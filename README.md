@@ -1,0 +1,4 @@
+- [ ] learn about [sqlc](https://www.youtube.com/watch?v=VX6KzpjaPp8)
+- [ ] make a CRUD handler for user's table
+- [ ] make the file server in go (serve static files in go)
+- [ ] components with vanilla js
