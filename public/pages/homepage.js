@@ -12,6 +12,7 @@ export function aboutPage() {
     `
 }
 
+
 export function notFoundPage() {
     return /*html*/`
         <div>404 - Page Not Found in js</div>

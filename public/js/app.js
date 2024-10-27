@@ -1,5 +1,5 @@
 import { homePage, aboutPage, notFoundPage } from '../pages/homepage.js';
-
+import { loginPage } from "../pages/login.js";
 const routes = {
     '/': {
         page: homePage,
@@ -12,6 +12,10 @@ const routes = {
     '/404': {
         page: notFoundPage,
         title: '404 - Page Not Found'
+    },
+    "/login": {
+        page: loginPage,
+        title: "Login"
     }
 };
 
