@@ -25,7 +25,7 @@ RETURNING id
 
 type CreateUserParams struct {
 	Nickname  string         `json:"nickname"`
-	Age       sql.NullInt64  `json:"age"`
+	Age       int64          `json:"age"`
 	Gender    sql.NullString `json:"gender"`
 	FirstName string         `json:"first_name"`
 	LastName  string         `json:"last_name"`
@@ -94,7 +94,7 @@ WHERE id = ?
 
 type UpdateUserParams struct {
 	Nickname  string         `json:"nickname"`
-	Age       sql.NullInt64  `json:"age"`
+	Age       int64          `json:"age"`
 	Gender    sql.NullString `json:"gender"`
 	FirstName string         `json:"first_name"`
 	LastName  string         `json:"last_name"`

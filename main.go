@@ -3,27 +3,27 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"real-time-forum/database"
-	"real-time-forum/models"
-
-	_ "github.com/mattn/go-sqlite3"
+	"os"
 )
 
 func main() {
-	defer database.CloseDB()
-	err := database.Init()
-	if err != nil {
-		fmt.Printf("err: %v\n", err)
-		return
-	}
+	mux := http.NewServeMux()
+	fs := http.FileServer(http.Dir("./public"))
+	mux.Handle("/public/", http.StripPrefix("/public/", fs))
 
-	fs := http.FileServer(http.Dir("./public/"))
-	http.Handle("/", fs)
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		_, err := os.Stat(r.URL.Path)
+		if err != nil && os.IsNotExist(err) {
+			http.ServeFile(w, r, "public/index.html")
+			return
+		}
+		http.ServeFile(w, r, "public"+r.URL.Path)
+	})
 
+	// Start server
 	fmt.Println("Listening on :8000")
-	err = http.ListenAndServe(models.DEFAULT_PORT, nil)
+	err := http.ListenAndServe(":8000", mux)
 	if err != nil {
 		fmt.Println(err)
-		return
 	}
 }

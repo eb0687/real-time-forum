@@ -1,8 +1,8 @@
 version: "2"
 sql:
   - engine: "sqlite"
-    schema: "./database/schema.sql"
-    queries: "./database/queries/"
+    schema: "./database/sql/schema.sql"
+    queries: "./database/sql/"
     gen:
       go:
         emit_json_tags: true

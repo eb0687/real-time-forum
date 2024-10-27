@@ -7,8 +7,6 @@ package database
 import (
 	"context"
 	"database/sql"
-	"fmt"
-	"real-time-forum/models"
 )
 
 type DBTX interface {
@@ -29,30 +27,5 @@ type Queries struct {
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
 		db: tx,
-	}
-}
-
-// ---
-
-var Database *sql.DB
-
-func Init() error {
-	d, err := sql.Open("sqlite3", models.DB_NAME)
-	if err != nil {
-		return err
-	}
-	Database = d
-
-	if err := Database.Ping(); err != nil {
-		return fmt.Errorf("failed to connect to database: %v", err)
-	}
-	return nil
-}
-
-func CloseDB() {
-	err := Database.Close()
-	if err != nil {
-		fmt.Printf("error closing the DB: %v\n", err)
-		return
 	}
 }

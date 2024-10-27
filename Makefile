@@ -14,4 +14,4 @@ db:
 	echo regenerate db with fake data
 
 sqlc:
-	echo  generate new bindings
+	@sqlc generate
