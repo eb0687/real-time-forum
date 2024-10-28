@@ -3,16 +3,20 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"real-time-forum/models"
 	"real-time-forum/server"
 )
 
 func main() {
-	mux := http.NewServeMux()
+	WebServer := server.WebServer{
+		Mux: http.NewServeMux(),
+		DB:  nil,
+	}
 
-	server.AddHandlers(mux)
+	server.AddHandlers(WebServer.Mux)
 	// Start server
-	fmt.Println("Listening on :8000")
-	err := http.ListenAndServe(":8080", mux)
+	fmt.Println("Listening on", models.DEFAULT_PORT)
+	err := http.ListenAndServe(models.DEFAULT_PORT, WebServer.Mux)
 	if err != nil {
 		fmt.Println(err)
 	}

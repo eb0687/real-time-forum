@@ -4,7 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"real-time-forum/database"
 )
+
+type WebServer struct {
+	Mux *http.ServeMux
+	DB  database.DBTX
+}
 
 func AddHandlers(mux *http.ServeMux) {
 	AddFileServer(mux)
