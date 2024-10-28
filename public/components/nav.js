@@ -17,7 +17,6 @@ export const Nav = () => {
     <nav>
         <a href="/" class="route">Home</a>
         <a href="/about" class="route">About</a>
-        <a href="/login" class="route">login</a>
         <a href="/logout" class="route">logout</a>
     </nav>
     `

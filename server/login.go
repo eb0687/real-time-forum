@@ -7,11 +7,13 @@ import (
 	"time"
 )
 
+// client params
 type LoginClientParams struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
+// server response
 type LoginServerResponse struct {
 	Msg string `json:"msg"`
 }
@@ -22,6 +24,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("err: %v\n", err)
 		return
 	}
+	
 
 	if data.Email != "a" && data.Password != "a" {
 		err := utils.SendJsonResponse(w, http.StatusUnauthorized, LoginServerResponse{

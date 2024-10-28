@@ -5,6 +5,12 @@ import { attachBaseLayout } from "./layouts.js";
 export function homePage() {
     attachBaseLayout(/*html*/`
         <div>home page</div>
-    `);
+    `, capabilities);
 }
+
+function capabilities() {
+    
+}
+
+
 

@@ -1,4 +1,4 @@
-import { attach, getCookie, reRoute } from "../js/utils.js";
+import { attach, getCookie, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 
@@ -11,30 +11,22 @@ export function loginPage() {
         reRoute('/');
         return
     }
-
     attachBaseLayout(/*html*/ `
-        <form id="login-form">
+        <form id="login-form" >
             <input type="text" name="email" id="email">
             <input type="password" name="password" id="password">
             <button type="submit">login</button>
         </form>
-    `)
-    loginFormEvent();
+    `, capabilities);
 }
 
-function loginFormEvent() {
+function capabilities() {
     document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault(); // Prevent default form submission
         const email = document.getElementById('email').value
         const password = document.getElementById('password').value
         try {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
+            const response = await SpecialFetch('/api/login', "POST", { email, password });
             if (!response) throw "could not get the response";
             if (response.status === 404) throw "please create an account"
             if (response.status === 401) throw "your email or password is incorrect"
@@ -44,6 +36,7 @@ function loginFormEvent() {
                 console.log('parent',parent)
             });
             const data = await response.json();
+            
             console.log('data', data)
             reRoute('/');
         } catch (error) {

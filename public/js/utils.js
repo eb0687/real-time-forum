@@ -43,3 +43,20 @@ export function getCookie(name) {
     return decodeURI(dc.substring(begin + prefix.length, end));
 }
 
+
+// you can only send json data or array or a map
+export async function SpecialFetch(url,method, data)  {
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        return response;
+    } catch (e) {
+        return null
+    }
+
+} 

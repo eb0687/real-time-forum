@@ -15,6 +15,9 @@ SELECT id, nickname, age, gender, first_name, last_name, email, password
 FROM users
 WHERE id = ?;
 
+-- name: ReadAllUsers :many
+SELECT * FROM users;
+
 -- name: UpdateUser :exec
 UPDATE users
 SET nickname = ?,

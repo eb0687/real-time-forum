@@ -4,6 +4,9 @@ import { attachBaseLayout } from "./layouts.js";
 export function notFoundPage() {
     attachBaseLayout(/*html*/`
         <div>The Page you are looking for does not exist</div>
-    `);
+    `, capabilities);
+}
 
+function capabilities() {
+    
 }

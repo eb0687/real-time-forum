@@ -58,6 +58,42 @@ func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 	return err
 }
 
+const readAllUsers = `-- name: ReadAllUsers :many
+SELECT id, nickname, age, gender, first_name, last_name, email, password FROM users
+`
+
+func (q *Queries) ReadAllUsers(ctx context.Context) ([]User, error) {
+	rows, err := q.db.QueryContext(ctx, readAllUsers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []User
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.Nickname,
+			&i.Age,
+			&i.Gender,
+			&i.FirstName,
+			&i.LastName,
+			&i.Email,
+			&i.Password,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const readUser = `-- name: ReadUser :one
 SELECT id, nickname, age, gender, first_name, last_name, email, password
 FROM users
