@@ -7,8 +7,35 @@ package database
 
 import (
 	"context"
-	"database/sql"
 )
+
+const authUser = `-- name: AuthUser :one
+SELECT id, nickname, age, gender, first_name, last_name, email, password FROM users WHERE
+(nickname = ? OR email = ?)
+AND password = ?
+`
+
+type AuthUserParams struct {
+	Nickname string `json:"nickname"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func (q *Queries) AuthUser(ctx context.Context, arg AuthUserParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, authUser, arg.Nickname, arg.Email, arg.Password)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Nickname,
+		&i.Age,
+		&i.Gender,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Password,
+	)
+	return i, err
+}
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
@@ -24,17 +51,16 @@ RETURNING id
 `
 
 type CreateUserParams struct {
-	Nickname  string         `json:"nickname"`
-	Age       int64          `json:"age"`
-	Gender    sql.NullString `json:"gender"`
-	FirstName string         `json:"first_name"`
-	LastName  string         `json:"last_name"`
-	Email     string         `json:"email"`
-	Password  string         `json:"password"`
+	Nickname  string `json:"nickname"`
+	Age       int64  `json:"age"`
+	Gender    string `json:"gender"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (int64, error) {
-	
 	row := q.db.QueryRowContext(ctx, createUser,
 		arg.Nickname,
 		arg.Age,
@@ -130,14 +156,14 @@ WHERE id = ?
 `
 
 type UpdateUserParams struct {
-	Nickname  string         `json:"nickname"`
-	Age       int64          `json:"age"`
-	Gender    sql.NullString `json:"gender"`
-	FirstName string         `json:"first_name"`
-	LastName  string         `json:"last_name"`
-	Email     string         `json:"email"`
-	Password  string         `json:"password"`
-	ID        int64          `json:"id"`
+	Nickname  string `json:"nickname"`
+	Age       int64  `json:"age"`
+	Gender    string `json:"gender"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	ID        int64  `json:"id"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {

@@ -32,3 +32,8 @@ WHERE id = ?;
 -- name: DeleteUser :exec
 DELETE FROM users
 WHERE id = ?;
+
+-- name: AuthUser :one
+SELECT * FROM users WHERE
+(nickname = ? OR email = ?)
+AND password = ?;

@@ -13,7 +13,7 @@ export function notFoundPage() {
     /*html*/ `
         // the page content
     `,
-    capabilities
+    capabilities,
   );
 }
 
@@ -49,7 +49,8 @@ try {
 ```
 
 - create golang handler with /api/<action name>
-- [temp] make the auth middleware to check the token 
+- [temp] make the auth middleware to check the token
 - check the db in go if you need
 - return the result to js
 - do whatever you want
+

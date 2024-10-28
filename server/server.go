@@ -9,13 +9,12 @@ import (
 
 type WebServer struct {
 	Mux *http.ServeMux
-	DB  database.DBTX
+	DB  *database.Queries
 }
 
-func AddHandlers(mux *http.ServeMux) {
-	AddFileServer(mux)
-	mux.HandleFunc("/api/login", LoginHandler)
-
+func (ws *WebServer) AddHandlers() {
+	AddFileServer(ws.Mux)
+	ws.Mux.HandleFunc("/api/login", ws.LoginHandler)
 }
 
 func AddFileServer(mux *http.ServeMux) {

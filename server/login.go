@@ -1,8 +1,10 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+	"real-time-forum/database"
 	"real-time-forum/utils"
 	"time"
 )
@@ -18,13 +20,30 @@ type LoginServerResponse struct {
 	Msg string `json:"msg"`
 }
 
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
+func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := utils.DecodeRequestBody[LoginClientParams](r)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 		return
 	}
-	
+
+	s, err := utils.HashingPasswordFunc(data.Password)
+	if err != nil {
+		return
+	}
+
+	u, err := ws.DB.AuthUser(context.Background(), database.AuthUserParams{
+		Nickname: data.Email,
+		Email:    data.Email,
+		Password: s,
+	})
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		return
+	}
+
+	fmt.Printf("u: %v\n", u)
+	return
 
 	if data.Email != "a" && data.Password != "a" {
 		err := utils.SendJsonResponse(w, http.StatusUnauthorized, LoginServerResponse{
@@ -57,5 +76,4 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("2")
-
 }

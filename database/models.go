@@ -4,17 +4,13 @@
 
 package database
 
-import (
-	"database/sql"
-)
-
 type User struct {
-	ID        int64          `json:"id"`
-	Nickname  string         `json:"nickname"`
-	Age       int64          `json:"age"`
-	Gender    sql.NullString `json:"gender"`
-	FirstName string         `json:"first_name"`
-	LastName  string         `json:"last_name"`
-	Email     string         `json:"email"`
-	Password  string         `json:"password"`
+	ID        int64  `json:"id"`
+	Nickname  string `json:"nickname"`
+	Age       int64  `json:"age"`
+	Gender    string `json:"gender"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
 }
