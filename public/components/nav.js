@@ -1,14 +1,26 @@
+import { getCookie } from "../js/utils.js";
 
-export const Nav = html`
+export const Nav = () => {
+    let cookie = getCookie('token');
+    console.log('document.cookie', document.cookie)
+    if (!cookie) {
+        return /*html*/`
     <nav>
-        <h1>hello im nav</h1>
+        <a href="/" class="route">Home</a>
+        <a href="/about" class="route">About</a>
+        <a href="/login" class="route">login</a>
+        <a href="/register" class="route">register</a>
     </nav>
-`
+    `
+    }
+    return /*html*/`
+    <nav>
+        <a href="/" class="route">Home</a>
+        <a href="/about" class="route">About</a>
+        <a href="/login" class="route">login</a>
+        <a href="/logout" class="route">logout</a>
+    </nav>
+    `
+}
 
-// TODO: will be deleted later
-export const Footer = html`
-    <nav>
-        <h1>hello im Footer</h1>
-    </nav>
-`
 

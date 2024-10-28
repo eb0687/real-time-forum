@@ -1,13 +1,11 @@
-import { homePage, aboutPage, notFoundPage } from '../pages/homepage.js';
+import { homePage } from '../pages/home.js';
 import { loginPage } from "../pages/login.js";
+import { notFoundPage } from "../pages/notFound.js";
+import { PreventDefaultATag } from './utils.js';
 const routes = {
     '/': {
         page: homePage,
         title: 'Home'
-    },
-    '/about': {
-        page: aboutPage,
-        title: 'About'
     },
     '/404': {
         page: notFoundPage,
@@ -19,20 +17,14 @@ const routes = {
     }
 };
 
-function router() {
+export function router() {
     const path = window.location.pathname;
-    const page = routes[path] || routes['/404'];
-    document.title = page.title;
-    document.getElementById('app').innerHTML = page.page();
+    const route = routes[path] || routes['/404'];
+    document.title = route.title;
+    route.page()
 }
 
 window.addEventListener('popstate', router);
-document.querySelectorAll('.route').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        history.pushState({}, '', e.target.href);
-        router();
-    });
-});
+PreventDefaultATag()
 
 router(); // Initial call to load the default page

@@ -8,7 +8,6 @@
 // add login to the router
 // create login.js in public/pages
 // when user click the action button
-<!-- TODO: solve the refresh problem -->
 // send request to golang
 // create golang handler with /api/<action name>
 // check the db in go
