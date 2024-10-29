@@ -33,18 +33,15 @@ func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		fmt.Printf("err: %v\n", err)
-		utils.SendJsonResponse(w, http.StatusNotFound, LoginServerResponse{models.ErrUserNotFound.Error()})
+		utils.SendCustomError(w, models.ErrUserNotFound)
 		return
 	}
 
 	isPasswordCorrect := utils.CheckPasswordHashFunc(data.Password, u.Password)
 	if !isPasswordCorrect {
-		fmt.Printf("err: %v\n", err)
-		utils.SendJsonResponse(w, http.StatusUnauthorized, LoginServerResponse{models.ErrUsernameOrPasswordIncorrect.Error()})
+		utils.SendCustomError(w, models.ErrUsernameOrPasswordIncorrect)
 		return
 	}
-	
 
 	// set cookie for storing token
 	cookie := http.Cookie{
@@ -67,4 +64,3 @@ func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-

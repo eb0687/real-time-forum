@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"real-time-forum/models"
 	"reflect"
 )
 
@@ -28,4 +29,8 @@ func SendJsonResponse(w http.ResponseWriter, status int, data any) error {
 		return err
 	}
 	return nil
+}
+
+func SendCustomError(w http.ResponseWriter, err models.CustomError) {
+	SendJsonResponse(w, err.Status, err)
 }
