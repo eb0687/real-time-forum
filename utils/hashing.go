@@ -49,7 +49,6 @@ func GenerateCookie(w http.ResponseWriter, userId int64, db *database.Queries) e
 		if err != nil {
 			return err
 		}
-		return err
 	}
 
 	cookie := http.Cookie{
