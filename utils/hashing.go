@@ -2,7 +2,11 @@ package utils
 
 import (
 	"fmt"
+	"net/http"
+	"real-time-forum/database"
+	"time"
 
+	"github.com/gofrs/uuid/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -21,4 +25,44 @@ func CheckPasswordHashFunc(password string, hash string) bool {
 		return false
 	}
 	return true
+}
+
+func GenerateCookie(w http.ResponseWriter, userId int64, db *database.Queries) error {
+	uid, err := uuid.NewV4()
+	if err != nil {
+		return err
+	}
+
+	_, err = db.CreateCookie(database.CreateCookieParams{
+		Userid: userId,
+		Cookie: uid.String(),
+	})
+	if err != nil {
+		err := db.DeleteCookieByUserID(userId)
+		if err != nil {
+			return err
+		}
+		_, err = db.CreateCookie(database.CreateCookieParams{
+			Userid: userId,
+			Cookie: uid.String(),
+		})
+		if err != nil {
+			return err
+		}
+		return err
+	}
+
+	cookie := http.Cookie{
+		Name:     "auth_token",
+		Value:    uid.String(),
+		Path:     "/",
+		MaxAge:   int(time.Hour),
+		HttpOnly: false,
+		Secure:   false,
+		SameSite: http.SameSiteLaxMode,
+	}
+
+	http.SetCookie(w, &cookie)
+
+	return nil
 }

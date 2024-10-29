@@ -4,7 +4,7 @@ INSERT INTO cookies (
  cookie
 )
 VALUES (?, ? )
-RETURNING id;
+RETURNING *;
 
 -- name: ReadCookie :one
 SELECT id, userid, cookie
@@ -23,3 +23,10 @@ WHERE id = ?;
 -- name: DeleteCookie :exec
 DELETE FROM cookies
 WHERE id = ?;
+
+-- name: DeleteCookieByUserID :exec
+DELETE FROM cookies
+WHERE userid = ?;
+
+-- name: ReadCookieByUserID :one
+SELECT * FROM cookies WHERE userid = ?;

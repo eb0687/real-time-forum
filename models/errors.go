@@ -16,4 +16,12 @@ var (
 		Msg:    "username or password is incorrect",
 		Status: http.StatusUnauthorized,
 	}
+	ErrInternalServerError = CustomError{
+		Msg:    "Internal server error",
+		Status: http.StatusInternalServerError,
+	}
+	ErrInvalidRequest = CustomError{
+		Msg:    "Invalid request",
+		Status: http.StatusBadRequest,
+	}
 )

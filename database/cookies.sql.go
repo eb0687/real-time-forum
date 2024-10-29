@@ -10,7 +10,7 @@ INSERT INTO cookies (
  cookie
 )
 VALUES (?, ? )
-RETURNING id
+RETURNING id, userid, cookie
 `
 
 type CreateCookieParams struct {
@@ -18,11 +18,11 @@ type CreateCookieParams struct {
 	Cookie string `json:"cookie"`
 }
 
-func (q *Queries) CreateCookie(arg CreateCookieParams) (int64, error) {
+func (q *Queries) CreateCookie(arg CreateCookieParams) (Cookie, error) {
 	row := q.db.QueryRow(createCookie, arg.Userid, arg.Cookie)
-	var id int64
-	err := row.Scan(&id)
-	return id, err
+	var i Cookie
+	err := row.Scan(&i.ID, &i.Userid, &i.Cookie)
+	return i, err
 }
 
 const deleteCookie = `
@@ -32,6 +32,16 @@ WHERE id = ?
 
 func (q *Queries) DeleteCookie(id int64) error {
 	_, err := q.db.Exec(deleteCookie, id)
+	return err
+}
+
+const deleteCookieByUserID = `
+DELETE FROM cookies
+WHERE userid = ?
+`
+
+func (q *Queries) DeleteCookieByUserID(userid int64) error {
+	_, err := q.db.Exec(deleteCookieByUserID, userid)
 	return err
 }
 
@@ -70,6 +80,17 @@ WHERE id = ?
 
 func (q *Queries) ReadCookie(id int64) (Cookie, error) {
 	row := q.db.QueryRow(readCookie, id)
+	var i Cookie
+	err := row.Scan(&i.ID, &i.Userid, &i.Cookie)
+	return i, err
+}
+
+const readCookieByUserID = `
+SELECT id, userid, cookie FROM cookies WHERE userid = ?
+`
+
+func (q *Queries) ReadCookieByUserID(userid int64) (Cookie, error) {
+	row := q.db.QueryRow(readCookieByUserID, userid)
 	var i Cookie
 	err := row.Scan(&i.ID, &i.Userid, &i.Cookie)
 	return i, err

@@ -6,7 +6,6 @@ import (
 	"real-time-forum/database"
 	"real-time-forum/models"
 	"real-time-forum/utils"
-	"time"
 )
 
 // client params
@@ -23,7 +22,7 @@ type LoginServerResponse struct {
 func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := utils.DecodeRequestBody[LoginClientParams](r)
 	if err != nil {
-		fmt.Printf("err: %v\n", err)
+		utils.SendCustomError(w, models.ErrInvalidRequest)
 		return
 	}
 
@@ -31,7 +30,6 @@ func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Nickname: data.Email,
 		Email:    data.Email,
 	})
-
 	if err != nil {
 		utils.SendCustomError(w, models.ErrUserNotFound)
 		return
@@ -43,18 +41,11 @@ func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// set cookie for storing token
-	cookie := http.Cookie{
-		Name:     "token",
-		Value:    "123",
-		Path:     "/",
-		MaxAge:   int(time.Hour),
-		HttpOnly: false,
-		Secure:   false,
-		SameSite: http.SameSiteLaxMode,
+	err = utils.GenerateCookie(w, u.ID, ws.DB)
+	if err != nil {
+		utils.SendCustomError(w, models.ErrInternalServerError)
+		return
 	}
-
-	http.SetCookie(w, &cookie)
 
 	err = utils.SendJsonResponse(w, http.StatusOK, LoginServerResponse{
 		Msg: "Login success",

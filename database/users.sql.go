@@ -15,7 +15,7 @@ INSERT INTO
         email,
         password
     )
-VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id
+VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id, nickname, age, gender, first_name, last_name, email, password
 `
 
 type CreateUserParams struct {
@@ -28,7 +28,7 @@ type CreateUserParams struct {
 	Password  string `json:"password"`
 }
 
-func (q *Queries) CreateUser(arg CreateUserParams) (int64, error) {
+func (q *Queries) CreateUser(arg CreateUserParams) (User, error) {
 	row := q.db.QueryRow(createUser,
 		arg.Nickname,
 		arg.Age,
@@ -38,9 +38,18 @@ func (q *Queries) CreateUser(arg CreateUserParams) (int64, error) {
 		arg.Email,
 		arg.Password,
 	)
-	var id int64
-	err := row.Scan(&id)
-	return id, err
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Nickname,
+		&i.Age,
+		&i.Gender,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Password,
+	)
+	return i, err
 }
 
 const deleteUser = `
