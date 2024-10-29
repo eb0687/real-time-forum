@@ -15,3 +15,4 @@ db:
 
 sqlc:
 	@sqlc generate
+	sqlite3 data.db < ./database/sql/schema.sql

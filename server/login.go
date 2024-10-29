@@ -120,6 +120,8 @@ func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Incorrect password")
 				return
 			}
+
+			fmt.Printf("u.Nickname: %v\n", u.Nickname)
 			break
 		}
 	}

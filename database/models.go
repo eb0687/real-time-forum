@@ -4,6 +4,12 @@
 
 package database
 
+type Cookie struct {
+	ID     int64  `json:"id"`
+	Userid int64  `json:"userid"`
+	Cookie string `json:"cookie"`
+}
+
 type User struct {
 	ID        int64  `json:"id"`
 	Nickname  string `json:"nickname"`
