@@ -5,16 +5,26 @@ import (
 	"net/http"
 	"os"
 	"real-time-forum/database"
+	"real-time-forum/middlewares"
 )
 
 type WebServer struct {
-	Mux *http.ServeMux
+	Mux http.Handler
 	DB  *database.Queries
 }
 
 func (ws *WebServer) AddHandlers() {
-	AddFileServer(ws.Mux)
-	ws.Mux.HandleFunc("/api/login", ws.LoginHandler)
+	parent := http.NewServeMux()
+	AddFileServer(parent)
+	s := middlewares.CreateStack(
+		middlewares.Logging,
+		middlewares.Recovery,
+	)
+	s(parent)
+
+	parent.HandleFunc("/api/login", ws.LoginHandler)
+	parent.Handle("/api/", http.StripPrefix("/api", RegisterWithAuth()))
+
 }
 
 func AddFileServer(mux *http.ServeMux) {
@@ -31,4 +41,13 @@ func AddFileServer(mux *http.ServeMux) {
 		}
 		http.ServeFile(w, r, "public"+r.URL.Path)
 	})
+}
+
+func RegisterWithAuth() http.Handler {
+	router := http.NewServeMux()
+
+	router.HandleFunc("/homepage", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Homepage")
+	})
+	return middlewares.Auth(router)
 }

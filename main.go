@@ -18,8 +18,7 @@ func main() {
 		return
 	}
 	WebServer := server.WebServer{
-		Mux: http.NewServeMux(),
-		DB:  database.New(db),
+		DB: database.New(db),
 	}
 	defer db.Close()
 
