@@ -9,7 +9,7 @@ export function registerPage() {
   <input type="text" name="nickname" id="nickname">
 
   <label for="age">Age:</label>
-  <input type="text" name="age" id="age">
+  <input type="number" name="age" id="age">
 
   <label>Gender:</label>
   <input type="radio" name="gender" id="male" value="male">
@@ -43,7 +43,7 @@ function capabilities() {
     .addEventListener("submit", async (e) => {
       e.preventDefault();
       const nickname = document.getElementById("nickname").value;
-      const age = document.getElementById("age").value;
+      const age = parseInt(document.getElementById("age").value);
       const gender = document.querySelector(
         'input[name="gender"]:checked',
       )?.value;

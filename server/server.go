@@ -23,6 +23,7 @@ func (ws *WebServer) AddHandlers() {
 	s(parent)
 
 	parent.HandleFunc("/api/login", ws.LoginHandler)
+	parent.HandleFunc("/api/register", ws.RegisterHandler)
 	parent.Handle("/api/", http.StripPrefix("/api", RegisterWithAuth()))
 	ws.Mux = parent
 }

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"real-time-forum/database"
 	"real-time-forum/models"
@@ -11,6 +12,7 @@ import (
 func (ws *WebServer) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := utils.DecodeRequestBody[database.CreateUserParams](r)
 	if err != nil {
+		fmt.Printf("err1: %v\n", err)
 		utils.SendCustomError(w, models.ErrInvalidRequest)
 		return
 	}
