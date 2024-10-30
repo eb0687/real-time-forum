@@ -4,18 +4,34 @@ import { attachBaseLayout } from "./layouts.js";
 export function registerPage() {
   attachBaseLayout(
     /*html*/ `
-        <form id="registration-form" >
-            <input type="text" name="nickname" id="nickname">
-            <input type="text" name="age" id="age">
-            <input type="radio" name="gender" id="male" value="male">
-            <input type="radio" name="gender" id="female" value="female">
-            <input type="text" name="firstname" id="firstname">
-            <input type="text" name="lastname" id="lastname">
-            <input type="text" name="email" id="email">
-            <input type="password" name="password" id="password">
-            <button type="submit">register</button>
-            <p id="message"><\p>
-        </form>
+<form id="registration-form">
+  <label for="nickname">Nickname:</label>
+  <input type="text" name="nickname" id="nickname">
+
+  <label for="age">Age:</label>
+  <input type="text" name="age" id="age">
+
+  <label>Gender:</label>
+  <input type="radio" name="gender" id="male" value="male">
+  <label for="male">Male</label>
+  <input type="radio" name="gender" id="female" value="female">
+  <label for="female">Female</label>
+
+  <label for="firstname">First Name:</label>
+  <input type="text" name="firstname" id="firstname">
+
+  <label for="lastname">Last Name:</label>
+  <input type="text" name="lastname" id="lastname">
+
+  <label for="email">Email:</label>
+  <input type="text" name="email" id="email">
+
+  <label for="password">Password:</label>
+  <input type="password" name="password" id="password">
+
+  <button type="submit">Register</button>
+  <p id="message"></p>
+</form>
     `,
     capabilities,
   );
