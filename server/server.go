@@ -24,7 +24,7 @@ func (ws *WebServer) AddHandlers() {
 
 	parent.HandleFunc("/api/login", ws.LoginHandler)
 	parent.Handle("/api/", http.StripPrefix("/api", RegisterWithAuth()))
-
+	ws.Mux = parent
 }
 
 func AddFileServer(mux *http.ServeMux) {
