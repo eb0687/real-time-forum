@@ -15,9 +15,9 @@ type LoginClientParams struct {
 }
 
 // server response
-type LoginServerResponse struct {
-	Msg string `json:"msg"`
-}
+// type MessageResponse struct {
+// 	Msg string `json:"msg"`
+// }
 
 func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := utils.DecodeRequestBody[LoginClientParams](r)
@@ -47,7 +47,7 @@ func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = utils.SendJsonResponse(w, http.StatusOK, LoginServerResponse{
+	err = utils.SendJsonResponse(w, http.StatusOK, models.MessageResponse{
 		Msg: "Login success",
 	})
 	if err != nil {
