@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"real-time-forum/models"
 	"reflect"
@@ -33,4 +34,13 @@ func SendJsonResponse(w http.ResponseWriter, status int, data any) error {
 
 func SendCustomError(w http.ResponseWriter, err models.CustomError) {
 	SendJsonResponse(w, err.Status, err)
+}
+
+func PrintReq(r *http.Request) {
+	data, err := io.ReadAll(r.Body)
+	if err != nil {
+		fmt.Printf("could not print request: %v\n", err)
+		return 
+	}
+	fmt.Printf("data: %v\n", string(data))
 }

@@ -1,11 +1,25 @@
 package middlewares
 
-import "net/http"
+import (
+	"net/http"
+	"real-time-forum/models"
+	"real-time-forum/utils"
+)
 
 func Recovery(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		println("recover 1")
+		defer func() {
+			r := recover()
+			if r == nil {
+				return
+			}
+			data, ok := r.(models.CustomError)
+			if !ok {
+				utils.SendCustomError(w, models.ErrInternalServerError)
+				return
+			}
+			utils.SendCustomError(w, data)
+		}()
 		next.ServeHTTP(w, r)
-		println("recover 2")
 	})
 }

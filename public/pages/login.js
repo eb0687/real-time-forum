@@ -38,7 +38,8 @@ function capabilities() {
             const data = await response.json();
             
             console.log('data', data)
-            reRoute('/');
+            reRout
+            e('/');
         } catch (error) {
             console.log('error', error)
         }

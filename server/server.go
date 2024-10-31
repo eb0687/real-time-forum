@@ -20,12 +20,12 @@ func (ws *WebServer) AddHandlers() {
 		middlewares.Logging,
 		middlewares.Recovery,
 	)
-	s(parent)
+	
 
 	parent.HandleFunc("/api/login", ws.LoginHandler)
 	parent.HandleFunc("/api/register", ws.RegisterHandler)
 	parent.Handle("/api/", http.StripPrefix("/api", RegisterWithAuth()))
-	ws.Mux = parent
+	ws.Mux = s(parent)
 }
 
 func AddFileServer(mux *http.ServeMux) {

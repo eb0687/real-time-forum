@@ -54,7 +54,6 @@ function capabilities() {
 
       if (
         !nickname ||
-        !age ||
         !gender ||
         !firstname ||
         !lastname ||
@@ -67,17 +66,18 @@ function capabilities() {
 
       try {
         const response = await SpecialFetch("/api/register", "POST", {
-          nickname,
-          age,
-          gender,
-          firstname,
-          lastname,
-          email,
-          password,
+          "nickname": nickname,
+          "age": age,
+          "gender": gender,
+          "first_name": firstname,
+          "last_name": lastname,
+          "email": email,
+          "password": password,
         });
 
         if (!response) throw "could not get the response";
         if (response.status == 401) throw "account already exists";
+        if (response.status != 200) throw "could not register";
         response.headers.forEach((value, name, parent) => {
           console.log("name", name);
           console.log("value", value);

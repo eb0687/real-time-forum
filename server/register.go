@@ -12,9 +12,7 @@ import (
 func (ws *WebServer) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := utils.DecodeRequestBody[database.CreateUserParams](r)
 	if err != nil {
-		fmt.Printf("err1: %v\n", err)
-		utils.SendCustomError(w, models.ErrInvalidRequest)
-		return
+		panic(models.ErrInvalidRequest)
 	}
 
 	if strings.TrimSpace(data.Nickname) == "" ||
@@ -22,20 +20,35 @@ func (ws *WebServer) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		strings.TrimSpace(data.Email) == "" ||
 		strings.TrimSpace(data.FirstName) == "" ||
 		strings.TrimSpace(data.LastName) == "" {
-		utils.SendCustomError(w, models.ErrInvalidRequest)
+		fmt.Println("err invalid request")
+		panic(models.ErrInvalidRequest)
 	}
 
-	passhash, err := utils.HashingPasswordFunc(data.Password)
+	if _, err := ws.DB.GetUserByEmailOrName(database.GetUserByEmailOrNameParams{
+		Nickname: data.Nickname,
+		Email:    data.Email,
+	}); err == nil {
+		panic(models.ErrUserAlreadyExists)
+	}
+
+	passwordHash, err := utils.HashingPasswordFunc(data.Password)
 	if err != nil {
-		utils.SendCustomError(w, models.ErrInternalServerError)
-		return
+		panic(models.ErrInvalidRequest)
 	}
 
-	data.Password = passhash
+	data.Password = passwordHash
 	user, err := ws.DB.CreateUser(*data)
 	if err != nil {
-		utils.SendCustomError(w, models.ErrInternalServerError)
+		panic(models.ErrInternalServerError)
 	}
 
-	utils.SendJsonResponse(w, http.StatusOK, user)
+	err = utils.SendJsonResponse(w, http.StatusOK, user)
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
+
+	err = utils.GenerateCookie(w, user.ID, ws.DB)
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
 }

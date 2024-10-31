@@ -12,6 +12,10 @@ var (
 		Msg:    "user not found",
 		Status: http.StatusNotFound,
 	}
+	ErrUserAlreadyExists = CustomError{
+		Msg:    "user already exists please login",
+		Status: http.StatusConflict,
+	}
 	ErrUsernameOrPasswordIncorrect = CustomError{
 		Msg:    "username or password is incorrect",
 		Status: http.StatusUnauthorized,
