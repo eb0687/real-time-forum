@@ -20,10 +20,10 @@ func (ws *WebServer) AddHandlers() {
 		middlewares.Logging,
 		middlewares.Recovery,
 	)
-	
 
 	parent.HandleFunc("/api/login", ws.LoginHandler)
 	parent.HandleFunc("/api/register", ws.RegisterHandler)
+	parent.HandleFunc("/api/logout", ws.LogoutHandler)
 	parent.Handle("/api/", http.StripPrefix("/api", RegisterWithAuth()))
 	ws.Mux = s(parent)
 }

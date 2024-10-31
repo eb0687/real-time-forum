@@ -14,11 +14,6 @@ type LoginClientParams struct {
 	Password string `json:"password"`
 }
 
-// server response
-// type MessageResponse struct {
-// 	Msg string `json:"msg"`
-// }
-
 func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := utils.DecodeRequestBody[LoginClientParams](r)
 	if err != nil {
