@@ -9,26 +9,18 @@ import (
 	"strconv"
 )
 
-type CreatePostClientParams struct {
-	Name string
-	Body string
-}
-
 func (ws *WebServer) CreatePost(w http.ResponseWriter, r *http.Request) {
 	c, err := utils.GetCookieByUUID(r, ws.DB)
 	if err != nil {
 		panic(err)
 	}
-	data, err := utils.DecodeRequestBody[CreatePostClientParams](r)
+	data, err := utils.DecodeRequestBody[database.CreatePostParams](r)
 	if err != nil {
 		panic(models.ErrInvalidRequest)
 	}
 
-	p, err := ws.DB.CreatePost(database.CreatePostParams{
-		Userid: c.Userid,
-		Title:  data.Name,
-		Body:   data.Body,
-	})
+	data.Userid = c.Userid
+	p, err := ws.DB.CreatePost(*data)
 	if err != nil {
 		panic(err)
 	}
@@ -73,10 +65,16 @@ func (ws *WebServer) ReadPost(w http.ResponseWriter, r *http.Request) {
 
 func (ws *WebServer) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		panic(models.ErrInvalidRequest)
+	}
 	data, err := utils.DecodeRequestBody[database.UpdatePostParams](r)
 	if err != nil {
 		panic(models.ErrInvalidRequest)
 	}
+
+	data.ID = id
 	newPost, err := ws.DB.UpdatePost(*data)
 	if err != nil {
 		panic(err)

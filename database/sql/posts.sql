@@ -9,7 +9,7 @@ DELETE FROM posts WHERE id = ?;
 SELECT * FROM posts WHERE id = ?;
 
 -- name: UpdatePost :one
-UPDATE posts SET title = ?, body = ? WHERE id = ? RETURNING *;
+UPDATE posts SET title = ?, body = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? RETURNING *;
 
 
 -- name: ReadAllPosts :many

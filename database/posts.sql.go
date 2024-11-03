@@ -142,7 +142,7 @@ func (q *Queries) ReadPostsByUserID(userid int64) ([]Post, error) {
 }
 
 const updatePost = `
-UPDATE posts SET title = ?, body = ? WHERE id = ? RETURNING id, userid, title, body, created_at, updated_at
+UPDATE posts SET title = ?, body = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? RETURNING id, userid, title, body, created_at, updated_at
 `
 
 type UpdatePostParams struct {

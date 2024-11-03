@@ -29,7 +29,7 @@ func (ws *WebServer) AddHandlers() {
 	parent.HandleFunc("POST /api/posts", ws.CreatePost)
 	parent.HandleFunc("GET /api/posts", ws.ReadAllPosts)
 	parent.HandleFunc("GET /api/posts/{id}", ws.ReadPost)
-	parent.HandleFunc("UPDATE /api/posts/{id}", ws.UpdatePost)
+	parent.HandleFunc("PATCH /api/posts/{id}", ws.UpdatePost)
 	parent.HandleFunc("DELETE /api/posts/{id}", ws.DeletePost)
 
 	parent.Handle("/api/", http.StripPrefix("/api", RegisterWithAuth()))
