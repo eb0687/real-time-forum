@@ -37,7 +37,8 @@ SET
     first_name = ?,
     last_name = ?,
     email = ?,
-    password = ?
+    password = ?,
+    updated_at = CURRENT_TIMESTAMP
 WHERE
     id = ?;
 

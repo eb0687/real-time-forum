@@ -10,7 +10,6 @@ export function attachBaseLayout(content, capabilities) {
     `);
     PreventDefaultATag();
     capabilities();
-
     cap()
 
 }

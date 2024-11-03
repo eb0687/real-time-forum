@@ -15,7 +15,7 @@ INSERT INTO
         email,
         password
     )
-VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id, nickname, age, gender, first_name, last_name, email, password
+VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id, nickname, age, gender, first_name, last_name, email, password, created_at, updated_at
 `
 
 type CreateUserParams struct {
@@ -48,6 +48,8 @@ func (q *Queries) CreateUser(arg CreateUserParams) (User, error) {
 		&i.LastName,
 		&i.Email,
 		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
@@ -62,7 +64,7 @@ func (q *Queries) DeleteUser(id int64) error {
 }
 
 const getUserByEmailOrName = `
-SELECT id, nickname, age, gender, first_name, last_name, email, password FROM users WHERE ( nickname = ? OR email = ? )
+SELECT id, nickname, age, gender, first_name, last_name, email, password, created_at, updated_at FROM users WHERE ( nickname = ? OR email = ? )
 `
 
 type GetUserByEmailOrNameParams struct {
@@ -82,12 +84,14 @@ func (q *Queries) GetUserByEmailOrName(arg GetUserByEmailOrNameParams) (User, er
 		&i.LastName,
 		&i.Email,
 		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
 
 const readAllUsers = `
-SELECT id, nickname, age, gender, first_name, last_name, email, password FROM users
+SELECT id, nickname, age, gender, first_name, last_name, email, password, created_at, updated_at FROM users
 `
 
 func (q *Queries) ReadAllUsers() ([]User, error) {
@@ -108,6 +112,8 @@ func (q *Queries) ReadAllUsers() ([]User, error) {
 			&i.LastName,
 			&i.Email,
 			&i.Password,
+			&i.CreatedAt,
+			&i.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -137,9 +143,20 @@ WHERE
     id = ?
 `
 
-func (q *Queries) ReadUser(id int64) (User, error) {
+type ReadUserRow struct {
+	ID        int64  `json:"id"`
+	Nickname  string `json:"nickname"`
+	Age       int64  `json:"age"`
+	Gender    string `json:"gender"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+}
+
+func (q *Queries) ReadUser(id int64) (ReadUserRow, error) {
 	row := q.db.QueryRow(readUser, id)
-	var i User
+	var i ReadUserRow
 	err := row.Scan(
 		&i.ID,
 		&i.Nickname,

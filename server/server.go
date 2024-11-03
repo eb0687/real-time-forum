@@ -24,6 +24,14 @@ func (ws *WebServer) AddHandlers() {
 	parent.HandleFunc("/api/login", ws.LoginHandler)
 	parent.HandleFunc("/api/register", ws.RegisterHandler)
 	parent.HandleFunc("/api/logout", ws.LogoutHandler)
+
+
+	parent.HandleFunc("POST /api/posts", ws.CreatePost)
+	parent.HandleFunc("GET /api/posts", ws.ReadAllPosts)
+	parent.HandleFunc("GET /api/posts/{id}", ws.ReadPost)
+	parent.HandleFunc("UPDATE /api/posts/{id}", ws.UpdatePost)
+	parent.HandleFunc("DELETE /api/posts/{id}", ws.DeletePost)
+
 	parent.Handle("/api/", http.StripPrefix("/api", RegisterWithAuth()))
 	ws.Mux = s(parent)
 }

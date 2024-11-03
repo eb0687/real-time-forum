@@ -17,7 +17,9 @@ SELECT * FROM cookies;
 -- name: UpdateCookie :exec
 UPDATE cookies
 SET userid = ?,
-    cookie = ?
+    cookie = ?,
+    updated_at = CURRENT_TIMESTAMP
+    
 WHERE id = ?;
 
 -- name: DeleteCookie :exec
@@ -36,4 +38,5 @@ WHERE cookie = ?;
 -- name: ReadCookieByUserID :one
 SELECT * FROM cookies WHERE userid = ?;
 
-
+-- name: ReadCookieByUUID :one
+SELECT * FROM cookies WHERE cookie = ?;

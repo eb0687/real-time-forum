@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"net/http"
 	"real-time-forum/models"
 	"real-time-forum/utils"
@@ -13,6 +14,7 @@ func Recovery(next http.Handler) http.Handler {
 			if r == nil {
 				return
 			}
+			fmt.Println("err",r)
 			data, ok := r.(models.CustomError)
 			if !ok {
 				utils.SendCustomError(w, models.ErrInternalServerError)

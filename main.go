@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"os"
 	"real-time-forum/database"
 	"real-time-forum/models"
 	"real-time-forum/server"
@@ -11,12 +12,39 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func main() {
+func initDB() (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", models.DB_NAME)
+	if err != nil {
+		return nil, err
+	}
+	// apply schema
+
+	data, err := os.ReadFile(`database/sql/schema.sql`)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = db.Exec(string(data))
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
+func main() {
+	db, err := initDB()
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 		return
 	}
+	// q := database.New(db)
+	// p, err := q.ReadAllPosts()
+	// if err != nil {
+	// 	fmt.Printf("err: %v\n", err)
+	// 	return
+	// }
+	// fmt.Printf("p: %v\n", p)
 	WebServer := server.WebServer{
 		DB: database.New(db),
 	}

@@ -7,6 +7,11 @@ type CustomError struct {
 	Status int    `json:"status"`
 }
 
+
+func (c CustomError) Error() string {
+	return c.Msg
+}
+
 var (
 	ErrUserNotFound = CustomError{
 		Msg:    "user not found",
@@ -24,8 +29,14 @@ var (
 		Msg:    "Internal server error",
 		Status: http.StatusInternalServerError,
 	}
+
 	ErrInvalidRequest = CustomError{
 		Msg:    "Invalid request",
 		Status: http.StatusBadRequest,
 	}
+	ErrUnauthorized = CustomError{
+		Msg:    "Unauthorized",
+		Status: http.StatusUnauthorized,
+	}
+
 )
