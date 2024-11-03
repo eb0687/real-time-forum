@@ -35,6 +35,16 @@ func (q *Queries) DeleteCookie(id int64) error {
 	return err
 }
 
+const deleteCookieByUUID = `
+DELETE FROM cookies
+WHERE cookie = ?
+`
+
+func (q *Queries) DeleteCookieByUUID(cookie string) error {
+	_, err := q.db.Exec(deleteCookieByUUID, cookie)
+	return err
+}
+
 const deleteCookieByUserID = `
 DELETE FROM cookies
 WHERE userid = ?

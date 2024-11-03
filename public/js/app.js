@@ -20,10 +20,10 @@ const routes = {
     page: registerPage,
     title: "Login",
   },
-  "/logout": {
-    page: logout,
-    title: "Logout",
-  },
+  //"/logout": {
+  //  page: logout,
+  //  title: "Logout",
+  //},
 };
 
 export function router() {

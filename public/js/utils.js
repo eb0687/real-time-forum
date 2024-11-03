@@ -24,28 +24,19 @@ export function PreventDefaultATag() {
 }
 
 export function getCookie(name) {
-    var dc = document.cookie;
-    var prefix = name + "=";
-    var begin = dc.indexOf("; " + prefix);
-    if (begin == -1) {
-        begin = dc.indexOf(prefix);
-        if (begin != 0) return null;
+    let value = "; " + document.cookie;
+    let parts = value.split("; " + name + "=");
+    if (parts.length != 2) {
+        return null;
     }
-    else {
-        begin += 2;
-        var end = document.cookie.indexOf(";", begin);
-        if (end == -1) {
-            end = dc.length;
-        }
-    }
-    // because unescape has been deprecated, replaced with decodeURI
-    //return unescape(dc.substring(begin + prefix.length, end));
-    return decodeURI(dc.substring(begin + prefix.length, end));
+    let cookie = decodeURI(parts.pop().split(";").shift());
+    return cookie;
+
 }
 
 
 // you can only send json data or array or a map
-export async function SpecialFetch(url,method, data)  {
+export async function SpecialFetch(url, method, data) {
     try {
         const response = await fetch(url, {
             method: method,

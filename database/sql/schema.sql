@@ -1,3 +1,10 @@
+
+
+PRAGMA foreign_keys = ON;
+PRAGMA temp_store = MEMORY;           -- Keeps temporary tables in memory for performance.
+PRAGMA cache_size = -50000;  -- Sets cache size to around 5MB
+
+
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nickname TEXT NOT NULL,
@@ -9,7 +16,6 @@ CREATE TABLE IF NOT EXISTS users (
     password TEXT NOT NULL
 );
 
---
 
 CREATE TABLE IF NOT EXISTS cookies (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

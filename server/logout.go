@@ -10,13 +10,14 @@ func (ws *WebServer) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("auth_token")
 	if err != nil {
 		if err == http.ErrNoCookie {
-			panic(models.ErrInvalidRequest)
+			return
 		}
 		panic(models.ErrInternalServerError)
 	}
 
 	// TODO: implement remove cookie from the cookies table in the db
 
+	ws.DB.DeleteCookieByUUID(c.Value)
 	c = &http.Cookie{
 		Name:     "auth_token",
 		Value:    "",

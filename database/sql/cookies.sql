@@ -28,5 +28,12 @@ WHERE id = ?;
 DELETE FROM cookies
 WHERE userid = ?;
 
+
+-- name: DeleteCookieByUUID :exec
+DELETE FROM cookies
+WHERE cookie = ?;
+
 -- name: ReadCookieByUserID :one
 SELECT * FROM cookies WHERE userid = ?;
+
+

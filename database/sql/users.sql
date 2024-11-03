@@ -46,3 +46,11 @@ DELETE FROM users WHERE id = ?;
 
 -- name: GetUserByEmailOrName :one
 SELECT * FROM users WHERE ( nickname = ? OR email = ? );
+
+
+-- name: Test :one
+
+
+
+
+
