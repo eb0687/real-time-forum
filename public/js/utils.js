@@ -8,17 +8,17 @@ export function attach(page) {
     document.getElementById('app').innerHTML = page
 }
 
-export function reRoute(path) {
+export async function reRoute(path) {
     history.pushState({}, '', path);
-    router();
+    await router();
 }
 
 export function PreventDefaultATag() {
     document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', (e) => {
+        link.addEventListener('click', async (e) => {
             e.preventDefault();
             history.pushState({}, '', e.target.href);
-            router();
+            await router();
         });
     });
 }
@@ -29,11 +29,13 @@ export async function getCookie(name) {
     if (parts.length != 2) {
         return null;
     }
+
     let cookie = decodeURI(parts.pop().split(";").shift());
 
     // TODO: check cookie from server
     const res = await SpecialFetch("/api/cookie")
-    if (!res || res.status !== 200) return null;
+    if (!res || !res.ok) return null;
+
     return cookie;
 }
 
@@ -48,8 +50,14 @@ export async function SpecialFetch(url, method, data) {
             },
             body: JSON.stringify(data),
         });
+        if (response.ok) return response;
+        if (response.status === 401) reRoute("/login");
+        if (response.status === 404) reRoute("/404");
+        if (response.status === 500) reRoute("/500");
+
         return response;
     } catch (e) {
+        console.log('e',e)
         return null
     }
 

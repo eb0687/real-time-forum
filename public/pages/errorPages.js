@@ -1,7 +1,12 @@
-import { attach } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
-export function notFoundPage() {
+export async function internalServerErrorPage() {
+    attachBaseLayout(/*html*/`
+        <div>Internal Server Error</div>
+    `, capabilities);
+}
+
+export async function notFoundPage() {
     attachBaseLayout(/*html*/`
         <div>The Page you are looking for does not exist</div>
     `, capabilities);

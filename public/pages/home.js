@@ -1,15 +1,20 @@
 import { PostList } from "../components/post.js";
-import { attach, SpecialFetch } from "../js/utils.js";
+import { attach, getCookie, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 
 export async function homePage() {
-    const res =await SpecialFetch("/api/posts");
+    if (await getCookie("auth_token") === null) {
+        reRoute("/login");
+        return
+    }
+
+    const res = await SpecialFetch("/api/posts");
     /**
      * @type {import("../js/types").Post[]}
      */
     const posts = await res.json();
-    
+
 
 
     attachBaseLayout(/*html*/`

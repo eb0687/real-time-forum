@@ -1,9 +1,11 @@
 import { homePage } from "../pages/home.js";
 import { loginPage } from "../pages/login.js";
-import { notFoundPage } from "../pages/notFound.js";
+import { notFoundPage } from "../pages/errorPages.js";
 import { registerPage } from "../pages/register.js";
 import { postPage } from "../pages/post.js"; // Import the post page
 import { PreventDefaultATag } from "./utils.js";
+
+
 const routes = {
   "/": {
     page: homePage,
@@ -27,26 +29,24 @@ const routes = {
   }
 };
 
-export function router() {
+export async function router() {
   const path = window.location.pathname;
   let route = routes[path] || routes["/404"];
 
-  console.log('path',path)
+  console.log('path', path)
   // Handle dynamic route for /posts/:id
   if (path.startsWith("/posts/")) {
-    console.log("im here 2");
     const id = path.split("/")[2];
-
     route = {
-      page: () => postPage(id),
+      page: async () => await postPage(id),
     };
   }
 
   document.title = route.title;
-  route.page();
+  await route.page();
 }
 
 window.addEventListener("popstate", router);
 PreventDefaultATag();
 
-router(); // Initial call to load the default page
+await router(); // Initial call to load the default page

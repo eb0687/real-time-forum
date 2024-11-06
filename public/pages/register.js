@@ -1,7 +1,7 @@
 import { reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
-export function registerPage() {
+export async function registerPage() {
   attachBaseLayout(
     /*html*/ `
 <form id="registration-form">

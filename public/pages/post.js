@@ -1,16 +1,24 @@
 import { Post } from "../components/post.js";
-import { SpecialFetch } from "../js/utils.js";
+import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export async function postPage(id) {
-    const postContainer = document.getElementById("app");
-    postContainer.innerHTML = `<h1>Post ${id}</h1><p>Loading post content...</p>`;
     
-    const res = await SpecialFetch(`/api/posts/${id}`);
-    if (!res) {
-        postContainer.innerHTML = `<p>Error loading post: ${res.error}</p>`;
+    if (await getCookie("auth_token") === null) {
+        reRoute("/login");
         return;
     }
+    attachBaseLayout(`<h1>Loading post...</h1>`, cap);
+
+    const res = await SpecialFetch(`/api/posts/${id}`);
+    if (!res || !res.ok) {
+        if (res.status === 401) {
+            reRoute("/login");
+            return null;
+        }
+        return;
+    }
+
     const post = await res.json();
 
     document.title = post.title;
@@ -18,5 +26,5 @@ export async function postPage(id) {
 }
 
 function cap() {
-    
+
 }

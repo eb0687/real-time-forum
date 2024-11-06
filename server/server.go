@@ -54,11 +54,11 @@ func (ws *WebServer) RegisterWithAuth() http.Handler {
 
 
 
-	router.HandleFunc("POST /api/posts", ws.CreatePost)
-	router.HandleFunc("GET /api/posts", ws.ReadAllPosts)
-	router.HandleFunc("GET /api/posts/{id}", ws.ReadPost)
-	router.HandleFunc("PATCH /api/posts/{id}", ws.UpdatePost)
-	router.HandleFunc("DELETE /api/posts/{id}", ws.DeletePost)
+	router.HandleFunc("POST /posts", ws.CreatePost)
+	router.HandleFunc("GET /posts", ws.ReadAllPosts)
+	router.HandleFunc("GET /posts/{id}", ws.ReadPost)
+	router.HandleFunc("PATCH /posts/{id}", ws.UpdatePost)
+	router.HandleFunc("DELETE /posts/{id}", ws.DeletePost)
 
 	router.HandleFunc("/cookie", ws.CheckCookie)
 	return middlewares.Auth(router, ws.DB)

@@ -1,10 +1,8 @@
 import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
-import { notFoundPage } from "../pages/notFound.js";
 
 export const Nav = async () => {
     let cookie = await getCookie("auth_token");
 
-    console.log('document.cookie', document.cookie)
     let nav;
     if (!cookie) {
         nav = /*html*/`
@@ -30,8 +28,6 @@ export const Nav = async () => {
 
 function cap() {
 
-    console.log("attached capabilities");
-
     document.getElementById("logout-button")?.addEventListener("click", async (e) => {
         e.preventDefault();
         try {
@@ -42,7 +38,7 @@ function cap() {
             // console.log("Logout response", data);
 
             console.log("logged out from server");
-            
+
             reRoute("/login");
 
         } catch (error) {
