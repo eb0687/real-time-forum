@@ -4,6 +4,16 @@ import (
 	"database/sql"
 )
 
+type Comment struct {
+	ID        int64        `json:"id"`
+	Userid    int64        `json:"userid"`
+	Postid    int64        `json:"postid"`
+	Body      string       `json:"body"`
+	CreatedAt sql.NullTime `json:"created_at"`
+	UpdatedAt sql.NullTime `json:"updated_at"`
+	Foreign   interface{}  `json:"foreign"`
+}
+
 type Cookie struct {
 	ID        int64        `json:"id"`
 	Userid    int64        `json:"userid"`

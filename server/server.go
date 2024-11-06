@@ -31,6 +31,11 @@ func (ws *WebServer) AddHandlers() {
 	parent.HandleFunc("PATCH /api/posts/{id}", ws.UpdatePost)
 	parent.HandleFunc("DELETE /api/posts/{id}", ws.DeletePost)
 
+	parent.HandleFunc("POST /api/comments", ws.CreateComment)
+	parent.HandleFunc("GET /api/comments", ws.ReadAllComments)
+	parent.HandleFunc("PATCH /api/comments/{id}", ws.UpdatePost)
+	parent.HandleFunc("DELETE /api/comments/{id}", ws.DeletePost)
+
 	parent.Handle("/api/", http.StripPrefix("/api", ws.RegisterWithAuth()))
 	ws.Mux = s(parent)
 }
