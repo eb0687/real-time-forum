@@ -1,8 +1,8 @@
 import { Nav } from "../components/nav.js";
 import { attach, PreventDefaultATag } from "../js/utils.js";
 
-export function attachBaseLayout(content, capabilities) {
-    let { nav, cap } = Nav();
+export async function attachBaseLayout(content, capabilities) {
+    let { nav, cap } = await Nav();
 
     attach(/*html*/ `
         ${nav}

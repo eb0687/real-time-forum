@@ -1,7 +1,8 @@
 import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
+import { notFoundPage } from "../pages/notFound.js";
 
-export const Nav = () => {
-    let cookie = getCookie("auth_token");
+export const Nav = async () => {
+    let cookie = await getCookie("auth_token");
 
     console.log('document.cookie', document.cookie)
     let nav;
@@ -37,10 +38,13 @@ function cap() {
             const response = await SpecialFetch("/api/logout", "POST");
             if (!response.ok) throw "Logout failed, please try again";
 
-            const data = await response.json();
-            console.log("Logout response", data);
+            // const data = await response.json();
+            // console.log("Logout response", data);
 
+            console.log("logged out from server");
+            
             reRoute("/login");
+
         } catch (error) {
             console.log("error", error);
         }

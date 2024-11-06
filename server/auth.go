@@ -1,11 +1,12 @@
 package server
 
-import "net/http"
+import (
+	"net/http"
+	"real-time-forum/utils"
+)
 
 func (ws *WebServer) CheckCookie(w http.ResponseWriter, r *http.Request) {
-	// cookie, err := r.Cookie("session")
-	// if err != nil {
-	// 	http.Error(w, "Unauthorized", http.StatusUnauthorized)
-	// 	return
-	// }
+	utils.SendJsonResponse(w, http.StatusOK, map[string]string{
+		"message": "Cookie is valid",
+	})
 }

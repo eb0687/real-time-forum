@@ -23,15 +23,18 @@ export function PreventDefaultATag() {
     });
 }
 
-export function getCookie(name) {
+export async function getCookie(name) {
     let value = "; " + document.cookie;
     let parts = value.split("; " + name + "=");
     if (parts.length != 2) {
         return null;
     }
     let cookie = decodeURI(parts.pop().split(";").shift());
-    return cookie;
 
+    // TODO: check cookie from server
+    const res = await SpecialFetch("/api/cookie")
+    if (!res || res.status !== 200) return null;
+    return cookie;
 }
 
 

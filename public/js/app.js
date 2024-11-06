@@ -2,6 +2,7 @@ import { homePage } from "../pages/home.js";
 import { loginPage } from "../pages/login.js";
 import { notFoundPage } from "../pages/notFound.js";
 import { registerPage } from "../pages/register.js";
+import { postPage } from "../pages/post.js"; // Import the post page
 import { PreventDefaultATag } from "./utils.js";
 const routes = {
   "/": {
@@ -20,15 +21,27 @@ const routes = {
     page: registerPage,
     title: "Login",
   },
-  //"/logout": {
-  //  page: logout,
-  //  title: "Logout",
-  //},
+  "/posts/:id": {
+    page: postPage,
+    title: "Post",
+  }
 };
 
 export function router() {
   const path = window.location.pathname;
-  const route = routes[path] || routes["/404"];
+  let route = routes[path] || routes["/404"];
+
+  console.log('path',path)
+  // Handle dynamic route for /posts/:id
+  if (path.startsWith("/posts/")) {
+    console.log("im here 2");
+    const id = path.split("/")[2];
+
+    route = {
+      page: () => postPage(id),
+    };
+  }
+
   document.title = route.title;
   route.page();
 }

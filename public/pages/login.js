@@ -1,10 +1,10 @@
 import { attach, getCookie, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
-export function loginPage() {
+export async function loginPage() {
   console.log("loginPage");
 
-  let cookie = getCookie("token");
+  let cookie = await getCookie("token");
   console.log("document.cookie", document.cookie);
   if (cookie) {
     reRoute("/");
