@@ -1,6 +1,5 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
-import ts from "typescript-eslint";
 import noFloat from "eslint-plugin-no-floating-promise";
 import importPlugin from 'eslint-plugin-import';
 import jsdoc from "eslint-plugin-jsdoc";
@@ -8,6 +7,7 @@ import jsdoc from "eslint-plugin-jsdoc";
 
 /** @type {import('eslint').Linter.Config} */
 export default [
+  pluginJs.configs.recommended,
   {
     files: ["**/*.js"],
     languageOptions: { globals: globals.browser },
@@ -33,6 +33,7 @@ export default [
 
       "strict": "warn",
 
+      "no-undef": "error",
     }
   }
 ];

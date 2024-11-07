@@ -13,8 +13,6 @@ export function attach(page) {
  * @param {import("./types.js").Paths} path 
  */
 export async function reRoute(path) {
-    console.log("re route");
-
     history.pushState({}, '', path);
     router();
 }
@@ -22,7 +20,6 @@ export async function reRoute(path) {
 export function PreventDefaultATag() {
     document.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', async (e) => {
-            console.log('prevent default');
             e.preventDefault();
             history.pushState({}, '', e.target.href);
             await router();

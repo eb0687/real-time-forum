@@ -57,7 +57,7 @@ func (ws *WebServer) RegisterWithAuth() http.Handler {
 	router.HandleFunc("POST /posts", ws.CreatePost)
 	router.HandleFunc("GET /posts", ws.ReadAllPosts)
 	router.HandleFunc("GET /posts/{id}", ws.ReadPost)
-	router.HandleFunc("PATCH /posts/{id}", ws.UpdatePost)
+	router.HandleFunc("PUT /posts/{id}", ws.UpdatePost)
 	router.HandleFunc("DELETE /posts/{id}", ws.DeletePost)
 
 	router.HandleFunc("/cookie", ws.CheckCookie)

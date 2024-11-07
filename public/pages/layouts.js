@@ -4,12 +4,10 @@ import { attach, getCookie, PreventDefaultATag, reRoute } from "../js/utils.js";
 
 export async function attachBaseLayout(content, capabilities) {
 
-    console.log("attachBaseLayout");
     
     
     const { nav, cap } = await Nav();
 
-    console.log('content',content)
 
     if (getCookie("auth_token") === null) {
         console.log("re route to login");
@@ -22,11 +20,9 @@ export async function attachBaseLayout(content, capabilities) {
         ${content}
     `);
     PreventDefaultATag();
-    console.log("attach capabilities");
     
     capabilities();
     cap()
 
-    console.log("-------------------");
     
 }

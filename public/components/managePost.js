@@ -1,20 +1,23 @@
 import { reRoute, SpecialFetch } from "../js/utils.js";
 
-export const createPostModal = () => {
+export const managePostModal = (isEdit = false, post = {}) => {
+    console.log('isEdit', isEdit)
+    console.log('post', post)
+
     const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'create-post-modal';
     modal.innerHTML = /*html*/`
-        <div id="create-post-modal" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h2>Create Post</h2>
-                <form id="create-post-form">
-                    <label for="post-title">Title:</label>
-                    <input type="text" id="post-title" name="title" required>
-                    <label for="post-body">Body:</label>
-                    <textarea id="post-body" name="body" required></textarea>
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>${isEdit ? 'Edit Post' : 'Create Post'}</h2>
+            <form id="create-post-form">
+                <label for="post-title">Title:</label>
+                <input type="text" id="post-title" name="title" value="${isEdit ? post.title : ''}" required>
+                <label for="post-body">Body:</label>
+                <textarea id="post-body" name="body" required>${isEdit ? post.body : ''}</textarea>
+                <button type="submit">${isEdit ? 'Update' : 'Submit'}</button>
+            </form>
         </div>
     `;
     document.body.appendChild(modal);
@@ -36,7 +39,9 @@ export const createPostModal = () => {
         event.preventDefault();
         const title = document.getElementById('post-title');
         const body = document.getElementById('post-body');
-        const res = await SpecialFetch("/api/posts", "POST", {
+        const url = isEdit ? `/api/posts/${post.id}` : "/api/posts";
+        const method = isEdit ? "PUT" : "POST";
+        const res = await SpecialFetch(url, method, {
             title: title.value,
             body: body.value
         });
@@ -45,7 +50,7 @@ export const createPostModal = () => {
         modalElement.style.display = 'none';
         title.value = ''; // Reset title field
         body.value = '';  // Reset body field
-        await reRoute("/");
+        await reRoute(document.location.pathname);
     });
 };
 

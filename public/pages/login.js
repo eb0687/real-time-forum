@@ -2,7 +2,6 @@ import { reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export async function loginPage() {
-  console.log("page");
   
   await attachBaseLayout(/*html*/ `
         <form id="login-form" >

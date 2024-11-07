@@ -1,6 +1,6 @@
 import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "../pages/layouts.js";
-import { createPostModal } from "./createPost.js";
+import { managePostModal } from "./managePost.js";
 
 export const Nav = async () => {
     const cookie = await getCookie("auth_token");
@@ -47,9 +47,13 @@ function capabilities() {
 
     document.getElementById("create-post-button")?.addEventListener("click", (e) => {
         e.preventDefault();
-        if (!document.getElementById('create-post-modal')) {
-            createPostModal();
+        const modal = document.getElementById('create-post-modal')
+        if (modal) {
+            modal.parentNode.removeChild(modal);
         }
+
+        managePostModal(false);
+
         document.getElementById('create-post-modal').style.display = 'block';
     });
 }

@@ -30,7 +30,6 @@ const routes = {
 
 export async function router() {
 
-  console.log('router');
 
   const path = window.location.pathname;
   let route = routes[path] || routes["/404"];
