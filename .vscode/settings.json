@@ -15,6 +15,11 @@
             "commands": [
                 "editor.action.moveLinesUpAction"
             ]
-        }
+        },
+        {
+            "command": "vscode-neovim.escape",
+            "key": "Escape",
+            "when": "editorTextFocus && neovim.init"
+        },    
     ]
 }

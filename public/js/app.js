@@ -3,8 +3,7 @@ import { loginPage } from "../pages/login.js";
 import { notFoundPage } from "../pages/errorPages.js";
 import { registerPage } from "../pages/register.js";
 import { postPage } from "../pages/post.js"; // Import the post page
-import { PreventDefaultATag } from "./utils.js";
-
+import { getCookie, PreventDefaultATag } from "./utils.js";
 
 const routes = {
   "/": {
@@ -21,7 +20,7 @@ const routes = {
   },
   "/register": {
     page: registerPage,
-    title: "Login",
+    title: "Register",
   },
   "/posts/:id": {
     page: postPage,
@@ -30,6 +29,9 @@ const routes = {
 };
 
 export async function router() {
+
+  console.log('router');
+
   const path = window.location.pathname;
   let route = routes[path] || routes["/404"];
 
@@ -38,9 +40,14 @@ export async function router() {
   if (path.startsWith("/posts/")) {
     const id = path.split("/")[2];
     route = {
-      page: async () => await postPage(id),
+      page: async () => postPage(id),
     };
   }
+
+
+  // if (await getCookie("auth_token") === null && path !== "/login" && path !== "/register") {
+  //   route = routes["/login"];
+  // }
 
   document.title = route.title;
   await route.page();

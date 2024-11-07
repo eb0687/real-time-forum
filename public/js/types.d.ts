@@ -16,3 +16,5 @@ export interface UpdatedAt {
   Time: string;
   Valid: boolean;
 }
+
+export type Paths = "/register" | "/posts/:id" | "/login" | "/404" | "/";

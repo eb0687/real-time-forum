@@ -9,7 +9,7 @@ import { attach } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export function notFoundPage() {
-  attachBaseLayout(
+  await attachBaseLayout(
     /*html*/ `
         // the page content
     `,

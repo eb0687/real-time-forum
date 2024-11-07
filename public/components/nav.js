@@ -1,4 +1,5 @@
 import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
+import { attachBaseLayout } from "../pages/layouts.js";
 
 export const Nav = async () => {
     let cookie = await getCookie("auth_token");
@@ -37,9 +38,10 @@ function cap() {
             // const data = await response.json();
             // console.log("Logout response", data);
 
+            attachBaseLayout("", () => { })
             console.log("logged out from server");
 
-            reRoute("/login");
+            await reRoute("/login");
 
         } catch (error) {
             console.log("error", error);

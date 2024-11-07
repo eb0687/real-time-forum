@@ -18,6 +18,7 @@ export const Post = (post) => {
  * @returns {string}
  */
 export const PostList = (posts) => {
+    if (!posts) return "";
     return posts.map(Post).join("");
 }
 

@@ -3,28 +3,22 @@ import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export async function postPage(id) {
-    
     if (await getCookie("auth_token") === null) {
+        // add await
         reRoute("/login");
         return;
     }
-    attachBaseLayout(`<h1>Loading post...</h1>`, cap);
+    await attachBaseLayout("<h1>Loading post...</h1>", cap);
 
     const res = await SpecialFetch(`/api/posts/${id}`);
-    if (!res || !res.ok) {
-        if (res.status === 401) {
-            reRoute("/login");
-            return null;
-        }
-        return;
-    }
+    if (!res.ok) return;
 
     const post = await res.json();
 
     document.title = post.title;
-    attachBaseLayout(Post(post), cap);
+    await attachBaseLayout(Post(post), cap);
 }
 
 function cap() {
-
+    
 }

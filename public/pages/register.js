@@ -2,7 +2,7 @@ import { reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export async function registerPage() {
-  attachBaseLayout(
+  await attachBaseLayout(
     /*html*/ `
 <form id="registration-form">
   <label for="nickname">Nickname:</label>
@@ -78,19 +78,14 @@ function capabilities() {
         if (!response) throw "could not get the response";
         if (response.status == 401) throw "account already exists";
         if (response.status != 200) throw "could not register";
-        response.headers.forEach((value, name, parent) => {
-          console.log("name", name);
-          console.log("value", value);
-          console.log("parent", parent);
-        });
         const data = await response.json();
 
         console.log("data", data);
-        reRoute("/");
+        await reRoute("/");
       } catch (error) {
         if (error == "account already exists") {
-          return (document.getElementById("message").innerHTML = `
-                <a href="/">Account already exists. Click <strong>here</strong> to login</a>
+          return (document.getElementById("message").innerHTML = /*html*/ `
+                <a href="/login">Account already exists. Click <strong>here</strong> to login</a>
             `);
         }
         console.log("error", error);
