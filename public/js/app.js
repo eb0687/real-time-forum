@@ -1,8 +1,10 @@
 import { homePage } from "../pages/home.js";
 import { loginPage } from "../pages/login.js";
-import { notFoundPage } from "../pages/notFound.js";
+import { notFoundPage } from "../pages/errorPages.js";
 import { registerPage } from "../pages/register.js";
-import { PreventDefaultATag } from "./utils.js";
+import { postPage } from "../pages/post.js"; // Import the post page
+import { getCookie, PreventDefaultATag } from "./utils.js";
+
 const routes = {
   "/": {
     page: homePage,
@@ -18,22 +20,39 @@ const routes = {
   },
   "/register": {
     page: registerPage,
-    title: "Login",
+    title: "Register",
   },
-  //"/logout": {
-  //  page: logout,
-  //  title: "Logout",
-  //},
+  "/posts/:id": {
+    page: postPage,
+    title: "Post",
+  }
 };
 
-export function router() {
+export async function router() {
+
+
   const path = window.location.pathname;
-  const route = routes[path] || routes["/404"];
+  let route = routes[path] || routes["/404"];
+
+  console.log('path', path)
+  // Handle dynamic route for /posts/:id
+  if (path.startsWith("/posts/")) {
+    const id = path.split("/")[2];
+    route = {
+      page: async () => postPage(id),
+    };
+  }
+
+
+  if (await getCookie("auth_token") === null && path !== "/login" && path !== "/register") {
+    route = routes["/login"];
+  }
+
   document.title = route.title;
-  route.page();
+  await route.page();
 }
 
 window.addEventListener("popstate", router);
 PreventDefaultATag();
 
-router(); // Initial call to load the default page
+await router(); // Initial call to load the default page

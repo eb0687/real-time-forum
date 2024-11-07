@@ -1,0 +1,25 @@
+{
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "alt+j"
+            ],
+            "commands": [
+                "editor.action.moveLinesDownAction"
+            ]
+        },
+        {
+            "before": [
+                "alt+k"
+            ],
+            "commands": [
+                "editor.action.moveLinesUpAction"
+            ]
+        },
+        {
+            "command": "vscode-neovim.escape",
+            "key": "Escape",
+            "when": "editorTextFocus && neovim.init"
+        },    
+    ]
+}

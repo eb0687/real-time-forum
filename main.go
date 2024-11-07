@@ -38,20 +38,12 @@ func main() {
 		fmt.Printf("err: %v\n", err)
 		return
 	}
-	// q := database.New(db)
-	// p, err := q.ReadAllPosts()
-	// if err != nil {
-	// 	fmt.Printf("err: %v\n", err)
-	// 	return
-	// }
-	// fmt.Printf("p: %v\n", p)
 	WebServer := server.WebServer{
 		DB: database.New(db),
 	}
 	defer db.Close()
 
 	WebServer.AddHandlers()
-	// Start server
 	fmt.Println("Listening on", models.DEFAULT_PORT)
 	err = http.ListenAndServe(models.DEFAULT_PORT, WebServer.Mux)
 	if err != nil {

@@ -1,15 +1,23 @@
-import { attach } from "../js/utils.js";
+import { PostList } from "../components/post.js";
+import { SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
+export async function homePage() {
+    const res = await SpecialFetch("/api/posts");
+    if (!res.ok) return;
+    /**
+     * @type {import("../js/types").Post[]}
+     */
+    const posts = await res.json();
 
-export function homePage() {
-    attachBaseLayout(/*html*/`
-        <div>home page</div>
+    await attachBaseLayout(/*html*/`
+        <div>
+            ${PostList(posts)}
+        </div>
     `, capabilities);
 }
 
 function capabilities() {
-    
 }
 
 

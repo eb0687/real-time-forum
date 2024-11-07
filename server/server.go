@@ -25,16 +25,7 @@ func (ws *WebServer) AddHandlers() {
 	parent.HandleFunc("/api/register", ws.RegisterHandler)
 	parent.HandleFunc("/api/logout", ws.LogoutHandler)
 
-	parent.HandleFunc("POST /api/posts", ws.CreatePost)
-	parent.HandleFunc("GET /api/posts", ws.ReadAllPosts)
-	parent.HandleFunc("GET /api/posts/{id}", ws.ReadPost)
-	parent.HandleFunc("PATCH /api/posts/{id}", ws.UpdatePost)
-	parent.HandleFunc("DELETE /api/posts/{id}", ws.DeletePost)
 
-	parent.HandleFunc("POST /api/comments", ws.CreateComment)
-	parent.HandleFunc("GET /api/comments", ws.ReadAllComments)
-	parent.HandleFunc("PATCH /api/comments/{id}", ws.UpdatePost)
-	parent.HandleFunc("DELETE /api/comments/{id}", ws.DeletePost)
 
 	parent.Handle("/api/", http.StripPrefix("/api", ws.RegisterWithAuth()))
 	ws.Mux = s(parent)
@@ -62,5 +53,20 @@ func (ws *WebServer) RegisterWithAuth() http.Handler {
 	router.HandleFunc("/homepage", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Homepage")
 	})
+
+
+
+	router.HandleFunc("POST /api/comments", ws.CreateComment)
+	router.HandleFunc("GET /api/comments", ws.ReadAllComments)
+	router.HandleFunc("PATCH /api/comments/{id}", ws.UpdatePost)
+	router.HandleFunc("DELETE /api/comments/{id}", ws.DeletePost)
+
+	router.HandleFunc("POST /posts", ws.CreatePost)
+	router.HandleFunc("GET /posts", ws.ReadAllPosts)
+	router.HandleFunc("GET /posts/{id}", ws.ReadPost)
+	router.HandleFunc("PUT /posts/{id}", ws.UpdatePost)
+	router.HandleFunc("DELETE /posts/{id}", ws.DeletePost)
+
+	router.HandleFunc("/cookie", ws.CheckCookie)
 	return middlewares.Auth(router, ws.DB)
 }
