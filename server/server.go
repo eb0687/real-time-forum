@@ -24,6 +24,9 @@ func (ws *WebServer) AddHandlers() {
 	parent.HandleFunc("/api/login", ws.LoginHandler)
 	parent.HandleFunc("/api/register", ws.RegisterHandler)
 	parent.HandleFunc("/api/logout", ws.LogoutHandler)
+
+
+
 	parent.Handle("/api/", http.StripPrefix("/api", ws.RegisterWithAuth()))
 	ws.Mux = s(parent)
 }
@@ -53,6 +56,10 @@ func (ws *WebServer) RegisterWithAuth() http.Handler {
 
 
 
+	router.HandleFunc("POST /api/comments", ws.CreateComment)
+	router.HandleFunc("GET /api/comments", ws.ReadAllComments)
+	router.HandleFunc("PATCH /api/comments/{id}", ws.UpdatePost)
+	router.HandleFunc("DELETE /api/comments/{id}", ws.DeletePost)
 
 	router.HandleFunc("POST /posts", ws.CreatePost)
 	router.HandleFunc("GET /posts", ws.ReadAllPosts)
