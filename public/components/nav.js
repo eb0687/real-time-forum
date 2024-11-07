@@ -2,7 +2,7 @@ import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "../pages/layouts.js";
 
 export const Nav = async () => {
-    let cookie = await getCookie("auth_token");
+    const cookie = await getCookie("auth_token");
 
     let nav;
     if (!cookie) {
@@ -34,9 +34,6 @@ function cap() {
         try {
             const response = await SpecialFetch("/api/logout", "POST");
             if (!response.ok) throw "Logout failed, please try again";
-
-            // const data = await response.json();
-            // console.log("Logout response", data);
 
             attachBaseLayout("", () => { })
             console.log("logged out from server");

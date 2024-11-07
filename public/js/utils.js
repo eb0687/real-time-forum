@@ -39,7 +39,6 @@ export async function getCookie(name) {
 
     const cookie = decodeURI(parts.pop().split(";").shift());
 
-    // TODO: check cookie from server
     const res = await SpecialFetch("/api/cookie")
     if (!res || !res.ok) return null;
 
@@ -47,7 +46,6 @@ export async function getCookie(name) {
 }
 
 
-// you can only send json data or array or a map
 export async function SpecialFetch(url, method, data) {
     try {
         const response = await fetch(url, {

@@ -45,9 +45,9 @@ export async function router() {
   }
 
 
-  // if (await getCookie("auth_token") === null && path !== "/login" && path !== "/register") {
-  //   route = routes["/login"];
-  // }
+  if (await getCookie("auth_token") === null && path !== "/login" && path !== "/register") {
+    route = routes["/login"];
+  }
 
   document.title = route.title;
   await route.page();

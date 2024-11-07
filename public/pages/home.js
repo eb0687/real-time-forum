@@ -1,13 +1,8 @@
 import { PostList } from "../components/post.js";
-import { SpecialFetch, getCookie, reRoute } from "../js/utils.js";
+import { SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export async function homePage() {
-    console.log('Page');
-    if (await getCookie("auth_token") === null) {
-        reRoute("/login");
-        return;
-    } 
     const res = await SpecialFetch("/api/posts");
     if (!res.ok) return;
     /**
@@ -23,7 +18,6 @@ export async function homePage() {
 }
 
 function capabilities() {
-    // Add any additional capabilities here
 }
 
 

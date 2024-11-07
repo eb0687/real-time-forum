@@ -34,11 +34,5 @@ export default [
       "strict": "warn",
 
     }
-  },
-
-  // Optional: TypeScript configuration if needed
-  // {
-  //   files: ["**/*.ts", "**/*.tsx"],
-  //   ...pluginTs.configs.recommended
-  // }
+  }
 ];
