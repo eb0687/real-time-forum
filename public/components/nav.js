@@ -1,5 +1,6 @@
 import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "../pages/layouts.js";
+import { createPostModal } from "./createPost.js";
 
 export const Nav = async () => {
     const cookie = await getCookie("auth_token");
@@ -7,28 +8,27 @@ export const Nav = async () => {
     let nav;
     if (!cookie) {
         nav = /*html*/`
-    <nav>
-        <a href="/" class="route">Home</a>
-        <a href="/about" class="route">About</a>
-        <a href="/login" class="route">login</a>
-        <a href="/register" class="route">register</a>
-    </nav>
+        <nav>
+            <a href="/" class="route">Home</a>
+            <a href="/about" class="route">About</a>
+            <a href="/login" class="route">login</a>
+            <a href="/register" class="route">register</a>
+        </nav>
     `
-    } else {
-        nav = /*html*/`
+        return { nav, cap: () => { } };
+    }
+    nav = /*html*/`
     <nav>
         <a href="/" class="route">Home</a>
         <a href="/about" class="route">About</a>
+        <a class="route" id="create-post-button">Create Post</a>
         <a class="route" id="logout-button">logout</a>
     </nav>
     `
-    }
-    return { nav, cap };
+    return { nav, cap: capabilities };
 }
 
-
-function cap() {
-
+function capabilities() {
     document.getElementById("logout-button")?.addEventListener("click", async (e) => {
         e.preventDefault();
         try {
@@ -43,5 +43,13 @@ function cap() {
         } catch (error) {
             console.log("error", error);
         }
+    });
+
+    document.getElementById("create-post-button")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!document.getElementById('create-post-modal')) {
+            createPostModal();
+        }
+        document.getElementById('create-post-modal').style.display = 'block';
     });
 }
