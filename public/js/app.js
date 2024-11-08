@@ -4,6 +4,7 @@ import { notFoundPage } from "../pages/errorPages.js";
 import { registerPage } from "../pages/register.js";
 import { postPage } from "../pages/post.js"; // Import the post page
 import { getCookie, PreventDefaultATag } from "./utils.js";
+import { profilePage } from "../pages/profile.js";
 
 const routes = {
   "/": {
@@ -25,16 +26,18 @@ const routes = {
   "/posts/:id": {
     page: postPage,
     title: "Post",
-  }
+  },
+  "/profile/:id": {
+    page: profilePage,
+    title: "Profile",
+  },
 };
 
 export async function router() {
-
-
   const path = window.location.pathname;
   let route = routes[path] || routes["/404"];
 
-  console.log('path', path)
+  console.log("path", path);
   // Handle dynamic route for /posts/:id
   if (path.startsWith("/posts/")) {
     const id = path.split("/")[2];
@@ -43,8 +46,20 @@ export async function router() {
     };
   }
 
+  console.log("path", path);
+  // Handle dynamic route for /profile/:id
+  if (path.startsWith("/profile/")) {
+    const id = path.split("/")[2];
+    route = {
+      page: async () => profilePage(id),
+    };
+  }
 
-  if (await getCookie("auth_token") === null && path !== "/login" && path !== "/register") {
+  if (
+    (await getCookie("auth_token")) === null &&
+    path !== "/login" &&
+    path !== "/register"
+  ) {
     route = routes["/login"];
   }
 
