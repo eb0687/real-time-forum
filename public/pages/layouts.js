@@ -9,6 +9,9 @@ export async function attachBaseLayout(content, capabilities) {
     const { nav, cap } = await Nav();
 
 
+    // DON'T AWAIT IT 
+    // DON'T AWAIT IT
+    // DON'T AWAIT IT
     if (getCookie("auth_token") === null) {
         console.log("re route to login");
         await reRoute("/login");
