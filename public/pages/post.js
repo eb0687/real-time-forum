@@ -96,6 +96,8 @@ function handleCreateComment(postId) {
   });
 }
 
+// TODO: page does not refresh automatically to show the newly created comment
+
 // TODO:
 // function handleDeleteComment(comment) {}
 
