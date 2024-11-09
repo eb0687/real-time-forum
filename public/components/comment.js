@@ -10,6 +10,8 @@ export const Comment = (comment) => {
         <p>created: ${comment.created_at.Time}</p>
         <p>userid: ${comment.userid}</p>
         <p>postid: ${comment.postid}</p>
+        <button class="edit-comment" data-comment-id="${comment.id}">Edit</button>
+        <button class="delete-comment" data-comment-id="${comment.id}">Delete</button>
     </a>
     `;
 };

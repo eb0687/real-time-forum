@@ -36,6 +36,7 @@ export async function postPage(id) {
     () => {
       handleEditPost(post);
       handleCreateComment(post.id);
+      handleDeleteComment(post.id);
     },
   );
 }
@@ -61,7 +62,6 @@ function Comments(post) {
  */
 async function fetchComments(post) {
   const commentsRes = await SpecialFetch(`/api/comments/${post.id}`);
-  // const commentsRes = await SpecialFetch(`/api/comments`);
   if (!commentsRes) {
     return "<p>Failed to load comments.</p>";
   }
@@ -69,7 +69,6 @@ async function fetchComments(post) {
     return "<p>Failed to load comments.</p>";
   }
   const comments = await commentsRes.json();
-  console.log(comments);
   return CommentList(comments);
 }
 
@@ -97,11 +96,30 @@ function handleCreateComment(postId) {
   });
 }
 
-// TODO:
-// function handleDeleteComment(comment) {}
+async function handleDeleteComment(postId) {
+  const deleteButtons = document.querySelectorAll(".delete-comment");
+
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const commentId = button.dataset.commentId;
+      if (!confirm("Are you sure you want to delete this comment?")) {
+        return;
+      }
+
+      const res = await SpecialFetch(`/api/comments/${commentId}`, "DELETE");
+
+      if (!res || !res.ok) {
+        console.error("Failed to delete comment");
+        return;
+      }
+      await reRoute(`/posts/${postId}`);
+    });
+  });
+}
 
 // TODO:
-// function handleUpdateComment(comment) {}
+async function handleUpdateComment(comment) {}
 
 function handleEditPost(post) {
   const editButton = document.getElementById("edit-post");
