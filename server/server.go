@@ -52,10 +52,10 @@ func (ws *WebServer) RegisterWithAuth() http.Handler {
 		fmt.Fprintf(w, "Homepage")
 	})
 
-	router.HandleFunc("POST /api/comments", ws.CreateComment)
-	router.HandleFunc("GET /api/comments", ws.ReadAllComments)
-	router.HandleFunc("PATCH /api/comments/{id}", ws.UpdatePost)
-	router.HandleFunc("DELETE /api/comments/{id}", ws.DeletePost)
+	router.HandleFunc("POST /comments", ws.CreateComment)
+	router.HandleFunc("GET /comments", ws.ReadAllComments)
+	router.HandleFunc("PUT /comments/{id}", ws.UpdateComment)
+	router.HandleFunc("DELETE /comments/{id}", ws.DeleteComment)
 
 	router.HandleFunc("POST /posts", ws.CreatePost)
 	router.HandleFunc("GET /posts", ws.ReadAllPosts)
