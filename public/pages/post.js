@@ -1,6 +1,7 @@
 import { managePostModal } from "../components/managePost.js";
 import { SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
+import { CommentList } from "../components/comment.js";
 
 export async function postPage(id) {
   await attachBaseLayout("<h1>Loading post...</h1>", handleEditPost);
@@ -15,6 +16,8 @@ export async function postPage(id) {
 
   const comments = Comments(post);
 
+  const commentsHtml = await fetchComments(post);
+
   document.title = post.title;
   await attachBaseLayout(
     /*html*/ `
@@ -27,11 +30,12 @@ export async function postPage(id) {
 
         <h2>Comments</h2>
         ${comments}
+        ${commentsHtml}
 
     `,
     () => {
       handleEditPost(post);
-      handleCreateComment();
+      handleCreateComment(post.id);
     },
   );
 }
@@ -50,7 +54,26 @@ function Comments(post) {
     `;
 }
 
-function handleCreateComment() {
+/**
+ *
+ * @param {import("../js/types").Post} post
+ * @returns {string}
+ */
+async function fetchComments(post) {
+  const commentsRes = await SpecialFetch(`/api/comments/${post.id}`);
+  // const commentsRes = await SpecialFetch(`/api/comments`);
+  if (!commentsRes) {
+    return "<p>Failed to load comments.</p>";
+  }
+  if (!commentsRes.ok) {
+    return "<p>Failed to load comments.</p>";
+  }
+  const comments = await commentsRes.json();
+  console.log(comments);
+  return CommentList(comments);
+}
+
+function handleCreateComment(postId) {
   const submitButton = document.getElementById("submit-comment-button");
   const commentText = document.getElementById("comment-text");
 
@@ -60,6 +83,7 @@ function handleCreateComment() {
     if (comment) {
       const res = await SpecialFetch("/api/comments", "POST", {
         body: comment,
+        postid: postId,
       });
       if (!res) {
         return;
@@ -72,8 +96,10 @@ function handleCreateComment() {
   });
 }
 
+// TODO:
 // function handleDeleteComment(comment) {}
 
+// TODO:
 // function handleUpdateComment(comment) {}
 
 function handleEditPost(post) {
@@ -88,4 +114,3 @@ function handleEditPost(post) {
     managePostModal(true, post);
   });
 }
-
