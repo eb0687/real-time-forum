@@ -1,5 +1,5 @@
 import { managePostModal } from "../components/managePost.js";
-import { SpecialFetch } from "../js/utils.js";
+import { reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 import { CommentList } from "../components/comment.js";
 
@@ -92,11 +92,10 @@ function handleCreateComment(postId) {
         return;
       }
       console.log("comment created successfully");
+      await reRoute(`/posts/${postId}`);
     }
   });
 }
-
-// TODO: page does not refresh automatically to show the newly created comment
 
 // TODO:
 // function handleDeleteComment(comment) {}
