@@ -54,6 +54,7 @@ func (ws *WebServer) RegisterWithAuth() http.Handler {
 
 	router.HandleFunc("POST /comments", ws.CreateComment)
 	router.HandleFunc("GET /comments", ws.ReadAllComments)
+	router.HandleFunc("GET /comments/{id}", ws.ReadCommentsByPostId)
 	router.HandleFunc("PUT /comments/{id}", ws.UpdateComment)
 	router.HandleFunc("DELETE /comments/{id}", ws.DeleteComment)
 

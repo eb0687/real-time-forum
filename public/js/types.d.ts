@@ -6,6 +6,7 @@ export interface Post {
   created_at: CreatedAt;
   updated_at: UpdatedAt;
 }
+
 export interface User {
   id: number;
   nickname: string;
@@ -16,6 +17,16 @@ export interface User {
   email: string;
   created_at: CreatedAt;
   updated_at: UpdatedAt;
+}
+
+export interface Comment {
+  id: number;
+  userid: number;
+  postid: number;
+  body: string;
+  created_at: CreatedAt;
+  updated_at: UpdatedAt;
+  foreign: string;
 }
 
 export interface CreatedAt {
@@ -29,4 +40,3 @@ export interface UpdatedAt {
 }
 
 export type Paths = "/register" | "/posts/:id" | "/login" | "/404" | "/";
-
