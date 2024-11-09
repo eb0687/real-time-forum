@@ -4,7 +4,7 @@ import { attachBaseLayout } from "./layouts.js";
 
 export async function postPage(id) {
 
-    await attachBaseLayout("<h1>Loading post...</h1>", cap);
+    await attachBaseLayout("<h1>Loading post...</h1>", handleEditPost);
 
     const res = await SpecialFetch(`/api/posts/${id}`);
     if (!res.ok) return;
@@ -14,6 +14,9 @@ export async function postPage(id) {
      */
     const post = await res.json();
 
+
+    const comments = Comments(post);
+
     document.title = post.title;
     await attachBaseLayout(/*html*/`
         <h1>${post.title}</h1>
@@ -22,10 +25,38 @@ export async function postPage(id) {
         <p>${post.created_at.Time}</p>
         <p>${post.updated_at.Time}</p>
         <button id="edit-post">edit</button>
-    `, () => { cap(post) });
+
+        <h2>Comments</h2>
+        ${comments}
+
+    `, () => {
+        handleEditPost(post);
+    });
 }
 
-function cap(post) {
+
+/**
+ * 
+ * @param {import("../js/types").Post} post 
+ * @returns {string}
+ */
+function Comments(post) {
+
+    return /*html*/`
+        <h1></h1>
+    `
+
+}
+
+function handleDeleteComment(comment) {
+
+}
+
+function handleUpdateComment(comment) {
+
+}
+
+function handleEditPost(post)   {
     const editButton = document.getElementById("edit-post");
 
     editButton?.addEventListener("click", (e) => {

@@ -10,14 +10,47 @@ export async function profilePage(id) {
   /**
    * @type {import("../js/types").User}
    */
-
   const user = await res.json();
 
   document.title = user.nickname;
 
-  // FIX: this is not being populated and takes to me a 500 error
   await attachBaseLayout(
-    /*html*/ `
+    GetProfilePageHTML(user),
+    () => {
+      capabilities();
+    },
+  );
+}
+
+
+
+
+export async function ownProfilePage() {
+
+  const res = await SpecialFetch(`/api/profile`);
+  if (!res.ok) return;
+
+  /**
+   * @type {import("../js/types").User}
+   */
+  const user = await res.json();
+
+  document.title = user.nickname;
+
+  await attachBaseLayout(
+    GetProfilePageHTML(user),
+    () => {
+      capabilities();
+    },
+  );
+}
+/**
+ * 
+ * @param {import("../js/types").User} user 
+ * @returns {string}
+ */
+function GetProfilePageHTML(user ) {
+    return /*html*/ `
         <h1>Profile of ${user.nickname}</h1>
         <p><strong>Nickname:</strong> ${user.nickname}</p>
         <p><strong>Age:</strong> ${user.age}</p>
@@ -26,11 +59,7 @@ export async function profilePage(id) {
         <p><strong>Last Name:</strong> ${user.last_name}</p>
         <p><strong>Email:</strong> ${user.email}</p>
         <p><strong>Joined On:</strong> ${user.created_at.Time}</p>
-    `,
-    () => {
-      capabilities();
-    },
-  );
+    `;
 }
 
 function capabilities() {

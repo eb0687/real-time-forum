@@ -6,7 +6,6 @@ export interface Post {
   created_at: CreatedAt;
   updated_at: UpdatedAt;
 }
-
 export interface User {
   id: number;
   nickname: string;
@@ -16,6 +15,7 @@ export interface User {
   last_name: string;
   email: string;
   created_at: CreatedAt;
+  updated_at: UpdatedAt;
 }
 
 export interface CreatedAt {

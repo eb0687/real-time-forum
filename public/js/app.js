@@ -4,7 +4,7 @@ import { notFoundPage } from "../pages/errorPages.js";
 import { registerPage } from "../pages/register.js";
 import { postPage } from "../pages/post.js"; // Import the post page
 import { getCookie, PreventDefaultATag } from "./utils.js";
-import { profilePage } from "../pages/profile.js";
+import { profilePage, ownProfilePage} from "../pages/profile.js";
 
 const routes = {
   "/": {
@@ -26,6 +26,11 @@ const routes = {
   "/posts/:id": {
     page: postPage,
     title: "Post",
+  },
+
+  "/profile": {
+    page: ownProfilePage,
+    title: "Profile",
   },
   "/profile/:id": {
     page: profilePage,

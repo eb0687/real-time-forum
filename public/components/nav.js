@@ -9,8 +9,6 @@ export const Nav = async () => {
   if (!cookie) {
     nav = /*html*/ `
         <nav>
-            <a href="/" class="route">Home</a>
-            <a href="/about" class="route">About</a>
             <a href="/login" class="route">login</a>
             <a href="/register" class="route">register</a>
         </nav>
@@ -22,7 +20,7 @@ export const Nav = async () => {
         <a href="/" class="route">Home</a>
         <a href="/about" class="route">About</a>
         <a class="route" id="create-post-button">Create Post</a>
-        <a href="/profile" class="route" id="profile-button">Profile Page</a>
+        <a href="/profile" class="route" >Profile Page</a>
         <a class="route" id="logout-button">logout</a>
     </nav>
     `;
@@ -42,23 +40,6 @@ function capabilities() {
         console.log("logged out from server");
 
         await reRoute("/login");
-      } catch (error) {
-        console.log("error", error);
-      }
-    });
-
-  document
-    .getElementById("profile-button")
-    ?.addEventListener("click", async (e) => {
-      e.preventDefault();
-      try {
-        // TODO: figure out how to retrieve the userid dynamically from the server
-        // and append it to the url
-        const response = await SpecialFetch("/api/profile/", "GET");
-        if (!response.ok) throw "Something went wrong";
-
-        // TODO: reroute to the profile page here
-        await reRoute("/profile/");
       } catch (error) {
         console.log("error", error);
       }

@@ -64,6 +64,7 @@ func (ws *WebServer) RegisterWithAuth() http.Handler {
 	router.HandleFunc("DELETE /posts/{id}", ws.DeletePost)
 
 	router.HandleFunc("GET /profile/{id}", ws.GetUserProfile)
+	router.HandleFunc("GET /profile", ws.GetOwnUserProfile)
 
 	router.HandleFunc("/cookie", ws.CheckCookie)
 	return middlewares.Auth(router, ws.DB)

@@ -130,33 +130,15 @@ func (q *Queries) ReadAllUsers() ([]User, error) {
 
 const readUser = `
 SELECT
-    id,
-    nickname,
-    age,
-    gender,
-    first_name,
-    last_name,
-    email,
-    password
+id, nickname, age, gender, first_name, last_name, email, password, created_at, updated_at
 FROM users
 WHERE
     id = ?
 `
 
-type ReadUserRow struct {
-	ID        int64  `json:"id"`
-	Nickname  string `json:"nickname"`
-	Age       int64  `json:"age"`
-	Gender    string `json:"gender"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-}
-
-func (q *Queries) ReadUser(id int64) (ReadUserRow, error) {
+func (q *Queries) ReadUser(id int64) (User, error) {
 	row := q.db.QueryRow(readUser, id)
-	var i ReadUserRow
+	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.Nickname,
@@ -166,6 +148,8 @@ func (q *Queries) ReadUser(id int64) (ReadUserRow, error) {
 		&i.LastName,
 		&i.Email,
 		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }
