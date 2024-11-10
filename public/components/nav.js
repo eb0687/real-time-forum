@@ -15,33 +15,33 @@ export const Nav = async () => {
     `;
     return { nav, cap: () => { } };
   }
+
   nav = /*html*/ `
+    <link rel="stylesheet" href="/public/css/nav.css">
     <nav class="sidebar">
-        <a href="/tailwind.html" class="nav-item">
+        <a href="/" class="nav-item">
             <i class="fas fa-home"></i>
             <span class="nav-text">Home</span>
         </a>
-        <a href="/tailwind.html" class="nav-item">
+        <a href="/about" class="nav-item">
             <i class="fas fa-info-circle"></i>
             <span class="nav-text">About</span>
         </a>
-        <a href="/tailwind.html" class="nav-item">
-            <i class="fas fa-plus-circle"></i>
-            <span class="nav-text">Create Post</span>
-        </a>
-        <a href="/tailwind.html" class="nav-item">
+        <a href="/profile" class="nav-item" >
             <i class="fas fa-user"></i>
             <span class="nav-text">Profile Page</span>
         </a>
-        <a href="/tailwind.html" class="nav-item">
+        <button class="nav-item" id="create-post-button">
+            <i class="fas fa-plus-circle"></i>
+            <span class="nav-text">Create Post</span>
+        </button>
+        <button class="nav-item" id="logout-button" >
             <i class="fas fa-sign-out-alt"></i>
             <span class="nav-text">Logout</span>
-        </a>
+        </button>
     </nav>
-    <link rel="stylesheet" href="/public/css/nav.css">
-
-    `;
-    return { nav, cap: capabilities };
+  `;
+  return { nav, cap: capabilities };
 };
 
 function capabilities() {
