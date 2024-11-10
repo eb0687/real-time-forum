@@ -6,6 +6,7 @@ import { postPage } from "../pages/post.js"; // Import the post page
 import { getCookie, PreventDefaultATag } from "./utils.js";
 import { profilePage, ownProfilePage} from "../pages/profile.js";
 import { applyTailwind } from "./cheatyCheaty.js";
+import { authPage } from "../pages/auth.js";
 
 const routes = {
   "/": {
@@ -17,11 +18,11 @@ const routes = {
     title: "404 - Page Not Found",
   },
   "/login": {
-    page: loginPage,
+    page: authPage,
     title: "Login",
   },
   "/register": {
-    page: registerPage,
+    page: authPage,
     title: "Register",
   },
   "/posts/:id": {

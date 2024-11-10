@@ -8,10 +8,10 @@ export const Nav = async () => {
   let nav;
   if (!cookie) {
     nav = /*html*/ `
-        <nav>
+        <!-- <nav>
             <a href="/login" class="route">login</a>
             <a href="/register" class="route">register</a>
-        </nav>
+        </nav> -->
     `;
     return { nav, cap: () => { } };
   }

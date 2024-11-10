@@ -5,9 +5,9 @@ export async function loginPage() {
   
   await attachBaseLayout(/*html*/ `
         <form id="login-form" >
-            <input type="text" name="email" id="email">
-            <input type="password" name="password" id="password">
-            <button type="submit">login</button>
+            <input class="b-1px-white text-white" type="text" name="email" id="email">
+            <input class="b-1px-white text-white" type="password" name="password" id="password">
+            <button class="b-1px-white text-white" type="submit">login</button>
         </form>
     `,
     capabilities,

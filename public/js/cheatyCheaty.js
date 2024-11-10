@@ -24,7 +24,6 @@ export const applyTailwind = () => document.querySelectorAll("*").forEach(
         classes.forEach((cls) => {
             
             const first = cls.split("-")[1];
-            console.log('first',first)
             // m-[number]
             // Margin and padding
             if (cls.startsWith("m-")) el.style.margin = `${first}`;

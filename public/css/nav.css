@@ -1,7 +1,7 @@
 .sidebar {
     background-color: black;
     border: 1px solid white;
-    color: white;
+    color: #ddd;
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -34,7 +34,7 @@
 }
 
 .nav-item:hover {
-    background-color: white;
+    background-color: #ddd;
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
     color: black;
     border-radius: 0.5rem;
@@ -42,7 +42,7 @@
 
 .nav-item i {
     font-size: 1.25rem;
-    color: white;
+    color: #ddd;
 }
 
 
@@ -67,7 +67,7 @@
 
 
 .sidebar * {
-    color: white;
+    color: #ddd;
 }
 
 button.nav-item {

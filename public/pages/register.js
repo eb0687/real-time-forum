@@ -33,11 +33,11 @@ export async function registerPage() {
   <p id="message"></p>
 </form>
     `,
-    capabilities,
+    registerCap,
   );
 }
 
-function capabilities() {
+function registerCap() {
   document
     .getElementById("registration-form")
     .addEventListener("submit", async (e) => {

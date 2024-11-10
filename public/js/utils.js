@@ -52,12 +52,12 @@ export async function SpecialFetch(url, method, data) {
             },
             body: JSON.stringify(data),
         });
-        if (response.ok) return response;
-        const currentPath = window.location.pathname;
-        if (response.status === 401 && currentPath !== "/login") await reRoute("/login");
-        if (response.status === 401) await reRoute("/login");
-        if (response.status === 404) await reRoute("/404");
-        if (response.status === 500) await reRoute("/500");
+        // if (response.ok) return response;
+        // const currentPath = window.location.pathname;
+        // if (response.status === 401 && currentPath !== "/login") await reRoute("/login");
+        // if (response.status === 401) await reRoute("/login");
+        // if (response.status === 404) await reRoute("/404");
+        // if (response.status === 500) await reRoute("/500");
 
         return response;
     } catch (e) {
