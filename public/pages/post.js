@@ -37,6 +37,7 @@ export async function postPage(id) {
       handleEditPost(post);
       handleCreateComment(post.id);
       handleDeleteComment(post.id);
+      handleUpdateComment(post.id);
     },
   );
 }
@@ -118,8 +119,61 @@ async function handleDeleteComment(postId) {
   });
 }
 
-// TODO:
-async function handleUpdateComment(comment) {}
+async function handleUpdateComment(postId) {
+  const editButtons = document.querySelectorAll(".edit-comment");
+
+  editButtons.forEach((editButton) => {
+    editButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      const commentId = editButton.dataset.commentId;
+
+      const contentDiv = document.getElementById(`comment-${commentId}`);
+      const editForm = document.getElementById(`edit-form-${commentId}`);
+      const textarea = editForm.querySelector(".edit-textarea");
+      const saveButton = editForm.querySelector(".save-comment");
+      const cancelButton = editForm.querySelector(".cancel-edit");
+
+      if (!contentDiv || !editForm) {
+        console.log("Could not find comment elements");
+        return;
+      }
+
+      contentDiv.style.display = "none";
+      editForm.style.display = "block";
+
+      // Handle cancel button
+      const cancelHandler = () => {
+        contentDiv.style.display = "block";
+        editForm.style.display = "none";
+        // Remove event listener to prevent multiple bindings
+        cancelButton.removeEventListener("click", cancelHandler);
+      };
+      cancelButton.addEventListener("click", cancelHandler);
+
+      // Handle save button
+      const saveHandler = async () => {
+        const updatedText = textarea.value;
+        if (!updatedText.trim()) {
+          alert("Comment cannot be empty!");
+          return;
+        }
+
+        const res = await SpecialFetch(`/api/comments/${commentId}`, "PUT", {
+          body: updatedText,
+        });
+        if (!res || !res.ok) {
+          console.log("Failed to update comment");
+          return;
+        }
+
+        // Remove event listener to prevent multiple bindings
+        saveButton.removeEventListener("click", saveHandler);
+        await reRoute(`/posts/${postId}`);
+      };
+      saveButton.addEventListener("click", saveHandler);
+    });
+  });
+}
 
 function handleEditPost(post) {
   const editButton = document.getElementById("edit-post");
