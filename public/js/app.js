@@ -5,6 +5,7 @@ import { registerPage } from "../pages/register.js";
 import { postPage } from "../pages/post.js"; // Import the post page
 import { getCookie, PreventDefaultATag } from "./utils.js";
 import { profilePage, ownProfilePage} from "../pages/profile.js";
+import { applyTailwind } from "./cheatyCheaty.js";
 
 const routes = {
   "/": {
@@ -70,6 +71,7 @@ export async function router() {
 
   document.title = route.title;
   await route.page();
+  applyTailwind()
 }
 
 window.addEventListener("popstate", router);

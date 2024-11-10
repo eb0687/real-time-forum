@@ -1,4 +1,5 @@
-document.querySelectorAll("*").forEach(
+
+export const applyTailwind = () => document.querySelectorAll("*").forEach(
     /**
      * 
      * @param {HTMLElement} el 
@@ -11,21 +12,19 @@ document.querySelectorAll("*").forEach(
 
         const classes = el.className.split(" ");
         const colors = {
-            primary: "#007bff",
-            secondary: "#6c757d",
+            pr: "black",
+            sec: "gray",
             success: "#28a745",
             danger: "#dc3545",
             warning: "#ffc107",
             info: "#17a2b8",
-            light: "#f8f9fa",
-            dark: "#343a40",
-            white: "#fff",
-            black: "#000",
-            border: "#dee2e6",
+            border: "white",
         }
 
         classes.forEach((cls) => {
+            
             const first = cls.split("-")[1];
+            console.log('first',first)
             // m-[number]
             // Margin and padding
             if (cls.startsWith("m-")) el.style.margin = `${first}`;
@@ -53,7 +52,7 @@ document.querySelectorAll("*").forEach(
             if (cls === "justify-around") el.style.justifyContent = "space-around";
             if (cls === "justify-start") el.style.justifyContent = "flex-start";
             if (cls === "justify-end") el.style.justifyContent = "flex-end";
-            
+
 
 
             // // Grid
@@ -98,7 +97,7 @@ document.querySelectorAll("*").forEach(
 
             // b-[number]-[color]
             if (cls.startsWith("b-")) {
-                el.style.borderWidth = `${first}`;
+                el.style.borderWidth = `${cls.split("-")[1]}`;
                 el.style.borderColor = colors[cls.split("-")[2]];
                 el.style.borderStyle = "solid";
             }
@@ -107,5 +106,15 @@ document.querySelectorAll("*").forEach(
             if (cls.startsWith("flex-grow-")) el.style.flexGrow = cls.split("-")[2];
             // if (cls.startsWith("flex-shrink-")) el.style.flexShrink = cls.split("-")[2];
             // if (cls.startsWith("basis-")) el.style.flexBasis = `${num}`;
+            if (cls === "w-full") el.style.width = "100%";
+            if (cls === "h-full") el.style.height = "100%";
+            if (cls === "w-fit") el.style.width = "fit-content";
+            if (cls === "h-fit") el.style.height = "fit-content";
+
+            if (cls === "rounded") el.style.borderRadius = "5px";
+            if (cls === "rounded-full") el.style.borderRadius = "50%";
+            if (cls === "rounded-lg") el.style.borderRadius = "10px";
+            if (cls === "rounded-xl") el.style.borderRadius = "15px";
+            
         });
     });
