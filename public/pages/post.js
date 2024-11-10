@@ -42,12 +42,7 @@ export async function postPage(id) {
   );
 }
 
-/**
- *
- * @param {import("../js/types").Post} post
- * @returns {string}
- */
-function Comments(post) {
+function Comments() {
   return /*html*/ `
         <div>
             <textarea id="comment-text" placeholder="Write your comment here..."></textarea>
@@ -97,7 +92,7 @@ function handleCreateComment(postId) {
   });
 }
 
-async function handleDeleteComment(postId) {
+function handleDeleteComment(postId) {
   const deleteButtons = document.querySelectorAll(".delete-comment");
 
   deleteButtons.forEach((button) => {
@@ -119,7 +114,7 @@ async function handleDeleteComment(postId) {
   });
 }
 
-async function handleUpdateComment(postId) {
+function handleUpdateComment(postId) {
   const editButtons = document.querySelectorAll(".edit-comment");
 
   editButtons.forEach((editButton) => {
