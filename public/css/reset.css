@@ -1,0 +1,93 @@
+/* Tailwind CSS Reset */
+
+/* Use a consistent box-sizing model across all elements */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Remove default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Remove list styles */
+ul,
+ol {
+    list-style: none;
+    padding: 0;
+}
+
+/* Remove the default background color on buttons and inputs */
+button,
+input,
+textarea,
+select {
+    background: none;
+    border: none;
+    outline: none;
+}
+
+/* Remove default link styles */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Set font and line-height to be consistent */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Set a consistent base font size for all elements */
+html {
+    font-size: 100%;
+    /* 16px */
+}
+
+/* Ensure the body takes up the full height */
+body,
+html {
+    height: 100%;
+}
+
+/* Prevent images and videos from overflowing their containers */
+img,
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Normalize table borders */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Standardize form element styles */
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+/* Make sure text isn't inheriting unwanted margins */
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
+    content: '';
+}
