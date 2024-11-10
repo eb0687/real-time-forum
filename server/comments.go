@@ -43,6 +43,23 @@ func (ws *WebServer) ReadAllComments(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (ws *WebServer) ReadCommentsByPostId(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		panic(models.ErrInvalidRequest)
+	}
+
+	data, err := ws.DB.ReadCommentsbyPostID(id)
+	if err != nil {
+		panic(err)
+	}
+
+	err = utils.SendJsonResponse(w, http.StatusOK, data)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (ws *WebServer) UpdateComment(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
 	if err != nil {

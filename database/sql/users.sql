@@ -13,14 +13,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *;
 
 -- name: ReadUser :one
 SELECT
-    id,
-    nickname,
-    age,
-    gender,
-    first_name,
-    last_name,
-    email,
-    password
+*
 FROM users
 WHERE
     id = ?;

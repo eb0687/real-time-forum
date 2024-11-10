@@ -1,31 +1,53 @@
 import { managePostModal } from "../components/managePost.js";
-import { SpecialFetch } from "../js/utils.js";
+import { reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
+import { CommentList } from "../components/comment.js";
 
 export async function postPage(id) {
+  await attachBaseLayout("<h1>Loading post...</h1>", handleEditPost);
 
-    await attachBaseLayout("<h1>Loading post...</h1>", cap);
+  const res = await SpecialFetch(`/api/posts/${id}`);
+  if (!res.ok) return;
 
-    const res = await SpecialFetch(`/api/posts/${id}`);
-    if (!res.ok) return;
+  /**
+   * @type {import("../js/types").Post}
+   */
+  const post = await res.json();
 
-    /**
-     * @type {import("../js/types").Post}
-     */
-    const post = await res.json();
+  const comments = Comments(post);
 
-    document.title = post.title;
-    await attachBaseLayout(/*html*/`
+  const commentsHtml = await fetchComments(post);
+
+  document.title = post.title;
+  await attachBaseLayout(
+    /*html*/ `
         <h1>${post.title}</h1>
         <p>${post.body}</p>
         <p>${post.id}</p>
         <p>${post.created_at.Time}</p>
         <p>${post.updated_at.Time}</p>
         <button id="edit-post">edit</button>
-    `, () => { cap(post) });
+
+        <h2>Comments</h2>
+        ${comments}
+        ${commentsHtml}
+
+    `,
+    () => {
+      handleEditPost(post);
+      handleCreateComment(post.id);
+      handleDeleteComment(post.id);
+      handleUpdateComment(post.id);
+    },
+  );
 }
 
-function Comments() {
+/**
+ *
+ * @param {import("../js/types").Post} post
+ * @returns {string}
+ */
+function Comments(post) {
   return /*html*/ `
         <div>
             <textarea id="comment-text" placeholder="Write your comment here..."></textarea>
@@ -75,7 +97,7 @@ function handleCreateComment(postId) {
   });
 }
 
-function handleDeleteComment(postId) {
+async function handleDeleteComment(postId) {
   const deleteButtons = document.querySelectorAll(".delete-comment");
 
   deleteButtons.forEach((button) => {
@@ -97,20 +119,71 @@ function handleDeleteComment(postId) {
   });
 }
 
-// TODO:
-// TODO: Naser says you can ignore this 
-// async function handleUpdateComment(comment) {}
+async function handleUpdateComment(postId) {
+  const editButtons = document.querySelectorAll(".edit-comment");
+
+  editButtons.forEach((editButton) => {
+    editButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      const commentId = editButton.dataset.commentId;
+
+      const contentDiv = document.getElementById(`comment-${commentId}`);
+      const editForm = document.getElementById(`edit-form-${commentId}`);
+      const textarea = editForm.querySelector(".edit-textarea");
+      const saveButton = editForm.querySelector(".save-comment");
+      const cancelButton = editForm.querySelector(".cancel-edit");
+
+      if (!contentDiv || !editForm) {
+        console.log("Could not find comment elements");
+        return;
+      }
+
+      contentDiv.style.display = "none";
+      editForm.style.display = "block";
+
+      // Handle cancel button
+      const cancelHandler = () => {
+        contentDiv.style.display = "block";
+        editForm.style.display = "none";
+        // Remove event listener to prevent multiple bindings
+        cancelButton.removeEventListener("click", cancelHandler);
+      };
+      cancelButton.addEventListener("click", cancelHandler);
+
+      // Handle save button
+      const saveHandler = async () => {
+        const updatedText = textarea.value;
+        if (!updatedText.trim()) {
+          alert("Comment cannot be empty!");
+          return;
+        }
+
+        const res = await SpecialFetch(`/api/comments/${commentId}`, "PUT", {
+          body: updatedText,
+        });
+        if (!res || !res.ok) {
+          console.log("Failed to update comment");
+          return;
+        }
+
+        // Remove event listener to prevent multiple bindings
+        saveButton.removeEventListener("click", saveHandler);
+        await reRoute(`/posts/${postId}`);
+      };
+      saveButton.addEventListener("click", saveHandler);
+    });
+  });
+}
 
 function handleEditPost(post) {
   const editButton = document.getElementById("edit-post");
 
-    editButton?.addEventListener("click", (e) => {
-        e.preventDefault();
-        const modal = document.getElementById('create-post-modal')
-        if (modal) {
-            modal.parentNode.removeChild(modal);
-        }
-        managePostModal(true, post);
-    });
-
+  editButton?.addEventListener("click", (e) => {
+    e.preventDefault();
+    const modal = document.getElementById("create-post-modal");
+    if (modal) {
+      modal.parentNode.removeChild(modal);
+    }
+    managePostModal(true, post);
+  });
 }
