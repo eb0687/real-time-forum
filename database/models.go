@@ -22,6 +22,16 @@ type Cookie struct {
 	UpdatedAt sql.NullTime `json:"updated_at"`
 }
 
+type Message struct {
+	ID         int64        `json:"id"`
+	Senderid   int64        `json:"senderid"`
+	Receiverid int64        `json:"receiverid"`
+	Body       string       `json:"body"`
+	CreatedAt  sql.NullTime `json:"created_at"`
+	UpdatedAt  sql.NullTime `json:"updated_at"`
+	Foreign    interface{}  `json:"foreign"`
+}
+
 type Post struct {
 	ID        int64        `json:"id"`
 	Userid    int64        `json:"userid"`

@@ -48,3 +48,15 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (userid) REFERENCES users (id)
     FOREIGN KEY (postid) REFERENCES posts (id)
 );
+
+
+CREATE TABLE IF NOT EXISTS Messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    senderid INTEGER NOT NULL,
+    receiverid INTEGER NOT NULL,
+    body TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    FOREIGN KEY (senderid) REFERENCES users (id)
+    FOREIGN KEY (receiverid) REFERENCES users (id)
+);
