@@ -1,10 +1,10 @@
 import { homePage } from "../pages/home.js";
-import { loginPage } from "../pages/login.js";
+// import { loginPage } from "../pages/login.js";
 import { notFoundPage } from "../pages/errorPages.js";
-import { registerPage } from "../pages/register.js";
+// import { registerPage } from "../pages/register.js";
 import { postPage } from "../pages/post.js"; // Import the post page
 import { getCookie, PreventDefaultATag } from "./utils.js";
-import { profilePage, ownProfilePage} from "../pages/profile.js";
+import { profilePage, ownProfilePage } from "../pages/profile.js";
 import { applyTailwind } from "./cheatyCheaty.js";
 import { authPage } from "../pages/auth.js";
 
@@ -72,7 +72,7 @@ export async function router() {
 
   document.title = route.title;
   await route.page();
-  applyTailwind()
+  applyTailwind();
 }
 
 window.addEventListener("popstate", router);
