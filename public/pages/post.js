@@ -14,23 +14,46 @@ export async function postPage(id) {
    */
   const post = await res.json();
 
-  const comments = Comments(post);
+  const commentsBox = CommentsBox(post);
 
   const commentsHtml = await fetchComments(post);
 
   document.title = post.title;
   await attachBaseLayout(
     /*html*/ `
-        <h1>${post.title}</h1>
-        <p>${post.body}</p>
-        <p>${post.id}</p>
-        <p>${post.created_at.Time}</p>
-        <p>${post.updated_at.Time}</p>
-        <button id="edit-post">edit</button>
 
-        <h2>Comments</h2>
-        ${comments}
-        ${commentsHtml}
+<div class="flex flex-col justify-start w-100dvh h-100dvh pl-120px pr-120px pt-10px">
+  <div id="main-container" class="b-1px-border rounded p-15px">
+    <div id="post-title" class="pb-10px">
+      ${post.title}
+    </div>
+    <div id="post-details" class="flex flex-row gap-20px pb-10px">
+      <p>${post.id}</p>
+      <p>${post.created_at.Time}</p>
+      <p>${post.updated_at.Time}</p>
+      <button id="edit-post">edit</button>
+    </div>
+    <div id="post-body-container">
+      <p>${post.body}</p>
+    </div>
+    ${commentsBox}
+    ${commentsHtml}
+  </div>
+</div>
+<style>
+  #post-title {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  #post-details {
+    font-size: 1rem;
+    border-bottom: 1px dotted white
+  }
+  #post-body-container {
+    font-size: 2rem;
+    border-bottom: 1px dotted white
+  }
+</style>
 
     `,
     () => {
@@ -42,12 +65,20 @@ export async function postPage(id) {
   );
 }
 
-function Comments() {
+function CommentsBox() {
   return /*html*/ `
-        <div>
-            <textarea id="comment-text" placeholder="Write your comment here..."></textarea>
+        <div id="comment-box-container" class="flex flex-col items-start pb-10px pt-10px">
+            <textarea class="mb-10px" id="comment-text" rows="10" cols="80" placeholder="Write your comment here..."></textarea>
             <button id="submit-comment-button">Submit</button>
         </div>
+        <style>
+          #comment-box-container{
+            border-bottom: 1px dotted white
+          }
+          #comment-text{
+            resize: none
+          }
+        </style>
     `;
 }
 
