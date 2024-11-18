@@ -6,13 +6,13 @@ export const Comment = (comment) => {
   return /*html*/ `
     <div class="comment-content" id="comment-${comment.id}" data-userid="${comment.userid}")>
       <div id="comment-container" class="flex flex-row pb-10px justify-start">
-        <div id="comment-details-container" class="w-150px">
+        <div id="comment-details-container" class="w-20%">
           <p>id: ${comment.id}</p>
           <p>created: ${comment.created_at.Time}</p>
           <p>userid: ${comment.userid}</p>
           <p>postid: ${comment.postid}</p>
         </div>
-        <div id="comment-body-container" class="w-80% p-10px">
+        <div id="comment-body-container" class="w-100% p-10px">
           ${comment.body}
         </div>
         <div id="comment-buttons-container" class="flex flex-row gap-10px items-end">
@@ -33,9 +33,11 @@ export const Comment = (comment) => {
     border-bottom: 1px dotted white
   }
   #comment-details-container{
+    min-width: 20%;
     border-right: 1px dotted white
   }
   #comment-body-container{
+    min-height: 30%
     font-size: 1.2rem;
   }
   #comment-buttons-container button {

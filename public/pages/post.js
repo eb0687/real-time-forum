@@ -72,10 +72,10 @@ export async function postPage(id) {
 
     `,
     async () => {
-      handleEditPost(post);
       handleCreateComment(post.id);
-      handleDeleteComment(post.id);
       const currentUserId = await getCurrentUserId();
+      handleEditPost(post, post.userid, currentUserId);
+      handleDeleteComment(post.id, currentUserId);
       handleUpdateComment(post.id, currentUserId);
     },
   );
@@ -153,10 +153,18 @@ function handleCreateComment(postId) {
   });
 }
 
-function handleDeleteComment(postId) {
+function handleDeleteComment(postId, currentUserId) {
   const deleteButtons = document.querySelectorAll(".delete-comment");
 
   deleteButtons.forEach((button) => {
+    const commentId = button.dataset.commentId;
+    const contentDiv = document.getElementById(`comment-${commentId}`);
+    const commentUserId = contentDiv.dataset.userid;
+
+    if (String(commentUserId) !== String(currentUserId)) {
+      button.style.display = "none";
+    }
+
     button.addEventListener("click", async (e) => {
       e.preventDefault();
       const commentId = button.dataset.commentId;
@@ -247,8 +255,17 @@ function handleUpdateComment(postId, currentUserId) {
   });
 }
 
-function handleEditPost(post) {
+function handleEditPost(post, postUserId, currentUserId) {
   const editButton = document.getElementById("edit-post");
+
+  // console.log("postUserId (String):", String(postUserId));
+  // console.log("currentUserId (String):", String(currentUserId));
+
+  if (String(postUserId) !== String(currentUserId)) {
+    console.log("postUserId and currentUserId are not equal");
+    editButton.style.display = "none";
+    return;
+  }
 
   editButton?.addEventListener("click", (e) => {
     e.preventDefault();
@@ -267,7 +284,7 @@ async function getCurrentUserId() {
       console.log("Failed to fetch the user profile.");
     }
     const user = await res.json();
-    console.log("user", user.id);
+    // console.log("user", user.id);
     return user.id;
   } catch (error) {
     console.log("An error occurred:", error);
