@@ -22,7 +22,7 @@ export async function postPage(id) {
   await attachBaseLayout(
     /*html*/ `
 
-<div class="flex flex-col justify-start pl-120px pr-120px pt-10px">
+<div class="flex flex-col justify-start pl-120px pr-120px pt-10px pb-10px">
   <div id="main-container" class="b-1px-border rounded p-15px">
     <div id="post-title" class="pb-10px">
       ${post.title}
