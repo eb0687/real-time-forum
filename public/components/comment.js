@@ -12,12 +12,14 @@ export const Comment = (comment) => {
           <p>userid: ${comment.userid}</p>
           <p>postid: ${comment.postid}</p>
         </div>
-        <div id="comment-body-container" class="flex w-full pt-10px pl-10px">
-          ${comment.body}
-        </div>
-        <div id="comment-buttons-container">
-          <button class="edit-comment" data-comment-id="${comment.id}">Edit</button>
-          <button class="delete-comment" data-comment-id="${comment.id}">Delete</button>
+        <div class="flex flex-col w-100% justify-between">
+          <div id="comment-body-container" class="flex w-full pt-10px pl-10px">
+            ${comment.body}
+          </div>
+            <div id="comment-buttons-container" class="flex flex-row justify-end gap-10px">
+              <button class="edit-comment" data-comment-id="${comment.id}">Edit</button>
+              <button class="delete-comment" data-comment-id="${comment.id}">Delete</button>
+          </div>
         </div>
         <div class="edit-form" id="edit-form-${comment.id}" style="display: none;">
           <textarea class="edit-textarea" id="edit-textarea-${comment.id}">${comment.body}</textarea>
@@ -32,6 +34,23 @@ export const Comment = (comment) => {
   }
   #comment-details-container{
     border-right: 1px dotted white
+  }
+  #comment-body-container{
+    font-size: 1.2rem;
+  }
+  #comment-buttons-container button {
+    font-size: 0.65rem;
+    padding: 0 10px;
+    min-width: 80px;
+    cursor: pointer;
+  }
+  #comment-buttons-container button:hover {
+    font-size: 0.65rem;
+    padding: 0 10px;
+    min-width: 80px;
+    cursor: pointer;
+    background-color: #ddd;
+    color: black;
   }
 </style>
 

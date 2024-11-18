@@ -27,11 +27,11 @@ export async function postPage(id) {
     <div id="post-title" class="pb-10px">
       ${post.title}
     </div>
-    <div id="post-details" class="flex flex-row gap-20px pb-10px">
+    <div id="post-details" class="flex flex-row gap-20px pb-10px items-center">
       <p>${post.id}</p>
       <p>${post.created_at.Time}</p>
       <p>${post.updated_at.Time}</p>
-      <button id="edit-post">edit</button>
+      <button id="edit-post">Edit</button>
     </div>
     <div id="post-body-container">
       <p>${post.body}</p>
@@ -48,6 +48,21 @@ export async function postPage(id) {
   #post-details {
     font-size: 1rem;
     border-bottom: 1px dotted white
+  }
+  #post-details button{
+    font-size: 0.65rem;
+    padding: 0 10px;
+    min-width: 80px;
+    max-height: 15px;
+    cursor: pointer;
+  }
+  #post-details button:hover {
+    font-size: 0.65rem;
+    padding: 0 10px;
+    min-width: 80px;
+    cursor: pointer;
+    background-color: #ddd;
+    color: black;
   }
   #post-body-container {
     font-size: 2rem;
@@ -74,6 +89,20 @@ function CommentsBox() {
         <style>
           #comment-box-container{
             border-bottom: 1px dotted white
+          }
+          #comment-box-container button{
+            font-size: 0.65rem;
+            padding: 0 10px;
+            min-width: 80px;
+            cursor: pointer;
+          }
+          #comment-box-container button:hover {
+            font-size: 0.65rem;
+            padding: 0 10px;
+            min-width: 80px;
+            cursor: pointer;
+            background-color: #ddd;
+            color: black;
           }
           #comment-text{
             resize: none
