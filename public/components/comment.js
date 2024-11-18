@@ -4,27 +4,27 @@
  */
 export const Comment = (comment) => {
   return /*html*/ `
-    <div class="comment-content" id="comment-${comment.id}">
-      <div id="comment-container" class="pb-10px flex flex-row justify-between">
-        <div id="comment-details-container" class="pr-10px">
+    <div class="comment-content" id="comment-${comment.id}" data-userid="${comment.userid}")>
+      <div id="comment-container" class="flex flex-row pb-10px justify-start">
+        <div id="comment-details-container" class="w-150px">
           <p>id: ${comment.id}</p>
           <p>created: ${comment.created_at.Time}</p>
           <p>userid: ${comment.userid}</p>
           <p>postid: ${comment.postid}</p>
         </div>
-        <div class="flex flex-col w-100% justify-between">
-          <div id="comment-body-container" class="flex w-full pt-10px pl-10px">
-            ${comment.body}
-          </div>
-            <div id="comment-buttons-container" class="flex flex-row justify-end gap-10px">
-              <button class="edit-comment" data-comment-id="${comment.id}">Edit</button>
-              <button class="delete-comment" data-comment-id="${comment.id}">Delete</button>
-          </div>
+        <div id="comment-body-container" class="w-80% p-10px">
+          ${comment.body}
         </div>
-        <div class="edit-form" id="edit-form-${comment.id}" style="display: none;">
+        <div id="comment-buttons-container" class="flex flex-row gap-10px items-end">
+          <button class="edit-comment" data-comment-id="${comment.id}">Edit</button>
+          <button class="delete-comment" data-comment-id="${comment.id}">Delete</button>
+        </div>
+        <div class="edit-form" id="edit-form-${comment.id}" >
           <textarea class="edit-textarea" id="edit-textarea-${comment.id}">${comment.body}</textarea>
-          <button class="save-comment" data-comment-id="${comment.id}">Save</button>
-          <button class="cancel-edit" data-comment-id="${comment.id}">Cancel</button>
+          <div id="edit-form-buttons-container" class="flex flex-row gap-10px items-end">
+            <button class="save-comment" data-comment-id="${comment.id}">Save</button>
+            <button class="cancel-edit" data-comment-id="${comment.id}">Cancel</button>
+          </div>
         </div>
       </div>
     </div>
@@ -45,6 +45,31 @@ export const Comment = (comment) => {
     cursor: pointer;
   }
   #comment-buttons-container button:hover {
+    font-size: 0.65rem;
+    padding: 0 10px;
+    min-width: 80px;
+    cursor: pointer;
+    background-color: #ddd;
+    color: black;
+  }
+  .edit-form{
+    display: none;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 0 0 10px;
+  }
+  .edit-form textarea{
+    width: 50%;
+    height: 90%;
+    resize: none;
+  }
+  #edit-form-buttons-container button{
+    font-size: 0.65rem;
+    padding: 0 10px;
+    min-width: 80px;
+    cursor: pointer;
+  }
+  #edit-form-buttons-container button:hover {
     font-size: 0.65rem;
     padding: 0 10px;
     min-width: 80px;

@@ -71,11 +71,12 @@ export async function postPage(id) {
 </style>
 
     `,
-    () => {
+    async () => {
       handleEditPost(post);
       handleCreateComment(post.id);
       handleDeleteComment(post.id);
-      handleUpdateComment(post.id);
+      const currentUserId = await getCurrentUserId();
+      handleUpdateComment(post.id, currentUserId);
     },
   );
 }
@@ -174,10 +175,19 @@ function handleDeleteComment(postId) {
   });
 }
 
-function handleUpdateComment(postId) {
+function handleUpdateComment(postId, currentUserId) {
   const editButtons = document.querySelectorAll(".edit-comment");
 
   editButtons.forEach((editButton) => {
+    const commentId = editButton.dataset.commentId;
+    const contentDiv = document.getElementById(`comment-${commentId}`);
+    const commentUserId = contentDiv.dataset.userid;
+
+    if (String(commentUserId) !== String(currentUserId)) {
+      // editButton.disabled = true;
+      editButton.style.display = "none";
+    }
+
     editButton.addEventListener("click", (e) => {
       e.preventDefault();
       const commentId = editButton.dataset.commentId;
@@ -188,17 +198,24 @@ function handleUpdateComment(postId) {
       const saveButton = editForm.querySelector(".save-comment");
       const cancelButton = editForm.querySelector(".cancel-edit");
 
+      const contentBody = contentDiv.querySelector("#comment-body-container");
+      const contentButtons = contentDiv.querySelector(
+        "#comment-buttons-container",
+      );
+
       if (!contentDiv || !editForm) {
         console.log("Could not find comment elements");
         return;
       }
 
-      contentDiv.style.display = "none";
-      editForm.style.display = "block";
+      contentBody.style.display = "none";
+      contentButtons.style.display = "none";
+      editForm.style.display = "flex";
 
       // Handle cancel button
       const cancelHandler = () => {
-        contentDiv.style.display = "block";
+        contentBody.style.display = "flex";
+        contentButtons.style.display = "flex";
         editForm.style.display = "none";
         // Remove event listener to prevent multiple bindings
         cancelButton.removeEventListener("click", cancelHandler);
@@ -241,4 +258,19 @@ function handleEditPost(post) {
     }
     managePostModal(true, post);
   });
+}
+
+async function getCurrentUserId() {
+  try {
+    const res = await SpecialFetch("/api/profile");
+    if (!res.ok) {
+      console.log("Failed to fetch the user profile.");
+    }
+    const user = await res.json();
+    console.log("user", user.id);
+    return user.id;
+  } catch (error) {
+    console.log("An error occurred:", error);
+    return null;
+  }
 }
