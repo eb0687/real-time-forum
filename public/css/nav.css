@@ -1,77 +1,104 @@
 .sidebar {
-    background-color: black;
-    border: 1px solid white;
-    color: #ddd;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4rem;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: width 0.3s ease;
+  background-color: black;
+  border: 1px solid white;
+  color: #ddd;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease;
 }
 
 .sidebar:hover {
-    width: 12rem;
+  width: 12rem;
 }
 
 .sidebar:hover .nav-item {
-    justify-content: flex-start;
-    column-gap: 1rem;
+  justify-content: flex-start;
+  column-gap: 1rem;
 }
 
 .nav-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    position: relative;
-    transition: background-color 0.2s, box-shadow 0.2s, border-radius 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s,
+    border-radius 0.2s;
 }
 
 .nav-item:hover {
-    background-color: #ddd;
-    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
-    color: black;
-    border-radius: 0.5rem;
+  background-color: #ddd;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  color: black;
+  border-radius: 0.5rem;
 }
 
 .nav-item i {
-    font-size: 1.25rem;
-    color: #ddd;
+  font-size: 1.25rem;
+  color: #ddd;
 }
 
-
 .nav-text {
-    display: none;
-    white-space: nowrap;
-    font-weight: 500;
+  display: none;
+  white-space: nowrap;
+  font-weight: 500;
 }
 
 .sidebar:hover .nav-text {
-    display: inline-block;
+  display: inline-block;
 }
 
 .nav-item:hover * {
-    color: black;
+  color: black;
 }
 
 .nav-item i,
 .nav-item span {
-    pointer-events: none;
+  pointer-events: none;
 }
 
-
 .sidebar * {
-    color: #ddd;
+  color: #ddd;
 }
 
 button.nav-item {
-    background-color: black;
-    border: none;
-    cursor: pointer;
+  background-color: black;
+  border: none;
+  cursor: pointer;
 }
+
+.modal {
+  background-color: #000;
+  border: 3px solid white;
+  width: 50%;
+  height: 50%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  height: 100%;
+  padding: 20px;
+}
+
+#create-post-form {
+  display: flex;
+  flex-direction: column;
+}
+
