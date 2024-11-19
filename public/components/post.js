@@ -25,10 +25,12 @@ export const Post = (post) => {
     min-width: 300px;
     min-height: 300px;
     border: solid white;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   }
   #post-container:hover {
     background-color: #2b2f31;
+    transform: translateY(-10px); 
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.7);
   }
   #post-title-container {
     text-align-center;
