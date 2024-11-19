@@ -56,6 +56,7 @@ export const Post = (post) => {
   .post-body {
     padding: 10px;
     font-size: 1.2rem;
+    max-height: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
