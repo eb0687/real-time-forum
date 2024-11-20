@@ -18,6 +18,8 @@ export async function postPage(id) {
 
   const commentsHtml = await fetchComments(post);
 
+  const postUserName = await getUsernameByUserId(post.userid);
+
   document.title = post.title;
   await attachBaseLayout(
     /*html*/ `
@@ -28,9 +30,13 @@ export async function postPage(id) {
       ${post.title}
     </div>
     <div id="post-details" class="flex flex-row gap-20px pb-10px items-center">
-      <p>${post.id}</p>
-      <p>${post.created_at.Time}</p>
-      <p>${post.updated_at.Time}</p>
+      <div id="post-author" class="flex flex-row items-center gap-5px">
+        <i class="fa-regular fa-user"></i>
+        <p>${postUserName}</p>
+      </div>
+      <p>postid: ${post.id}</p>
+      <p>created: ${post.created_at.Time}</p>
+      <p>updated: ${post.updated_at.Time}</p>
       <button id="edit-post">Edit</button>
     </div>
     <div id="post-body-container">
