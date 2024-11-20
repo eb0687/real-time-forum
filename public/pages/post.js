@@ -119,14 +119,27 @@ function CommentsBox() {
  */
 async function fetchComments(post) {
   const commentsRes = await SpecialFetch(`/api/comments/${post.id}`);
+
   if (!commentsRes) {
     return "<p>Failed to load comments.</p>";
   }
   if (!commentsRes.ok) {
     return "<p>Failed to load comments.</p>";
   }
+
   const comments = await commentsRes.json();
-  return CommentList(comments);
+
+  if (!comments || comments.length === 0) {
+    return "<p>No comments available.</p>";
+  }
+
+  const enrichedComments = await Promise.all(
+    comments.map(async (comment) => {
+      const username = await getUsernameByUserId(comment.userid);
+      return { ...comment, username };
+    }),
+  );
+  return CommentList(enrichedComments);
 }
 
 function handleCreateComment(postId) {
@@ -289,5 +302,20 @@ async function getCurrentUserId() {
   } catch (error) {
     console.log("An error occurred:", error);
     return null;
+  }
+}
+
+async function getUsernameByUserId(userId) {
+  try {
+    const res = await SpecialFetch(`/api/users/${userId}`);
+    if (!res.ok) {
+      console.log(`Failed to fetch the username for userId: ${userId}`);
+      return;
+    }
+    const user = await res.json();
+    return user.nickname;
+  } catch (error) {
+    console.log("An error occurred:", error);
+    return;
   }
 }

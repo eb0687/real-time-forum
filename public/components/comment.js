@@ -7,6 +7,7 @@ export const Comment = (comment) => {
     <div class="comment-content" id="comment-${comment.id}" data-userid="${comment.userid}")>
       <div id="comment-container" class="flex flex-row pb-10px justify-start">
         <div id="comment-details-container" class="w-20%">
+          <p>username: ${comment.username}</p>
           <p>id: ${comment.id}</p>
           <p>created: ${comment.created_at.Time}</p>
           <p>userid: ${comment.userid}</p>
