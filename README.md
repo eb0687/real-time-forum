@@ -27,12 +27,12 @@
   - [ ] login
   - [ ] profile
 
-- a proper readme file
-- no mention of docker anywhere so not sure if we need to make one
+- a proper read me file
 
 ### extras:
 
 - [ ] allow user to update their own profile?
+- [ ] no mention of docker anywhere so not sure if we need to make one
 
 ## Issues
 
