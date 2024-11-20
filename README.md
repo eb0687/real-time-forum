@@ -5,7 +5,7 @@
 - [x] make the file server in go (serve static files in go)
 - [x] components with vanilla js
 - [x] create html css for the login page and the register page
-- [ ] categories
+- [ ] categories ([source](https://learn.reboot01.com/git/root/public/src/branch/master/subjects/real-time-forum#posts-and-comments) )
 - [ ] private chat ([source](https://learn.reboot01.com/git/root/public/src/branch/master/subjects/real-time-forum))
 
   - A section to show who is online/offline and able to talk to:
@@ -19,12 +19,16 @@
 
 - [ ] user status
 - [ ] css for:
+
   - [ ] private chat
   - [ ] homepage
   - [ ] post
   - [ ] registration
   - [ ] login
   - [ ] profile
+
+- a proper readme file
+- no mention of docker anywhere so not sure if we need to make one
 
 ### extras:
 
