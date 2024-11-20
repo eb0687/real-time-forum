@@ -29,19 +29,10 @@ func (ws *WebServer) GetUserProfile(w http.ResponseWriter, r *http.Request) {
 		panic(models.ErrInvalidRequest)
 	}
 
-	// data, err := utils.DecodeRequestBody[database.User](r)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// data.ID = id
-
 	userData, err := ws.DB.ReadUser(id)
 	if err != nil {
 		panic(err)
 	}
-
-	// TODO: need to handle user status (online/offline) and pass it to the client
 
 	err = utils.SendJsonResponse(w, http.StatusOK, userData)
 	if err != nil {
