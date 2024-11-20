@@ -10,6 +10,15 @@ export async function homePage() {
    */
   const posts = await res.json();
 
+  const enrichedPosts = await Promise.all(
+    posts.map(async (post) => {
+      const username = await getUsernameByUserId(post.userid);
+      return { ...post, username };
+    }),
+  );
+
+  // console.log("enrichedPosts", enrichedPosts);
+
   await attachBaseLayout(
     /*html*/ `
 <div id="home-header" class="flex flex-col justify-center items-center p-10px">
@@ -17,7 +26,7 @@ export async function homePage() {
   <p>Some text describing the project goes here</p>
 </div>
 <div id="main-posts-container" class="flex flex-row gap-40px justify-between pl-120px pr-120px pt-50px pb-50px">
-  ${PostList(posts)}
+  ${PostList(enrichedPosts)}
 </div>
 
 <style>
@@ -32,3 +41,18 @@ export async function homePage() {
 }
 
 function capabilities() {}
+
+async function getUsernameByUserId(userId) {
+  try {
+    const res = await SpecialFetch(`/api/users/${userId}`);
+    if (!res.ok) {
+      console.log(`Failed to fetch the username for userId: ${userId}`);
+      return;
+    }
+    const user = await res.json();
+    return user.nickname;
+  } catch (error) {
+    console.log("An error occurred:", error);
+    return;
+  }
+}

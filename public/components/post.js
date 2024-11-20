@@ -8,7 +8,10 @@ export const Post = (post) => {
 <div id="post-container" class="b-3px-border p-10px rounded">
   <a id="post-${post.id}">
     <div id="post-title-container" class="flex flex-row justify-start w-100% items-center">
-      <i class="fa-sharp fa-solid fa-comment"></i>
+      <div id="post-details" class="flex flex-col pr-10px items-center">
+        <i class="fa-regular fa-user"></i>
+        <p>${post.username}</p>
+      </div>
       <a class="post-title" href="/posts/${post.id}">${post.title}</a>
     </div>
     <p class="post-body">
@@ -16,8 +19,6 @@ export const Post = (post) => {
     </p>
   </a>
 </div>
-
-
 
 <style>
   #post-container {
@@ -38,6 +39,11 @@ export const Post = (post) => {
   } 
   #post-container:hover #post-title-container {
     border-bottom-color: black;
+  }
+  #post-details p {
+    font-size: 0.8rem;
+    color: #bbb;
+    margin-top: 5px;
   }
   .post-title {
     padding: 10px;

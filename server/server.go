@@ -68,6 +68,8 @@ func (ws *WebServer) RegisterWithAuthApi() http.Handler {
 	router.HandleFunc("GET /profile/{id}", ws.GetUserProfile)
 	router.HandleFunc("GET /profile", ws.GetOwnUserProfile)
 
+	router.HandleFunc("GET /users/{id}", ws.GetUserDetailsById)
+
 	router.HandleFunc("/cookie", ws.CheckCookie)
 	return middlewares.Auth(router, ws.DB)
 }
