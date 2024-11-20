@@ -9,8 +9,10 @@ export const managePostModal = (isEdit = false, post = {}) => {
   modal.id = "create-post-modal";
   modal.innerHTML = /*html*/ `
         <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>${isEdit ? "Edit Post" : "Create Post"}</h2>
+            <span class="close-button">
+              <i class="fa-solid fa-square-xmark"></i>
+            </span>
+            <h2 class="create-post-form-header">${isEdit ? "Edit Post" : "Create Post"}</h2>
             <form id="create-post-form">
                 <label for="post-title">Title:</label>
                 <input type="text" id="post-title" name="title" value="${isEdit ? post.title : ""}" required>
