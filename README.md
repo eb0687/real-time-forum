@@ -6,7 +6,7 @@
 - [x] components with vanilla js
 - [x] create html css for the login page and the register page
 - [ ] categories ([source](https://learn.reboot01.com/git/root/public/src/branch/master/subjects/real-time-forum#posts-and-comments) )
-- [ ] private chat ([source](https://learn.reboot01.com/git/root/public/src/branch/master/subjects/real-time-forum))
+- [ ] private chat ([source](https://learn.reboot01.com/git/root/public/src/branch/master/subjects/real-time-forum#private-messages))
 
   - A section to show who is online/offline and able to talk to:
   - This section must be organized by the last message sent (just like discord). If the user is new and does not present messages you must organize it in alphabetic order.
@@ -14,10 +14,10 @@
   - This section must be visible at all times.
   - Be visible, for this you will have to be able to see the previous messages that you had with the user
   - Reload the last 10 messages and when scrolled up to see more messages you must provide the user with 10 more, without spamming the scroll event. Do not forget what you learned!! (Throttle, Debounce)
-  - A date that shows when the message was sent
-  - The user name, that identifies the user that sent the message
+  - Messages must follow a specific format:
+    - A date that shows when the message was sent
+    - The user name, that identifies the user that sent the message
 
-- [ ] user status
 - [ ] css for:
 
   - [ ] private chat
