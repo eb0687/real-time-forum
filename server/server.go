@@ -23,15 +23,15 @@ func (ws *WebServer) AddHandlers() {
 
 	// pp := http.NewServeMux()
 
-	apiRouter := http.NewServeMux()
-	AddSubrouter(apiRouter, "/auth", func(m *http.ServeMux) http.Handler {
+	AddSubrouter(parent, "/auth", func(m *http.ServeMux) http.Handler {
 		m.HandleFunc("/login", ws.LoginHandler)
 		m.HandleFunc("/register", ws.RegisterHandler)
 		m.HandleFunc("/logout", ws.LogoutHandler)
 		return s(m)
 	})
 
-	AddSubrouter(apiRouter, "/api", func(m *http.ServeMux) http.Handler {
+	AddSubrouter(parent, "/api", func(m *http.ServeMux) http.Handler {
+		fmt.Println("mama")
 		m.HandleFunc("POST /comments", ws.CreateComment)
 		m.HandleFunc("GET /comments", ws.ReadAllComments)
 		m.HandleFunc("GET /comments/{id}", ws.ReadCommentsByPostId)
@@ -55,10 +55,10 @@ func (ws *WebServer) AddHandlers() {
 	})
 
 	// WebSocket route under /api
-	apiRouter.HandleFunc("/ws", ws.HandleWebSocket)
+	parent.HandleFunc("/ws", ws.HandleWebSocket)
 
 	// Mount the API router at /api
-	parent.Handle("/api/", http.StripPrefix("/api", apiRouter))
+	// parent.Handle("/api/", http.StripPrefix("/api", apiRouter))
 
 	ws.Mux = parent
 }
