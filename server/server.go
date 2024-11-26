@@ -22,7 +22,6 @@ func (ws *WebServer) AddHandlers() {
 	)
 
 	// pp := http.NewServeMux()
-
 	AddSubrouter(parent, "/auth", func(m *http.ServeMux) http.Handler {
 		m.HandleFunc("/login", ws.LoginHandler)
 		m.HandleFunc("/register", ws.RegisterHandler)
