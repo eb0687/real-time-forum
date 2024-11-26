@@ -5,6 +5,11 @@
 export const Comment = (comment) => {
   return /*html*/ `
     <div class="comment-content" id="comment-${comment.id}" data-userid="${comment.userid}")>
+      <html></html>
+  <style>
+  
+
+  </style>
       <div id="comment-container" class="flex flex-row pb-10px justify-start">
         <div id="comment-details-container" class="w-20%">
           <p>username: ${comment.username}</p>

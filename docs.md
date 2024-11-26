@@ -27,7 +27,7 @@ function capabilities() {
 
 ```js
 try {
-  const response = await SpecialFetch("/api/login", "POST", {
+  const response = await SpecialFetch("/auth/login", "POST", {
     email,
     password,
   });

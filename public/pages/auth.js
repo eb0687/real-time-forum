@@ -3,7 +3,7 @@ import { reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export async function authPage() {
-    await attachBaseLayout(
+  await attachBaseLayout(
     /*html*/ `
     <div class="flex flex-col items-center justify-center h-100dvh">
       <div class="flex flex-col items-center b-1px-border p-20px rounded bg-sec">
@@ -77,83 +77,106 @@ export async function authPage() {
         }
     </style>
     `,
-        setupAuthHandlers
-    );
+    setupAuthHandlers,
+  );
 }
 
 function setupAuthHandlers() {
-    // Tab switching logic
-    const tabs = document.querySelectorAll('.tab-btn');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
+  // Tab switching logic
+  const tabs = document.querySelectorAll(".tab-btn");
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
 
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.add('hidden'));
-            document.getElementById(`${tab.dataset.tab}-tab`).classList.remove('hidden');
-            document.getElementById(`${tab.dataset.tab}-tab`).classList.add('block');
-            applyTailwind();
+      const tabContents = document.querySelectorAll(".tab-content");
+      tabContents.forEach((content) => content.classList.add("hidden"));
+      document
+        .getElementById(`${tab.dataset.tab}-tab`)
+        .classList.remove("hidden");
+      document.getElementById(`${tab.dataset.tab}-tab`).classList.add("block");
+      applyTailwind();
+    });
+  });
+
+  // Login form handler
+  document
+    .getElementById("login-form")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      try {
+        const response = await SpecialFetch("/auth/login", "POST", {
+          email,
+          password,
         });
+        if (!response) throw "could not get the response";
+        if (response.status === 404) throw "please create an account";
+        if (response.status === 401)
+          throw "your email or password is incorrect";
+        // const data = await response.json();
+        await reRoute("/");
+      } catch (error) {
+        // alert(error);
+        document.getElementById("message").innerHTML = error;
+
+        console.log("error", error);
+      }
     });
 
-    // Login form handler
-    document.getElementById("login-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const email = document.getElementById("login-email").value;
-        const password = document.getElementById("login-password").value;
+  // Registration form handler
+  document
+    .getElementById("registration-form")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nickname = document.getElementById("nickname").value;
+      const age = parseInt(document.getElementById("age").value);
+      const gender = document.querySelector(
+        'input[name="gender"]:checked',
+      )?.value;
+      const firstname = document.getElementById("firstname").value;
+      const lastname = document.getElementById("lastname").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-        try {
-            const response = await SpecialFetch("/api/login", "POST", {
-                email,
-                password,
-            });
-            if (!response) throw "could not get the response";
-            if (response.status === 404) throw "please create an account";
-            if (response.status === 401) throw "your email or password is incorrect";
-            // const data = await response.json();
-            await reRoute("/");
-        } catch (error) {
+      if (
+        !nickname ||
+        !gender ||
+        !firstname ||
+        !lastname ||
+        !email ||
+        !password
+      ) {
+        console.log("Please fill in all fields.");
+        return;
+      }
 
-            // alert(error);
-            document.getElementById("message").innerHTML = error;
+      try {
+        const response = await SpecialFetch("/auth/register", "POST", {
+          nickname,
+          age,
+          gender,
+          first_name: firstname,
+          last_name: lastname,
+          email,
+          password,
+        });
 
-            console.log('document.getElementById("message")', document.getElementById("message"))
-            console.log("error", error);
-        }
-    });
+        if (!response) throw "could not get the response";
+        //if (response.status == 401)
+        //  throw `<a href="/login">Account already exists. Click <strong>here</strong> to login</a>`;
 
-    // Registration form handler
-    document.getElementById("registration-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const nickname = document.getElementById("nickname").value;
-        const age = parseInt(document.getElementById("age").value);
-        const gender = document.querySelector('input[name="gender"]:checked')?.value;
-        const firstname = document.getElementById("firstname").value;
-        const lastname = document.getElementById("lastname").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        if (response.status === 401) throw "Account already exists.";
 
-        if (!nickname || !gender || !firstname || !lastname || !email || !password) {
-            console.log("Please fill in all fields.");
-            return;
-        }
-
-        try {
-            const response = await SpecialFetch("/api/register", "POST", {
-                nickname, age, gender, first_name: firstname,
-                last_name: lastname, email, password,
-            });
-
-            if (!response) throw "could not get the response";
-            if (response.status == 401) throw `<a href="/login">Account already exists. Click <strong>here</strong> to login</a>`;
-            if (response.status == 400) throw "Please fill in all fields";
-            if (response.status != 200) throw "could not create an account";
-            //   const data = await response.json();
-            await reRoute("/");
-        } catch (error) {
-            document.getElementById("message").innerHTML = error;
-            console.log("error", error);
-        }
+        if (response.status == 400) throw "Please fill in all fields";
+        if (response.status != 200) throw "could not create an account";
+        //   const data = await response.json();
+        await reRoute("/");
+      } catch (error) {
+        document.getElementById("message").innerHTML = error;
+        console.log("error", error);
+      }
     });
 }

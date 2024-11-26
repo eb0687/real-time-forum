@@ -3,14 +3,13 @@ import { reRoute, SpecialFetch } from "../js/utils.js";
 export const managePostModal = (isEdit = false, post = {}) => {
   console.log("isEdit", isEdit);
   console.log("post", post);
-
   const modal = document.createElement("div");
   modal.className = "modal";
   modal.id = "create-post-modal";
   modal.innerHTML = /*html*/ `
-        <div class="modal-content">
-            <span class="close-button">
-              <i class="fa-solid fa-square-xmark"></i>
+      <div class="modal-content">
+        <span class="close-button">
+          <i class="fa-solid fa-square-xmark"></i>
             </span>
             <h2 class="create-post-form-header">${isEdit ? "Edit Post" : "Create Post"}</h2>
             <form id="create-post-form">
@@ -42,9 +41,13 @@ export const managePostModal = (isEdit = false, post = {}) => {
     .addEventListener("submit", async (event) => {
       event.preventDefault();
       const title = document.getElementById("post-title");
+      console.log(title.value);
+
       const body = document.getElementById("post-body");
+
       const url = isEdit ? `/api/posts/${post.id}` : "/api/posts";
       const method = isEdit ? "PUT" : "POST";
+
       const res = await SpecialFetch(url, method, {
         title: title.value,
         body: body.value,

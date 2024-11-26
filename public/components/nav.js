@@ -13,7 +13,7 @@ export const Nav = async () => {
             <a href="/register" class="route">register</a>
         </nav> -->
     `;
-    return { nav, cap: () => { } };
+    return { nav, cap: () => {} };
   }
 
   nav = /*html*/ `
@@ -50,10 +50,10 @@ function capabilities() {
     ?.addEventListener("click", async (e) => {
       e.preventDefault();
       try {
-        const response = await SpecialFetch("/api/logout", "POST");
+        const response = await SpecialFetch("/auth/logout", "POST");
         if (!response.ok) throw "Logout failed, please try again";
 
-        attachBaseLayout("", () => { });
+        attachBaseLayout("", () => {});
         console.log("logged out from server");
 
         await reRoute("/login");

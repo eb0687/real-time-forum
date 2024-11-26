@@ -21,14 +21,52 @@ func (ws *WebServer) AddHandlers() {
 		middlewares.Recovery,
 	)
 
-	parent.HandleFunc("/api/login", ws.LoginHandler)
-	parent.HandleFunc("/api/register", ws.RegisterHandler)
-	parent.HandleFunc("/api/logout", ws.LogoutHandler)
+	// pp := http.NewServeMux()
 
-	parent.Handle("/api/", http.StripPrefix("/api", ws.RegisterWithAuthApi()))
-	http.HandleFunc("/ws", ws.HandleWebSocket)
-	ws.Mux = s(parent)
-	// ws.Mux = parent
+	apiRouter := http.NewServeMux()
+	AddSubrouter(apiRouter, "/auth", func(m *http.ServeMux) http.Handler {
+		m.HandleFunc("/login", ws.LoginHandler)
+		m.HandleFunc("/register", ws.RegisterHandler)
+		m.HandleFunc("/logout", ws.LogoutHandler)
+		return s(m)
+	})
+
+	AddSubrouter(apiRouter, "/api", func(m *http.ServeMux) http.Handler {
+		m.HandleFunc("POST /comments", ws.CreateComment)
+		m.HandleFunc("GET /comments", ws.ReadAllComments)
+		m.HandleFunc("GET /comments/{id}", ws.ReadCommentsByPostId)
+		m.HandleFunc("PUT /comments/{id}", ws.UpdateComment)
+		m.HandleFunc("DELETE /comments/{id}", ws.DeleteComment)
+
+		m.HandleFunc("POST /posts", ws.CreatePost)
+		m.HandleFunc("GET /posts", ws.ReadAllPosts)
+		m.HandleFunc("GET /posts/{id}", ws.ReadPost)
+		m.HandleFunc("PUT /posts/{id}", ws.UpdatePost)
+		m.HandleFunc("DELETE /posts/{id}", ws.DeletePost)
+
+		m.HandleFunc("GET /profile/{id}", ws.GetUserProfile)
+		m.HandleFunc("GET /profile", ws.GetOwnUserProfile)
+
+		m.HandleFunc("GET /users/{id}", ws.GetUserDetailsById)
+
+		m.HandleFunc("/cookie", ws.CheckCookie)
+
+		return s(middlewares.Auth(m, ws.DB))
+	})
+
+	// WebSocket route under /api
+	apiRouter.HandleFunc("/ws", ws.HandleWebSocket)
+
+	// Mount the API router at /api
+	parent.Handle("/api/", http.StripPrefix("/api", apiRouter))
+
+	ws.Mux = parent
+}
+
+func AddSubrouter(parent *http.ServeMux, basePath string, f func(*http.ServeMux) http.Handler) {
+	mux := http.NewServeMux()
+	handler := f(mux)
+	parent.Handle(basePath+"/", http.StripPrefix(basePath, handler))
 }
 
 func AddFileServer(mux *http.ServeMux) {
@@ -47,7 +85,7 @@ func AddFileServer(mux *http.ServeMux) {
 	})
 }
 
-func (ws *WebServer) RegisterWithAuthApi() http.Handler {
+func (ws *WebServer) WithAuthMiddleware() http.Handler {
 	router := http.NewServeMux()
 
 	router.HandleFunc("/homepage", func(w http.ResponseWriter, r *http.Request) {
