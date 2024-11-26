@@ -7,6 +7,7 @@ import { getCookie, PreventDefaultATag } from "./utils.js";
 import { profilePage, ownProfilePage } from "../pages/profile.js";
 import { applyTailwind } from "./cheatyCheaty.js";
 import { authPage } from "../pages/auth.js";
+import { messagesPage } from "../pages/messages.js";
 
 const routes = {
   "/": {
@@ -37,6 +38,10 @@ const routes = {
   "/profile/:id": {
     page: profilePage,
     title: "Profile",
+  },
+  "/messages": {
+    page: messagesPage,
+    title: "Messages",
   },
 };
 

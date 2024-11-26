@@ -24,7 +24,7 @@ var upgrader = websocket.Upgrader{
 // 	Conn *websocket.Conn
 // }
 
-var Users map[*websocket.Conn]database.User
+var Users map[*websocket.Conn]database.User = make(map[*websocket.Conn]database.User)
 
 func getConnByUserID(uid int64) *websocket.Conn {
 	for conn, user := range Users {
@@ -33,26 +33,35 @@ func getConnByUserID(uid int64) *websocket.Conn {
 		}
 	}
 	return nil
-
 }
 
-func (ws *WebServer) handleWebSocket(w http.ResponseWriter, r *http.Request) {
+func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("1")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("1")
+	defer conn.Close()
 
 	cookie, err := ws.DB.ReadCookieByUUID(r.URL.Query().Get("token"))
 	if err != nil {
 		panic(models.ErrUnauthorized)
 	}
+	// fmt.Println("2")
+	// cookie := utils.GetAuthCookie(r)
+	// if cookie == nil {
+	// 	panic(models.ErrUnauthorized)
+	// }
 
 	user, err := ws.DB.ReadUser(cookie.Userid)
 	if err != nil {
 		panic(models.ErrUnauthorized)
 	}
+	fmt.Println("1")
+	fmt.Printf("conn: %v\n", conn)
+	fmt.Printf("user: %v\n", user)
 	Users[conn] = user
-	defer conn.Close()
 
 	// Handle websocket messages
 	for {
@@ -66,6 +75,7 @@ func (ws *WebServer) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 			SendErrorToWS(models.ErrInternalServerError, conn)
 			continue
 		}
+		fmt.Println("1")
 
 		var dbMsg database.CreateMessageParams
 		err = json.Unmarshal(data, &dbMsg)
@@ -74,6 +84,7 @@ func (ws *WebServer) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 			continue
 			// panic(err)
 		}
+		fmt.Println("1")
 		dbMsg.Senderid = user.ID
 
 		msg, err := ws.DB.CreateMessage(dbMsg)
@@ -87,6 +98,7 @@ func (ws *WebServer) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 			SendErrorToWS(models.ErrInternalServerError, conn)
 			continue
 		}
+		fmt.Println("1")
 
 		// add to db
 		// db would generate times, from, who

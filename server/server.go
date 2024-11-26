@@ -26,8 +26,9 @@ func (ws *WebServer) AddHandlers() {
 	parent.HandleFunc("/api/logout", ws.LogoutHandler)
 
 	parent.Handle("/api/", http.StripPrefix("/api", ws.RegisterWithAuthApi()))
-	http.HandleFunc("/ws", ws.handleWebSocket)
+	http.HandleFunc("/ws", ws.HandleWebSocket)
 	ws.Mux = s(parent)
+	// ws.Mux = parent
 }
 
 func AddFileServer(mux *http.ServeMux) {
