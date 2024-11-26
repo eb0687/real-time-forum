@@ -24,7 +24,7 @@ var upgrader = websocket.Upgrader{
 // 	Conn *websocket.Conn
 // }
 
-var Users map[*websocket.Conn]database.User
+var Users map[*websocket.Conn]database.User = make(map[*websocket.Conn]database.User)
 
 func getConnByUserID(uid int64) *websocket.Conn {
 	for conn, user := range Users {
@@ -35,12 +35,17 @@ func getConnByUserID(uid int64) *websocket.Conn {
 	return nil
 }
 
-func (ws *WebServer) handleWebSocket(w http.ResponseWriter, r *http.Request) {
+func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("1")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+	defer conn.Close()
+	token := r.URL.Query().Get("token")
+	fmt.Printf("test: %v\n", token)
+
 	cookie, err := ws.DB.ReadCookieByUUID(r.URL.Query().Get("token"))
 	if err != nil {
 		fmt.Println(models.ErrUnauthorized)
@@ -53,7 +58,6 @@ func (ws *WebServer) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	Users[conn] = user
-	defer conn.Close()
 
 	// Handle websocket messages
 	for {
@@ -68,14 +72,19 @@ func (ws *WebServer) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
+		// i can receive the data
+		fmt.Println("Received data:", string(data))
+
 		var dbMsg database.CreateMessageParams
+
 		err = json.Unmarshal(data, &dbMsg)
 		if err != nil {
 			SendErrorToWS(models.ErrInvalidRequest, conn)
 			continue
-			// fmt.Println(err)
 		}
 		dbMsg.Senderid = user.ID
+
+		fmt.Printf("Unmarshalled message: %+v\n", dbMsg)
 
 		msg, err := ws.DB.CreateMessage(dbMsg)
 		if err != nil {
@@ -89,12 +98,13 @@ func (ws *WebServer) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
+		fmt.Printf("Sending to receiver (ID: %d): %s\n", msg.Receiverid, string(data))
+
 		// add to db
 		// db would generate times, from, who
 
-		fmt.Printf("Received from client: %s\n", data)
 		receiverConn := getConnByUserID(msg.Receiverid)
-		if conn == nil {
+		if receiverConn == nil {
 			SendErrorToWS(models.ErrUserNotFound, conn)
 			// send to db
 			continue

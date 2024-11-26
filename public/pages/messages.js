@@ -1,12 +1,33 @@
-import { attach } from "../js/utils.js";
+import { attach, getCookie, getCookieWithoutRequest } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export async function messagesPage() {
-  const socket = new WebSocket("ws://localhost:8080/ws");
+  const cookie = getCookieWithoutRequest("auth_token");
+  console.log(document.cookie);
+  if (cookie === null) {
+    return;
+  }
+  const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
 
   socket.addEventListener("open", (event) => {
     console.log("Connected to the WebSocket server");
   });
+
+  socket.onmessage = (event) => {
+    try {
+      const message = JSON.parse(event.data);
+      // console.log("message:", message);
+
+      const output = document.getElementById("messages-container");
+      output.innerHTML += `
+            <div>
+              From (${message.senderid}): ${message.body}
+            </div>
+        `;
+    } catch (error) {
+      console.error("Error parsing message:", error, "Data:", event.data);
+    }
+  };
 
   socket.addEventListener("error", (event) => {
     console.error("WebSocket error observed:", event);
@@ -16,9 +37,7 @@ export async function messagesPage() {
     /*html*/ `
 <div id="private-messages-container" class="flex flex-col pl-120px pr-120px gap-20px">
     <h2>Private Messages</h2>
-    <div id="messages-container" class="">
-        <!-- Messages will be dynamically added here -->
-    </div>
+    <div id="messages-container"></div>
     <div class="message-input-container">
         <input type="text" id="message-input" placeholder="Type your message here..." />
         <button id="send-message-button">Send</button>

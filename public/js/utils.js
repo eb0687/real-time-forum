@@ -42,6 +42,17 @@ export async function getCookie(name) {
   return cookie;
 }
 
+export function getCookieWithoutRequest(name) {
+  const value = "; " + document.cookie;
+  const parts = value.split("; " + name + "=");
+  if (parts.length != 2) {
+    return null;
+  }
+
+  const cookie = decodeURI(parts.pop().split(";").shift());
+  return cookie;
+}
+
 export async function SpecialFetch(url, method, data) {
   try {
     const response = await fetch(url, {
