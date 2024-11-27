@@ -41,7 +41,11 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-	defer conn.Close()
+	// defer conn.Close()
+	defer func() {
+		delete(Users, conn)
+		conn.Close()
+	}()
 
 	token := r.URL.Query().Get("token")
 	fmt.Printf("token: %v\n", token)
@@ -66,6 +70,7 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			SendErrorToWS(models.ErrInternalServerError, conn)
 			// NOTE: had to break out of the loop else it panics
 			// continue
+			delete(Users, conn)
 			break
 		}
 

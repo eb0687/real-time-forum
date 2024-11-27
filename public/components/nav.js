@@ -31,6 +31,10 @@ export const Nav = async () => {
             <i class="fas fa-user"></i>
             <span class="nav-text">Profile Page</span>
         </a>
+        <a href="/messages" class="nav-item" >
+            <i class="fa-solid fa-message"></i>
+            <span class="nav-text">Messages</span>
+        </a>
         <button class="nav-item" id="create-post-button">
             <i class="fas fa-plus-circle"></i>
             <span class="nav-text">Create Post</span>
