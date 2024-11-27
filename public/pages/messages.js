@@ -1,4 +1,5 @@
 import { attach, getCookie, getCookieWithoutRequest } from "../js/utils.js";
+import { getUsernameByUserId } from "./home.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export async function messagesPage() {
@@ -13,25 +14,11 @@ export async function messagesPage() {
     console.log("Connected to the WebSocket server");
   });
 
-  socket.onmessage = (event) => {
-    try {
-      const message = JSON.parse(event.data);
-      // console.log("message:", message);
-
-      const output = document.getElementById("messages-container");
-      output.innerHTML += `
-            <div>
-              From (${message.senderid}): ${message.body}
-            </div>
-        `;
-    } catch (error) {
-      console.error("Error parsing message:", error, "Data:", event.data);
-    }
-  };
-
   socket.addEventListener("error", (event) => {
     console.error("WebSocket error observed:", event);
   });
+
+  socket.onmessage = (event) => handleIncomingMessage(event, socket);
 
   await attachBaseLayout(
     /*html*/ `
@@ -87,3 +74,21 @@ export async function messagesPage() {
 }
 
 function capabilities() {}
+
+async function handleIncomingMessage(event, socket) {
+  try {
+    const message = JSON.parse(event.data);
+    const output = document.getElementById("messages-container");
+
+    const senderUserName = await getUsernameByUserId(message.senderid);
+
+    // Append the message with the username
+    output.innerHTML += `
+      <div>
+        (${message.created_at.Time}) ${senderUserName}: ${message.body}
+      </div>
+    `;
+  } catch (error) {
+    console.error("Error parsing message:", error, "Data:", event.data);
+  }
+}

@@ -296,7 +296,7 @@ function handleEditPost(post, postUserId, currentUserId) {
   });
 }
 
-async function getCurrentUserId() {
+export async function getCurrentUserId() {
   try {
     const res = await SpecialFetch("/api/profile");
     if (!res.ok) {
@@ -311,7 +311,7 @@ async function getCurrentUserId() {
   }
 }
 
-async function getUsernameByUserId(userId) {
+export async function getUsernameByUserId(userId) {
   try {
     const res = await SpecialFetch(`/api/users/${userId}`);
     if (!res.ok) {
