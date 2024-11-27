@@ -1,6 +1,7 @@
 import { attach, getCookie, getCookieWithoutRequest } from "../js/utils.js";
 import { getUsernameByUserId } from "./home.js";
 import { attachBaseLayout } from "./layouts.js";
+import { getCurrentUserId } from "./post.js";
 
 export async function messagesPage() {
   const cookie = getCookieWithoutRequest("auth_token");
@@ -8,17 +9,19 @@ export async function messagesPage() {
   if (cookie === null) {
     return;
   }
+
   const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
 
   socket.addEventListener("open", (event) => {
     console.log("Connected to the WebSocket server");
+    handleSendMessage(socket);
   });
 
   socket.addEventListener("error", (event) => {
     console.error("WebSocket error observed:", event);
   });
 
-  socket.onmessage = (event) => handleIncomingMessage(event, socket);
+  socket.onmessage = (event) => handleIncomingMessage(event);
 
   await attachBaseLayout(
     /*html*/ `
@@ -75,7 +78,7 @@ export async function messagesPage() {
 
 function capabilities() {}
 
-async function handleIncomingMessage(event, socket) {
+async function handleIncomingMessage(event) {
   try {
     const message = JSON.parse(event.data);
     const output = document.getElementById("messages-container");
@@ -91,4 +94,31 @@ async function handleIncomingMessage(event, socket) {
   } catch (error) {
     console.error("Error parsing message:", error, "Data:", event.data);
   }
+}
+
+async function handleSendMessage(socket) {
+  const sendButton = document.getElementById("send-message-button");
+  const messageInput = document.getElementById("message-input");
+
+  const senderId = await getCurrentUserId();
+
+  sendButton.addEventListener("click", () => {
+    const messageBody = messageInput.value.trim();
+    if (messageBody) {
+      const messageData = {
+        body: messageBody,
+        senderid: senderId,
+        receiverid: 8, // TODO: make this dynamic
+      };
+
+      socket.send(JSON.stringify(messageData));
+      messageInput.value = "";
+    }
+  });
+
+  messageInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      sendButton.click();
+    }
+  });
 }
