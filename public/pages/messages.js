@@ -100,6 +100,7 @@ async function handleSendMessage(socket) {
   const messageInput = document.getElementById("message-input");
 
   const senderId = await getCurrentUserId();
+  // console.log("senderId", senderId);
 
   sendButton.addEventListener("click", () => {
     const messageBody = messageInput.value.trim();
