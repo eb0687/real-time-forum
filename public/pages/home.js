@@ -42,7 +42,7 @@ export async function homePage() {
 
 function capabilities() {}
 
-async function getUsernameByUserId(userId) {
+export async function getUsernameByUserId(userId) {
   try {
     const res = await SpecialFetch(`/api/users/${userId}`);
     if (!res.ok) {

@@ -36,15 +36,15 @@ func getConnByUserID(uid int64) *websocket.Conn {
 }
 
 func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("1")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer conn.Close()
+
 	token := r.URL.Query().Get("token")
-	fmt.Printf("test: %v\n", token)
+	fmt.Printf("token: %v\n", token)
 
 	cookie, err := ws.DB.ReadCookieByUUID(r.URL.Query().Get("token"))
 	if err != nil {
@@ -61,15 +61,12 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	// Handle websocket messages
 	for {
-		// send something like this in js
-		// {
-		// 	"message": "Hello, World!",
-		//  "to": "user1"
-		// }
 		messageType, data, err := conn.ReadMessage()
 		if err != nil {
 			SendErrorToWS(models.ErrInternalServerError, conn)
-			continue
+			// NOTE: had to break out of the loop else it panics
+			// continue
+			break
 		}
 
 		// i can receive the data
