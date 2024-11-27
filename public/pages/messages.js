@@ -85,7 +85,6 @@ async function handleIncomingMessage(event) {
 
     const senderUserName = await getUsernameByUserId(message.senderid);
 
-    // Append the message with the username
     output.innerHTML += `
       <div>
         (${message.created_at.Time}) ${senderUserName}: ${message.body}
