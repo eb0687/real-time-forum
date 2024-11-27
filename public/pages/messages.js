@@ -56,6 +56,7 @@ export async function messagesPage() {
   }
   #messages-container {
     height: 600px; 
+    overflow-y: auto;
     border: 2px solid; 
     border-radius: 8px; 
     padding: 10px; 
