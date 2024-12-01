@@ -30,7 +30,6 @@ func (ws *WebServer) AddHandlers() {
 	})
 
 	AddSubrouter(parent, "/api", func(m *http.ServeMux) http.Handler {
-		fmt.Println("mama")
 		m.HandleFunc("POST /comments", ws.CreateComment)
 		m.HandleFunc("GET /comments", ws.ReadAllComments)
 		m.HandleFunc("GET /comments/{id}", ws.ReadCommentsByPostId)
@@ -47,6 +46,12 @@ func (ws *WebServer) AddHandlers() {
 		m.HandleFunc("GET /profile", ws.GetOwnUserProfile)
 
 		m.HandleFunc("GET /users/{id}", ws.GetUserDetailsById)
+
+		m.HandleFunc("GET /categories", ws.GetAllCategories)
+
+		m.HandleFunc("POST /post-categories", ws.CreatePostCategory)
+		m.HandleFunc("GET /post/{id}/categories", ws.CreatePostCategory)
+		m.HandleFunc("DELETE /post-categories", ws.DeletePostCategory)
 
 		m.HandleFunc("/cookie", ws.CheckCookie)
 

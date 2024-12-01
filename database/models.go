@@ -4,6 +4,11 @@ import (
 	"database/sql"
 )
 
+type Category struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+}
+
 type Comment struct {
 	ID        int64        `json:"id"`
 	Userid    int64        `json:"userid"`
@@ -39,6 +44,12 @@ type Post struct {
 	Body      string       `json:"body"`
 	CreatedAt sql.NullTime `json:"created_at"`
 	UpdatedAt sql.NullTime `json:"updated_at"`
+}
+
+type PostCategory struct {
+	ID         int64 `json:"id"`
+	PostID     int64 `json:"post_id"`
+	CategoryID int64 `json:"category_id"`
 }
 
 type User struct {

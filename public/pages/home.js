@@ -19,11 +19,24 @@ export async function homePage() {
 
   // console.log("enrichedPosts", enrichedPosts);
 
+  const categories = await fetchCategories();
+  const categoriesHtml = categories
+    ? categories
+        .map(
+          (category) =>
+            `<button class="category-button" data-category-id="${category.id}">${category.name}</button>`,
+        )
+        .join("")
+    : "<p>No categories available.</p>";
+
   await attachBaseLayout(
     /*html*/ `
 <div id="home-header" class="flex flex-col justify-center items-center p-10px">
   <h1>Real time forum (placeholder)</h1>
   <p>Some text describing the project goes here</p>
+</div>
+<div id="categories-container" class="flex flex-row gap-10px justify-center pt-20px">
+  ${categoriesHtml}
 </div>
 <div id="main-posts-container" class="flex flex-row gap-40px justify-between pl-120px pr-120px pt-50px pb-50px">
   ${PostList(enrichedPosts)}
@@ -33,6 +46,21 @@ export async function homePage() {
   #main-posts-container {
     flex-wrap: wrap;
     justify-content: center;
+  }
+  #categories-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .category-button {
+    font-size: 0.7rem;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .category-button:hover {
+    background-color: #ddd;
   }
 </style>
     `,
@@ -55,4 +83,18 @@ export async function getUsernameByUserId(userId) {
     console.log("An error occurred:", error);
     return;
   }
+}
+
+export async function fetchCategories() {
+  const response = await SpecialFetch(`/api/categories`);
+
+  if (!response) {
+    return "<p>Failed to load categories.</p>";
+  }
+  if (!response.ok) {
+    return "<p>Failed to load categories.</p>";
+  }
+
+  const categories = await response.json();
+  return categories;
 }

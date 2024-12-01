@@ -56,7 +56,20 @@ CREATE TABLE IF NOT EXISTS Messages (
     receiverid INTEGER NOT NULL,
     body TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (senderid) REFERENCES users (id)
     FOREIGN KEY (receiverid) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS post_categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES posts (id),
+    FOREIGN KEY (category_id) REFERENCES categories (id)
 );

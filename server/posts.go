@@ -60,11 +60,9 @@ func (ws *WebServer) ReadPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("err: %v\n", err)
 		panic(err)
 	}
-
 }
 
 func (ws *WebServer) UpdatePost(w http.ResponseWriter, r *http.Request) {
-
 	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
 	if err != nil {
 		panic(models.ErrInvalidRequest)
