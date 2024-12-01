@@ -1,4 +1,4 @@
-import { attach, getCookie, getCookieWithoutRequest } from "../js/utils.js";
+import { getCookieWithoutRequest } from "../js/utils.js";
 import { getUsernameByUserId } from "./home.js";
 import { attachBaseLayout } from "./layouts.js";
 import { getCurrentUserId } from "./post.js";
@@ -12,16 +12,31 @@ export async function messagesPage() {
 
   const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
 
-  socket.addEventListener("open", (event) => {
+  socket.addEventListener("open", async (event) => {
     console.log("Connected to the WebSocket server");
-    handleSendMessage(socket);
+    await handleSendMessage(socket);
   });
 
   socket.addEventListener("error", (event) => {
     console.error("WebSocket error observed:", event);
   });
 
-  socket.onmessage = (event) => handleIncomingMessage(event);
+  // socket.onmessage = (event) => handleIncomingMessage(event);
+  socket.onmessage = async (event) => {
+    try {
+      const payload = JSON.parse(event.data);
+
+      // Check if its a user status list
+      if (Array.isArray(payload)) {
+        displayUserStatus(payload);
+      } else {
+        // Otherwise, handle it as a chat message
+        await handleIncomingMessage(event);
+      }
+    } catch (error) {
+      console.error("Error handling WebSocket message:", error);
+    }
+  };
 
   await attachBaseLayout(
     /*html*/ `
@@ -31,6 +46,10 @@ export async function messagesPage() {
     <div class="message-input-container">
         <input type="text" id="message-input" placeholder="Type your message here..." />
         <button id="send-message-button">Send</button>
+    </div>
+    <div id="user-list-container">
+      <h3>Users</h3>
+      <ul id="user-list"></ul>
     </div>
 </div>
 <style>
@@ -108,7 +127,7 @@ async function handleSendMessage(socket) {
       const messageData = {
         body: messageBody,
         senderid: senderId,
-        receiverid: 8, // TODO: make this dynamic
+        receiverid: selectedReceiverId,
       };
 
       socket.send(JSON.stringify(messageData));
@@ -121,4 +140,30 @@ async function handleSendMessage(socket) {
       sendButton.click();
     }
   });
+}
+
+function displayUserStatus(userStatuses) {
+  const userList = document.getElementById("user-list");
+  userList.innerHTML = ""; // Clear the list before re-rendering
+
+  userStatuses.forEach((user) => {
+    const status = user.online ? "Online" : "Offline";
+    const userElement = document.createElement("li");
+    userElement.innerHTML = `
+      <span>${user.username} (ID: ${user.id})</span>
+      <span>${status}</span>
+    `;
+
+    userElement.addEventListener("click", () => handleUserSelect(user));
+
+    userList.appendChild(userElement);
+  });
+}
+
+let selectedReceiverId = null;
+function handleUserSelect(user) {
+  selectedReceiverId = user.id;
+  const messageInput = document.getElementById("message-input");
+  messageInput.placeholder = `Type your message to ${user.username}...`;
+  console.log("Selected receiver ID:", selectedReceiverId);
 }

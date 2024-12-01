@@ -19,11 +19,6 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-// type User struct {
-// 	*database.User
-// 	Conn *websocket.Conn
-// }
-
 var Users map[*websocket.Conn]database.User = make(map[*websocket.Conn]database.User)
 
 func getConnByUserID(uid int64) *websocket.Conn {
@@ -62,6 +57,24 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	Users[conn] = user
+
+	// Send the list of all users with their status to the connected client
+	userStatuses, err := ws.GetAllUserStatus()
+	if err != nil {
+		SendErrorToWS(models.ErrInternalServerError, conn)
+		return
+	}
+
+	data, err := json.Marshal(userStatuses)
+	if err != nil {
+		SendErrorToWS(models.ErrInternalServerError, conn)
+		return
+	}
+
+	err = conn.WriteMessage(websocket.TextMessage, data)
+	if err != nil {
+		panic(err)
+	}
 
 	// Handle websocket messages
 	for {
@@ -130,4 +143,28 @@ func SendErrorToWS(err error, conn *websocket.Conn) {
 	if err != nil {
 		conn.WriteMessage(websocket.TextMessage, []byte(err.Error()))
 	}
+}
+
+type UserStatus struct {
+	ID       int64  `json:"id"`
+	Username string `json:"username"`
+	Online   bool   `json:"online"`
+}
+
+func (ws *WebServer) GetAllUserStatus() ([]UserStatus, error) {
+	allUsers, err := ws.DB.ReadAllUsers()
+	if err != nil {
+		panic(err)
+	}
+
+	userStatuses := []UserStatus{}
+	for _, user := range allUsers {
+		isOnline := getConnByUserID(user.ID) != nil
+		userStatuses = append(userStatuses, UserStatus{
+			ID:       user.ID,
+			Username: user.Nickname,
+			Online:   isOnline,
+		})
+	}
+	return userStatuses, nil
 }
