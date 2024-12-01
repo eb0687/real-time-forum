@@ -15,9 +15,6 @@ func (ws *WebServer) GetAllCategories(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	// testing the output
-	fmt.Printf("categories: %v\n", categories)
-
 	err = utils.SendJsonResponse(w, http.StatusOK, categories)
 	if err != nil {
 		panic(err)

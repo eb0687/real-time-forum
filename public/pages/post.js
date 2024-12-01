@@ -18,6 +18,13 @@ export async function postPage(id) {
 
   const commentsHtml = await fetchComments(post);
 
+  const categories = await fetchCategoriesForPost(post.id);
+  const categoryList = categories.length
+    ? categories
+        .map((cat) => `<span class="post-category">${cat.name}</span>`)
+        .join(", ")
+    : "";
+
   const postUserName = await getUsernameByUserId(post.userid);
 
   document.title = post.title;
@@ -37,6 +44,11 @@ export async function postPage(id) {
       <p>postid: ${post.id}</p>
       <p>created: ${post.created_at.Time}</p>
       <p>updated: ${post.updated_at.Time}</p>
+
+      <div id="post-categories">
+        Categories: ${categoryList}
+      </div>
+
       <button id="edit-post">Edit</button>
     </div>
     <div id="post-body-container">
@@ -323,5 +335,19 @@ export async function getUsernameByUserId(userId) {
   } catch (error) {
     console.log("An error occurred:", error);
     return;
+  }
+}
+
+async function fetchCategoriesForPost(postId) {
+  try {
+    const res = await SpecialFetch(`/api/post/${postId}/categories`, "GET");
+    if (!res.ok) {
+      console.error("Failed to fetch categories for the post");
+      return [];
+    }
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return [];
   }
 }

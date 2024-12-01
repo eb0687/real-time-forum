@@ -50,7 +50,7 @@ func (ws *WebServer) AddHandlers() {
 		m.HandleFunc("GET /categories", ws.GetAllCategories)
 
 		m.HandleFunc("POST /post-categories", ws.CreatePostCategory)
-		m.HandleFunc("GET /post/{id}/categories", ws.CreatePostCategory)
+		m.HandleFunc("GET /post/{id}/categories", ws.GetPostCategories)
 		m.HandleFunc("DELETE /post-categories", ws.DeletePostCategory)
 
 		m.HandleFunc("/cookie", ws.CheckCookie)
