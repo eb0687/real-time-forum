@@ -142,6 +142,7 @@ async function handleSendMessage(socket) {
   });
 }
 
+//  TODO: need to work on this
 function displayUserStatus(userStatuses) {
   const userList = document.getElementById("user-list");
   userList.innerHTML = ""; // Clear the list before re-rendering
