@@ -23,19 +23,16 @@ func (ws *WebServer) GetAllCategories(w http.ResponseWriter, r *http.Request) {
 
 func (ws *WebServer) CreatePostCategory(w http.ResponseWriter, r *http.Request) {
 	data, err := utils.DecodeRequestBody[database.CreatePostCategoryParams](r)
-	fmt.Println("1")
 	if err != nil {
 		panic(models.ErrInvalidRequest)
 	}
 
 	pc, err := ws.DB.CreatePostCategory(*data)
-	fmt.Println("1")
 	if err != nil {
 		panic(err)
 	}
 
 	err = utils.SendJsonResponse(w, http.StatusCreated, pc)
-	fmt.Println("1")
 	if err != nil {
 		panic(err)
 	}
@@ -63,6 +60,10 @@ func (ws *WebServer) DeletePostCategory(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		panic(models.ErrInvalidRequest)
 	}
+
+	fmt.Printf("data.CategoryID: %v\n", data.CategoryID)
+	fmt.Printf("data.PostID: %v\n", data.PostID)
+	// FIX: looks like I am getting a err runtime error: invalid memory address or nil pointer dereference error somewhere here
 
 	err = ws.DB.DeletePostCategory(*data)
 	if err != nil {
