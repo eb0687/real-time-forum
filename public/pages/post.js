@@ -333,7 +333,7 @@ export async function getUsernameByUserId(userId) {
     const user = await res.json();
     return user.nickname;
   } catch (error) {
-    console.log("An error occurred:", error);
+    console.error("An error occurred:", error);
     return;
   }
 }
@@ -345,7 +345,8 @@ async function fetchCategoriesForPost(postId) {
       console.error("Failed to fetch categories for the post");
       return [];
     }
-    return await res.json();
+    const categories = await res.json();
+    return Array.isArray(categories) ? categories : []; // Ensure it's an array
   } catch (error) {
     console.error("Error fetching categories:", error);
     return [];
