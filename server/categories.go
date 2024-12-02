@@ -38,7 +38,7 @@ func (ws *WebServer) CreatePostCategory(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-func (ws *WebServer) GetPostCategories(w http.ResponseWriter, r *http.Request) {
+func (ws *WebServer) GetAllCategoriesForPost(w http.ResponseWriter, r *http.Request) {
 	postId, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
 	if err != nil {
 		panic(models.ErrInvalidRequest)
@@ -71,6 +71,23 @@ func (ws *WebServer) DeletePostCategory(w http.ResponseWriter, r *http.Request) 
 	}
 
 	err = utils.SendJsonResponse(w, http.StatusOK, nil)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (ws *WebServer) GetAllPostsForCategory(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		panic(models.ErrInvalidRequest)
+	}
+
+	data, err := ws.DB.ReadPostsForCategory(id)
+	if err != nil {
+		panic(err)
+	}
+
+	err = utils.SendJsonResponse(w, http.StatusOK, data)
 	if err != nil {
 		panic(err)
 	}

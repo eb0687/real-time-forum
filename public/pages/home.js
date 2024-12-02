@@ -66,6 +66,17 @@ export async function homePage() {
     `,
     capabilities,
   );
+
+  document.querySelectorAll(".category-button").forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      const categoryId = event.target.dataset.categoryId;
+      const filteredPosts = await filterPostsByCategory(
+        enrichedPosts,
+        categoryId,
+      );
+      updatePosts(filteredPosts);
+    });
+  });
 }
 
 function capabilities() {}
@@ -97,4 +108,21 @@ export async function fetchCategories() {
 
   const categories = await response.json();
   return categories;
+}
+
+async function filterPostsByCategory(posts, categoryId) {
+  const res = await SpecialFetch(`/api/post-categories/${categoryId}`);
+  if (!res.ok) return posts;
+
+  const filteredCategoryPosts = await res.json();
+  return posts.filter((post) =>
+    filteredCategoryPosts.some(
+      (filteredPost) => filteredPost.post_id === post.id,
+    ),
+  );
+}
+
+function updatePosts(filteredPosts) {
+  const postsContainer = document.getElementById("main-posts-container");
+  postsContainer.innerHTML = PostList(filteredPosts);
 }
