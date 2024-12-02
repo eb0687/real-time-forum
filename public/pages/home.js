@@ -114,7 +114,12 @@ async function filterPostsByCategory(posts, categoryId) {
   const res = await SpecialFetch(`/api/post-categories/${categoryId}`);
   if (!res.ok) return posts;
 
-  const filteredCategoryPosts = await res.json();
+  let filteredCategoryPosts = await res.json();
+  // this is a fix for categories with no posts assosiated to it
+  if (!Array.isArray(filteredCategoryPosts)) {
+    filteredCategoryPosts = [];
+  }
+
   return posts.filter((post) =>
     filteredCategoryPosts.some(
       (filteredPost) => filteredPost.post_id === post.id,
@@ -124,5 +129,11 @@ async function filterPostsByCategory(posts, categoryId) {
 
 function updatePosts(filteredPosts) {
   const postsContainer = document.getElementById("main-posts-container");
-  postsContainer.innerHTML = PostList(filteredPosts);
+  if (filteredPosts.length === 0) {
+    postsContainer.innerHTML = `
+      <p>No posts available for this category...</p>
+`;
+  } else {
+    postsContainer.innerHTML = PostList(filteredPosts);
+  }
 }
