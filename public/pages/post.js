@@ -36,6 +36,9 @@ export async function postPage(id) {
     <div id="post-title" class="pb-10px">
       ${post.title}
     </div>
+    <div id="post-categories">
+      Categories: ${categoryList}
+    </div>
     <div id="post-details" class="flex flex-row gap-20px pb-10px items-center">
       <div id="post-author" class="flex flex-row items-center gap-5px">
         <i class="fa-regular fa-user"></i>
@@ -44,11 +47,6 @@ export async function postPage(id) {
       <p>postid: ${post.id}</p>
       <p>created: ${post.created_at.Time}</p>
       <p>updated: ${post.updated_at.Time}</p>
-
-      <div id="post-categories">
-        Categories: ${categoryList}
-      </div>
-
       <button id="edit-post">Edit</button>
     </div>
     <div id="post-body-container">
