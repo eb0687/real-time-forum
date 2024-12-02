@@ -70,13 +70,13 @@ export const managePostModal = async (isEdit = false, post = {}) => {
         return;
       }
 
-      const post = await res.json();
+      const newPost = await res.json();
 
       // create categories
       if (selectedCategories.length > 0) {
         const categoryRequests = selectedCategories.map((categoryId) =>
           SpecialFetch("/api/post-categories", "POST", {
-            post_id: post.id,
+            post_id: newPost.id,
             category_id: categoryId,
           }),
         );
