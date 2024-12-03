@@ -81,7 +81,7 @@ export const managePostModal = async (isEdit = false, post = {}) => {
     .addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const title = document.getElementById("post-title");
+      const title = document.querySelector("input#post-title");
       const body = document.getElementById("post-body");
       const categoryCheckboxes = document.querySelectorAll(
         'input[name="category"]:checked',
@@ -93,11 +93,13 @@ export const managePostModal = async (isEdit = false, post = {}) => {
 
       const url = isEdit ? `/api/posts/${post.id}` : "/api/posts";
       const method = isEdit ? "PUT" : "POST";
-
-      const res = await SpecialFetch(url, method, {
+      const data = {
         title: title.value,
         body: body.value,
-      });
+      };
+      console.log(data);
+
+      const res = await SpecialFetch(url, method, data);
 
       if (!res || !res.ok) {
         return;
