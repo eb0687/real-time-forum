@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"real-time-forum/database"
 	"real-time-forum/models"
@@ -61,16 +60,14 @@ func (ws *WebServer) DeletePostCategory(w http.ResponseWriter, r *http.Request) 
 		panic(models.ErrInvalidRequest)
 	}
 
-	fmt.Printf("data.CategoryID: %v\n", data.CategoryID)
-	fmt.Printf("data.PostID: %v\n", data.PostID)
-	// FIX: looks like I am getting a err runtime error: invalid memory address or nil pointer dereference error somewhere here
-
 	err = ws.DB.DeletePostCategory(*data)
 	if err != nil {
 		panic(err)
 	}
 
-	err = utils.SendJsonResponse(w, http.StatusOK, nil)
+	err = utils.SendJsonResponse(w, http.StatusOK, map[string]any{
+		"data": "error from hell",
+	})
 	if err != nil {
 		panic(err)
 	}
