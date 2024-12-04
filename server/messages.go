@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"real-time-forum/database"
 	"real-time-forum/models"
+	"strconv"
 
 	"github.com/gorilla/websocket"
 )
@@ -30,6 +31,9 @@ func getConnByUserID(uid int64) *websocket.Conn {
 	return nil
 }
 
+func (ws *WebServer) GetHistory(w http.ResponseWriter, r *http.Request) {
+}
+
 func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -42,16 +46,14 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		conn.Close()
 	}()
 
-	token := r.URL.Query().Get("token")
-	fmt.Printf("token: %v\n", token)
-
-	cookie, err := ws.DB.ReadCookieByUUID(r.URL.Query().Get("token"))
+	uid := r.URL.Query().Get("uid")
+	id, err := strconv.Atoi(uid)
 	if err != nil {
-		fmt.Println(models.ErrUnauthorized)
+		fmt.Printf("err: %v\n", err)
 		return
 	}
 
-	user, err := ws.DB.ReadUser(cookie.Userid)
+	user, err := ws.DB.ReadUser(int64(id))
 	if err != nil {
 		fmt.Println(models.ErrUnauthorized)
 		return
