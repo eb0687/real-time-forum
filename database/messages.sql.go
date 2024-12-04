@@ -49,27 +49,22 @@ const getHistory = `
 SELECT id, senderid, receiverid, body, created_at, updated_at, "foreign"
 FROM Messages
 WHERE
-    (senderid = ? AND receiverid = ?) OR
-    (senderid = ? AND receiverid = ?)
+    senderid = ? AND receiverid = ?
 ORDER BY created_at DESC
 LIMIT ? OFFSET ?
 `
 
 type GetHistoryParams struct {
-	Senderid     int64 `json:"senderid"`
-	Receiverid   int64 `json:"receiverid"`
-	Senderid_2   int64 `json:"senderid_2"`
-	Receiverid_2 int64 `json:"receiverid_2"`
-	Limit        int64 `json:"limit"`
-	Offset       int64 `json:"offset"`
+	Senderid   int64 `json:"senderid"`
+	Receiverid int64 `json:"receiverid"`
+	Limit      int64 `json:"limit"`
+	Offset     int64 `json:"offset"`
 }
 
 func (q *Queries) GetHistory(arg GetHistoryParams) ([]Message, error) {
 	rows, err := q.db.Query(getHistory,
 		arg.Senderid,
 		arg.Receiverid,
-		arg.Senderid_2,
-		arg.Receiverid_2,
 		arg.Limit,
 		arg.Offset,
 	)
@@ -104,23 +99,16 @@ func (q *Queries) GetHistory(arg GetHistoryParams) ([]Message, error) {
 
 const readChat = `
 SELECT id, senderid, receiverid, body, created_at, updated_at, "foreign" FROM Messages
-WHERE (senderid = ? AND receiverid = ?) OR (senderid = ? AND receiverid = ?)
+WHERE senderid=? and receiverid=?
 `
 
 type ReadChatParams struct {
-	Senderid     int64 `json:"senderid"`
-	Receiverid   int64 `json:"receiverid"`
-	Senderid_2   int64 `json:"senderid_2"`
-	Receiverid_2 int64 `json:"receiverid_2"`
+	Senderid   int64 `json:"senderid"`
+	Receiverid int64 `json:"receiverid"`
 }
 
 func (q *Queries) ReadChat(arg ReadChatParams) ([]Message, error) {
-	rows, err := q.db.Query(readChat,
-		arg.Senderid,
-		arg.Receiverid,
-		arg.Senderid_2,
-		arg.Receiverid_2,
-	)
+	rows, err := q.db.Query(readChat, arg.Senderid, arg.Receiverid)
 	if err != nil {
 		return nil, err
 	}

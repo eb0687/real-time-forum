@@ -14,6 +14,7 @@ func (ws *WebServer) AddHandlers() {
 	parent := http.NewServeMux()
 
 	parent.HandleFunc("/ws", ws.HandleWebSocket)
+	parent.HandleFunc("/msgs", ws.GetHistory)
 
 	ws.Mux = parent
 }

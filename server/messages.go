@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"real-time-forum/database"
 	"real-time-forum/models"
+	"real-time-forum/utils"
 	"strconv"
 
 	"github.com/gorilla/websocket"
@@ -32,6 +33,23 @@ func getConnByUserID(uid int64) *websocket.Conn {
 }
 
 func (ws *WebServer) GetHistory(w http.ResponseWriter, r *http.Request) {
+	data, err := utils.DecodeRequestBody[database.GetHistoryParams](r)
+	if err != nil {
+		utils.SendCustomError(w, models.ErrInvalidRequest)
+		return
+	}
+
+	msgs, err := ws.DB.GetHistory(*data)
+	if err != nil {
+		utils.SendCustomError(w, models.ErrInternalServerError)
+		return
+	}
+
+	err = utils.SendJsonResponse(w, http.StatusOK, msgs)
+	if err != nil {
+		utils.SendCustomError(w, models.ErrInternalServerError)
+		return
+	}
 }
 
 func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
