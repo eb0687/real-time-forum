@@ -17,9 +17,9 @@ DELETE FROM Messages
 WHERE id = ?;
 
 -- name: GetHistory :many
-SELECT *
-FROM Messages
-WHERE
-    senderid = ? AND receiverid = ?
+SELECT * FROM Messages
+WHERE (senderid = ? AND receiverid = ?)
+   OR (senderid = ? AND receiverid = ?)
 ORDER BY created_at DESC
-LIMIT ? OFFSET ?
+LIMIT ?
+OFFSET ?
