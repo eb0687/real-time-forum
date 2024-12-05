@@ -1,4 +1,4 @@
-import { getCookieWithoutRequest } from "../js/utils.js";
+import { getCookieWithoutRequest, SpecialFetch } from "../js/utils.js";
 import { getUsernameByUserId } from "./home.js";
 import { attachBaseLayout } from "./layouts.js";
 import { getCurrentUserId } from "./post.js";
@@ -21,7 +21,6 @@ export async function messagesPage() {
     console.error("WebSocket error observed:", event);
   });
 
-  // socket.onmessage = (event) => handleIncomingMessage(event);
   socket.onmessage = async (event) => {
     try {
       const payload = JSON.parse(event.data);
@@ -102,16 +101,35 @@ async function handleIncomingMessage(event) {
     const message = JSON.parse(event.data);
     const output = document.getElementById("messages-container");
 
-    const senderUserName = await getUsernameByUserId(message.senderid);
+    if (
+      message.senderid === selectedReceiverId ||
+      message.receiverid === selectedReceiverId
+    ) {
+      const senderUserName = await getUsernameByUserId(message.senderid);
 
-    output.innerHTML += `
-      <div>
-        (${message.created_at.Time}) ${senderUserName}: ${message.body}
-      </div>
-    `;
+      output.innerHTML += `
+        <div>
+          (${message.created_at.Time}) ${senderUserName}: ${message.body}
+        </div>
+      `;
+    }
   } catch (error) {
     console.error("Error parsing message:", error, "Data:", event.data);
   }
+  // try {
+  //   const message = JSON.parse(event.data);
+  //   const output = document.getElementById("messages-container");
+  //
+  //   const senderUserName = await getUsernameByUserId(message.senderid);
+  //
+  //   output.innerHTML += `
+  //     <div>
+  //       (${message.created_at.Time}) ${senderUserName}: ${message.body}
+  //     </div>
+  //   `;
+  // } catch (error) {
+  //   console.error("Error parsing message:", error, "Data:", event.data);
+  // }
 }
 
 async function handleSendMessage(socket) {
@@ -119,11 +137,10 @@ async function handleSendMessage(socket) {
   const messageInput = document.getElementById("message-input");
 
   const senderId = await getCurrentUserId();
-  // console.log("senderId", senderId);
 
   sendButton.addEventListener("click", () => {
     const messageBody = messageInput.value.trim();
-    if (messageBody) {
+    if (messageBody && selectedReceiverId) {
       const messageData = {
         body: messageBody,
         senderid: senderId,
@@ -162,9 +179,46 @@ function displayUserStatus(userStatuses) {
 }
 
 let selectedReceiverId = null;
-function handleUserSelect(user) {
+async function handleUserSelect(user) {
   selectedReceiverId = user.id;
   const messageInput = document.getElementById("message-input");
   messageInput.placeholder = `Type your message to ${user.username}...`;
-  console.log("Selected receiver ID:", selectedReceiverId);
+  // console.log("Selected receiver ID:", selectedReceiverId);
+
+  const messagesContainer = document.getElementById("messages-container");
+  messagesContainer.innerHTML = "";
+
+  await fetchMessageHistory(selectedReceiverId);
+}
+
+async function fetchMessageHistory(receiverId) {
+  try {
+    const currentUserId = await getCurrentUserId();
+    const response = await SpecialFetch("/api/messages", "GET", {
+      senderid: currentUserId,
+      receiverid: receiverId,
+      limit: 5,
+      offset: 0,
+    });
+
+    if (!response.ok) {
+      console.log("Failed to fetch message history:", response);
+    }
+
+    const messageHistory = await response.json();
+    const messagesContainer = document.getElementById("messages-container");
+    messagesContainer.innerHTML = "";
+
+    messageHistory.reverse().forEach(async (message) => {
+      const senderUserName = await getUsernameByUserId(message.senderid);
+
+      messagesContainer.innerHTML += `
+        <div class="${message.senderid === currentUserId ? "sent-message" : "received-message"}">
+          (${message.created_at.Time}) ${senderUserName}: ${message.body}
+        </div>
+      `;
+    });
+  } catch (error) {
+    console.error("Error fetching message history:", error);
+  }
 }

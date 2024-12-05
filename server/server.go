@@ -54,6 +54,8 @@ func (ws *WebServer) AddHandlers() {
 		m.HandleFunc("GET /post-categories/{id}", ws.GetAllPostsForCategory)
 		m.HandleFunc("DELETE /post-categories", ws.DeletePostCategory)
 
+		m.HandleFunc("POST /messages", ws.GetHistory)
+
 		m.HandleFunc("/cookie", ws.CheckCookie)
 
 		return s(middlewares.Auth(m, ws.DB))

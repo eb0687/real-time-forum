@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"real-time-forum/database"
 	"real-time-forum/models"
+	"real-time-forum/utils"
 
 	"github.com/gorilla/websocket"
 )
@@ -167,4 +168,21 @@ func (ws *WebServer) GetAllUserStatus() ([]UserStatus, error) {
 		})
 	}
 	return userStatuses, nil
+}
+
+func (ws *WebServer) GetHistory(w http.ResponseWriter, r *http.Request) {
+	data, err := utils.DecodeRequestBody[database.GetHistoryParams](r)
+	if err != nil {
+		panic(models.ErrInvalidRequest)
+	}
+
+	msgs, err := ws.DB.GetHistory(*data)
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
+
+	err = utils.SendJsonResponse(w, http.StatusOK, msgs)
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
 }
