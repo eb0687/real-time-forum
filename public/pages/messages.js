@@ -94,7 +94,7 @@ export async function messagesPage() {
   );
 }
 
-function capabilities() {}
+function capabilities() { }
 
 async function handleIncomingMessage(event) {
   try {
@@ -194,13 +194,12 @@ async function handleUserSelect(user) {
 async function fetchMessageHistory(receiverId) {
   try {
     const currentUserId = await getCurrentUserId();
-    const response = await SpecialFetch("/api/messages", "GET", {
+    const response = await SpecialFetch("/api/messages", "POST", {
       senderid: currentUserId,
       receiverid: receiverId,
       limit: 5,
       offset: 0,
     });
-
     if (!response.ok) {
       console.log("Failed to fetch message history:", response);
     }
@@ -208,6 +207,9 @@ async function fetchMessageHistory(receiverId) {
     const messageHistory = await response.json();
     const messagesContainer = document.getElementById("messages-container");
     messagesContainer.innerHTML = "";
+    if (messageHistory == null) {
+      throw new Error("you don't have any chat with this person");
+    }
 
     messageHistory.reverse().forEach(async (message) => {
       const senderUserName = await getUsernameByUserId(message.senderid);
