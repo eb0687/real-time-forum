@@ -188,10 +188,12 @@ async function handleIncomingMessage(event) {
       message.receiverid === selectedReceiverId
     ) {
       const senderUserName = await getUsernameByUserId(message.senderid);
+      const date = new Date(message.created_at.Time);
+      const prettyDate = date.toLocaleString();
 
       output.innerHTML += `
         <div>
-          (${message.created_at.Time}) ${senderUserName}: ${message.body}
+          (${prettyDate}) ${senderUserName}: ${message.body}
         </div>
       `;
     }
@@ -281,9 +283,12 @@ async function fetchMessageHistory(receiverId, limit = 10) {
     messageHistory.reverse().forEach(async (message) => {
       const senderUserName = await getUsernameByUserId(message.senderid);
 
+      const date = new Date(message.created_at.Time);
+      const prettyDate = date.toLocaleString();
+
       messagesContainer.innerHTML += `
         <div class="${message.senderid === currentUserId ? "sent-message" : "received-message"}">
-          (${message.created_at.Time}) ${senderUserName}: ${message.body}
+          (${prettyDate}) ${senderUserName}: ${message.body}
         </div>
       `;
     });
