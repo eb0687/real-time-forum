@@ -111,65 +111,81 @@ export async function messagesPage() {
   .status-icon.offline {
     color: red;
   }
-#user-list-container {
-    position: fixed;
-    top: 7.9%;
-    right: 2rem;
-    width: 40px;
-    height: 100%;
-    max-height: 810px;
-    overflow-y: auto;
-    background-color: #000000;
-    border: 2px solid white;
-    border-radius: 8px;
-    padding: 10px 5px;
-    box-sizing: border-box;
-    transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  #user-list-container {
+      position: fixed;
+      top: 7.9%;
+      right: 2rem;
+      width: 40px;
+      height: 100%;
+      max-height: 810px;
+      overflow-y: auto;
+      background-color: #000000;
+      border: 2px solid white;
+      border-radius: 8px;
+      padding: 10px 5px;
+      box-sizing: border-box;
+      transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  #user-list-container:hover {
+    width: 200px;
+  }
+  #user-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .user-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .user-item:hover {
+    background-color: #f0f0f0;
+  }
+  .user-item span {
+    opacity: 0; 
+    transition: opacity 0.3s ease;
+  }
+  #user-list-container:hover .user-item span {
+    opacity: 1; 
+  }
+  .status-icon {
+    font-size: 14px;
+  }
+.sent .sender-name {
+  color: blue;
+  font-weight: bold;
 }
-
-#user-list-container:hover {
-  width: 200px;
-}
-
-#user-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.user-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 5px;
-  cursor: pointer;
+.sent .sent-message {
+  color: #000000;
+  background-color: #d0e0f0;
   border-radius: 5px;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding: 5px;
+  margin-top: 5px;
+  display: inline-block;
 }
-
-.user-item:hover {
+.received .receiver-name {
+  color: green;
+  font-weight: bold;
+}
+.received .received-message {
+  color: #000000;
   background-color: #f0f0f0;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 5px;
+  display: inline-block;
 }
-
-.user-item span {
-  opacity: 0; 
-  transition: opacity 0.3s ease;
-}
-
-#user-list-container:hover .user-item span {
-  opacity: 1; 
-}
-
-.status-icon {
-  font-size: 14px;
-}
-
 
     `,
     capabilities,
@@ -192,8 +208,13 @@ async function handleIncomingMessage(event) {
       const prettyDate = date.toLocaleString();
 
       output.innerHTML += `
-        <div>
-          (${prettyDate}) ${senderUserName}: ${message.body}
+        <div class="message ${message.senderid === selectedReceiverId ? "received" : "sent"}">
+          <span class="${message.senderid === selectedReceiverId ? "receiver-name" : "sender-name"}">
+            (${prettyDate}) ${senderUserName}:
+          </span>
+          <span class="${message.senderid === selectedReceiverId ? "received-message" : "sent-message"}">
+            ${message.body}
+          </span>
         </div>
       `;
     }
@@ -266,6 +287,8 @@ async function fetchMessageHistory(receiverId, limit = 10) {
     const response = await SpecialFetch("/api/messages", "POST", {
       senderid: currentUserId,
       receiverid: receiverId,
+      senderid_2: receiverId,
+      receiverid_2: currentUserId,
       limit: limit,
       offset: 0,
     });
@@ -274,6 +297,7 @@ async function fetchMessageHistory(receiverId, limit = 10) {
     }
 
     const messageHistory = await response.json();
+    console.log("Message History:", messageHistory); // Add this log
     const messagesContainer = document.getElementById("messages-container");
     messagesContainer.innerHTML = "";
     if (messageHistory == null) {
@@ -287,9 +311,14 @@ async function fetchMessageHistory(receiverId, limit = 10) {
       const prettyDate = date.toLocaleString();
 
       messagesContainer.innerHTML += `
-        <div class="${message.senderid === currentUserId ? "sent-message" : "received-message"}">
-          (${prettyDate}) ${senderUserName}: ${message.body}
-        </div>
+        <div class="message ${message.senderid === currentUserId ? "sent" : "received"}">
+          <span class="${message.senderid === currentUserId ? "sender-name" : "receiver-name"}">
+            (${prettyDate}) ${senderUserName}:
+          </span>
+          <span class="${message.senderid === currentUserId ? "sent-message" : "received-message"}">
+            ${message.body}
+          </span>
+        </div> 
       `;
     });
   } catch (error) {
