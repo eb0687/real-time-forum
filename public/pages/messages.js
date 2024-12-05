@@ -39,22 +39,39 @@ export async function messagesPage() {
 
   await attachBaseLayout(
     /*html*/ `
-<div id="private-messages-container" class="flex flex-col pl-120px pr-120px gap-20px">
+<div id="main">
+  <div id="private-messages-container" class="flex flex-col pl-120px pr-20px gap-20px">
     <h2>Private Messages</h2>
     <div id="messages-container"></div>
     <div class="message-input-container">
-        <input type="text" id="message-input" placeholder="Type your message here..." />
-        <button id="send-message-button">Send</button>
+      <input type="text" id="message-input" placeholder="Type your message here..." />
+      <button id="send-message-button">Send</button>
     </div>
-    <div id="user-list-container">
-      <h3>Users</h3>
-      <ul id="user-list"></ul>
-    </div>
+  </div>
+  <div id="user-list-container">
+    <ul id="user-list"></ul>
+  </div>
 </div>
+
 <style>
+  #main {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100dvh;
+  }
+  #private-messages-container {
+    width: 95%
+  }
+  .message-input-container {
+    display: flex; 
+    flex-direction: row; 
+    gap: 10px;
+  }
   .message-input-container input#message-input {
     width: 100%; 
-    max-width: 800px; 
     padding: 10px 15px; 
     border: 2px solid ; 
     border-radius: 8px; 
@@ -63,7 +80,7 @@ export async function messagesPage() {
     outline: none; 
   }
   #messages-container {
-    height: 600px; 
+    height: 90%; 
     overflow-y: auto;
     border: 2px solid; 
     border-radius: 8px; 
@@ -81,20 +98,85 @@ export async function messagesPage() {
     transition: background-color 0.3s ease, transform 0.2s ease; 
   }
   .message-input-container button#send-message-button:hover {
-      background-color: #0056b3; 
-      transform: translateY(-2px); 
+    background-color: #0056b3; 
+    transform: translateY(-2px); 
   }
   .message-input-container button#send-message-button:active {
     background-color: #004494; 
     transform: translateY(1px); 
   }
-</style>
+  .status-icon.online {
+    color: green;
+  }
+  .status-icon.offline {
+    color: red;
+  }
+#user-list-container {
+    position: fixed;
+    top: 7.9%;
+    right: 2rem;
+    width: 40px;
+    height: 100%;
+    max-height: 810px;
+    overflow-y: auto;
+    background-color: #000000;
+    border: 2px solid white;
+    border-radius: 8px;
+    padding: 10px 5px;
+    box-sizing: border-box;
+    transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+#user-list-container:hover {
+  width: 200px;
+}
+
+#user-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-item:hover {
+  background-color: #f0f0f0;
+}
+
+.user-item span {
+  opacity: 0; 
+  transition: opacity 0.3s ease;
+}
+
+#user-list-container:hover .user-item span {
+  opacity: 1; 
+}
+
+.status-icon {
+  font-size: 14px;
+}
+
+
     `,
     capabilities,
   );
 }
 
-function capabilities() { }
+function capabilities() {}
 
 async function handleIncomingMessage(event) {
   try {
@@ -116,20 +198,6 @@ async function handleIncomingMessage(event) {
   } catch (error) {
     console.error("Error parsing message:", error, "Data:", event.data);
   }
-  // try {
-  //   const message = JSON.parse(event.data);
-  //   const output = document.getElementById("messages-container");
-  //
-  //   const senderUserName = await getUsernameByUserId(message.senderid);
-  //
-  //   output.innerHTML += `
-  //     <div>
-  //       (${message.created_at.Time}) ${senderUserName}: ${message.body}
-  //     </div>
-  //   `;
-  // } catch (error) {
-  //   console.error("Error parsing message:", error, "Data:", event.data);
-  // }
 }
 
 async function handleSendMessage(socket) {
@@ -159,17 +227,16 @@ async function handleSendMessage(socket) {
   });
 }
 
-//  TODO: need to work on this
 function displayUserStatus(userStatuses) {
   const userList = document.getElementById("user-list");
   userList.innerHTML = ""; // Clear the list before re-rendering
 
   userStatuses.forEach((user) => {
-    const status = user.online ? "Online" : "Offline";
     const userElement = document.createElement("li");
+    userElement.className = "user-item";
     userElement.innerHTML = `
-      <span>${user.username} (ID: ${user.id})</span>
-      <span>${status}</span>
+      <i class="fa-solid fa-circle status-icon ${user.online ? "online" : "offline"}"></i>
+      <span>${user.username}</span>
     `;
 
     userElement.addEventListener("click", () => handleUserSelect(user));
@@ -181,9 +248,9 @@ function displayUserStatus(userStatuses) {
 let selectedReceiverId = null;
 async function handleUserSelect(user) {
   selectedReceiverId = user.id;
+
   const messageInput = document.getElementById("message-input");
   messageInput.placeholder = `Type your message to ${user.username}...`;
-  // console.log("Selected receiver ID:", selectedReceiverId);
 
   const messagesContainer = document.getElementById("messages-container");
   messagesContainer.innerHTML = "";
@@ -191,13 +258,13 @@ async function handleUserSelect(user) {
   await fetchMessageHistory(selectedReceiverId);
 }
 
-async function fetchMessageHistory(receiverId) {
+async function fetchMessageHistory(receiverId, limit = 10) {
   try {
     const currentUserId = await getCurrentUserId();
     const response = await SpecialFetch("/api/messages", "POST", {
       senderid: currentUserId,
       receiverid: receiverId,
-      limit: 5,
+      limit: limit,
       offset: 0,
     });
     if (!response.ok) {
