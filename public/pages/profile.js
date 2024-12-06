@@ -40,16 +40,15 @@ export async function ownProfilePage() {
  * @returns {string}
  */
 function GetProfilePageHTML(user) {
+  const createdDate = new Date(user.created_at.Time).toLocaleString();
   return /*html*/ `
-
-<div class="flex flex-col items-center justify-center h-100vh">
-  <div class="b-1px-border p-20px rounded w-600px">
-    <div class="flex flex-row items-center mb-30px">
-      <div id="profile-title" class="text-center w-full b-1px-border rounded p-10px">
-        ${user.first_name} ${user.last_name}
-      </div>
+<link rel="stylesheet" href="/public/css/profile.css">
+<div id="main" class="">
+  <div id="profile-container" class="">
+    <div id="profile-title" class="">
+      ${user.first_name} ${user.last_name}
     </div>
-    <div class="flex flex-col items-start gap-10px">
+    <div id="user-details-container" class="">
       <div class="label-value-pair">
         <span class="label-bold">Nickname:</span>
         <span class="value">${user.nickname}</span>
@@ -76,35 +75,11 @@ function GetProfilePageHTML(user) {
       </div>
       <div class="label-value-pair">
         <span class="label-bold">Joined On:</span>
-        <span class="value">${user.created_at.Time}</span>
+        <span class="value">${createdDate}</span>
       </div>
     </div>
   </div>
 </div>
-
-<style>
-  #profile-title {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-
-  .label-bold {
-    font-weight: bold;
-    font-size: 1.2rem;
-  }
-
-  .value {
-    font-size: 1.2rem;
-  }
-
-  .label-value-pair {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    width: 100%;
-  }
-</style>
-
     `;
 }
 

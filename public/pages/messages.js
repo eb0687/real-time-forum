@@ -39,8 +39,9 @@ export async function messagesPage() {
 
   await attachBaseLayout(
     /*html*/ `
+<link rel="stylesheet" href="public/css/messages.css">
 <div id="main">
-  <div id="private-messages-container" class="flex flex-col pl-120px pr-20px gap-20px">
+  <div id="private-messages-container" class="">
     <h2>Private Messages</h2>
     <div id="messages-container"></div>
     <div class="message-input-container">
@@ -52,141 +53,6 @@ export async function messagesPage() {
     <ul id="user-list"></ul>
   </div>
 </div>
-
-<style>
-  #main {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    height: 100dvh;
-  }
-  #private-messages-container {
-    width: 95%
-  }
-  .message-input-container {
-    display: flex; 
-    flex-direction: row; 
-    gap: 10px;
-  }
-  .message-input-container input#message-input {
-    width: 100%; 
-    padding: 10px 15px; 
-    border: 2px solid ; 
-    border-radius: 8px; 
-    font-size: 16px; 
-    color: #ddd; 
-    outline: none; 
-  }
-  #messages-container {
-    height: 90%; 
-    overflow-y: auto;
-    border: 2px solid; 
-    border-radius: 8px; 
-    padding: 10px; 
-  }
-  .message-input-container button#send-message-button {
-    padding: 10px 20px; 
-    background-color: #007BFF; 
-    color: white; 
-    font-size: 16px; 
-    font-weight: bold; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    transition: background-color 0.3s ease, transform 0.2s ease; 
-  }
-  .message-input-container button#send-message-button:hover {
-    background-color: #0056b3; 
-    transform: translateY(-2px); 
-  }
-  .message-input-container button#send-message-button:active {
-    background-color: #004494; 
-    transform: translateY(1px); 
-  }
-  .status-icon.online {
-    color: green;
-  }
-  .status-icon.offline {
-    color: red;
-  }
-  #user-list-container {
-      position: fixed;
-      top: 7.9%;
-      right: 2rem;
-      width: 40px;
-      height: 100%;
-      max-height: 810px;
-      overflow-y: auto;
-      background-color: #000000;
-      border: 2px solid white;
-      border-radius: 8px;
-      padding: 10px 5px;
-      box-sizing: border-box;
-      transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  }
-  #user-list-container:hover {
-    width: 200px;
-  }
-  #user-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .user-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 5px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.2s ease, color 0.2s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .user-item:hover {
-    background-color: #f0f0f0;
-  }
-  .user-item span {
-    opacity: 0; 
-    transition: opacity 0.3s ease;
-  }
-  #user-list-container:hover .user-item span {
-    opacity: 1; 
-  }
-  .status-icon {
-    font-size: 14px;
-  }
-.sent .sender-name {
-  color: blue;
-  font-weight: bold;
-}
-.sent .sent-message {
-  color: #000000;
-  background-color: #d0e0f0;
-  border-radius: 5px;
-  padding: 5px;
-  margin-top: 5px;
-  display: inline-block;
-}
-.received .receiver-name {
-  color: green;
-  font-weight: bold;
-}
-.received .received-message {
-  color: #000000;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  padding: 5px;
-  margin-top: 5px;
-  display: inline-block;
-}
-
     `,
     capabilities,
   );
