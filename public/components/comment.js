@@ -2,7 +2,9 @@
  * @param {import("../js/types").Comment} comment
  * @returns {string}
  */
+
 export const Comment = (comment) => {
+  const commentCreatedDate = new Date(comment.created_at.Time).toLocaleString();
   return /*html*/ `
     <div class="comment-content" id="comment-${comment.id}" data-userid="${comment.userid}")>
       <html></html>
@@ -14,7 +16,7 @@ export const Comment = (comment) => {
         <div id="comment-details-container" class="w-20%">
           <p>username: ${comment.username}</p>
           <p>id: ${comment.id}</p>
-          <p>created: ${comment.created_at.Time}</p>
+          <p>created: ${commentCreatedDate}</p>
           <p>userid: ${comment.userid}</p>
           <p>postid: ${comment.postid}</p>
         </div>

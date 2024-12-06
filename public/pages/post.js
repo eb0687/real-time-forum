@@ -27,6 +27,9 @@ export async function postPage(id) {
 
   const postUserName = await getUsernameByUserId(post.userid);
 
+  const createdDate = new Date(post.created_at.Time).toLocaleString();
+  const updatedDate = new Date(post.updated_at.Time).toLocaleString();
+
   document.title = post.title;
   await attachBaseLayout(
     /*html*/ `
@@ -45,8 +48,8 @@ export async function postPage(id) {
         <p>${postUserName}</p>
       </div>
       <p>postid: ${post.id}</p>
-      <p>created: ${post.created_at.Time}</p>
-      <p>updated: ${post.updated_at.Time}</p>
+      <p>created: ${createdDate}</p>
+      <p>updated: ${updatedDate}</p>
       <button id="edit-post">Edit</button>
     </div>
     <div id="post-body-container">
