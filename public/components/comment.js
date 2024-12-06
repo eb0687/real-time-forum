@@ -8,24 +8,24 @@ export const Comment = (comment) => {
   return /*html*/ `
 <link rel="stylesheet" href="/public/css/post.css">
 <div class="comment-content" id="comment-${comment.id}" data-userid="${comment.userid}")>
-    <div id="comment-container" class="flex flex-row pb-10px justify-start">
-      <div id="comment-details-container" class="w-20%">
+    <div id="comment-container" class="">
+      <div id="comment-details-container" class="">
         <p>username: ${comment.username}</p>
         <p>id: ${comment.id}</p>
         <p>created: ${commentCreatedDate}</p>
         <p>userid: ${comment.userid}</p>
         <p>postid: ${comment.postid}</p>
       </div>
-      <div id="comment-body-container" class="w-100% p-10px">
+      <div id="comment-body-container" class="">
         ${comment.body}
       </div>
-      <div id="comment-buttons-container" class="flex flex-row gap-10px items-end">
+      <div id="comment-buttons-container" class="">
         <button class="edit-comment" data-comment-id="${comment.id}">Edit</button>
         <button class="delete-comment" data-comment-id="${comment.id}">Delete</button>
       </div>
       <div class="edit-form" id="edit-form-${comment.id}" >
         <textarea class="edit-textarea" id="edit-textarea-${comment.id}">${comment.body}</textarea>
-        <div id="edit-form-buttons-container" class="flex flex-row gap-10px items-end">
+        <div id="edit-form-buttons-container" class="">
           <button class="save-comment" data-comment-id="${comment.id}">Save</button>
           <button class="cancel-edit" data-comment-id="${comment.id}">Cancel</button>
         </div>

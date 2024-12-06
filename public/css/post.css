@@ -65,6 +65,9 @@
   margin-bottom: 10px;
   resize: none;
 }
+#comment-text {
+  background-color: #f8f9fa;
+}
 #comment-box-container button {
   font-size: 0.65rem;
   padding: 0 10px;
@@ -83,15 +86,28 @@
   resize: none;
 }
 #comment-container {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
+  justify-content: flex-start;
   border-bottom: 1px dotted white;
 }
 #comment-details-container {
+  width: 20%;
   min-width: 20%;
   border-right: 1px dotted white;
 }
 #comment-body-container {
+  width: 100%;
+  padding: 10px;
   min-height: 30%;
   font-size: 1.2rem;
+}
+#comment-buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-end;
 }
 #comment-buttons-container button {
   font-size: 0.65rem;
@@ -117,6 +133,13 @@
   width: 50%;
   height: 90%;
   resize: none;
+  background-color: #f8f9fa;
+}
+#edit-form-buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-end;
 }
 #edit-form-buttons-container button {
   font-size: 0.65rem;
