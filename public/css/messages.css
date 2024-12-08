@@ -105,7 +105,9 @@
   text-overflow: ellipsis;
 }
 .user-item:hover {
-  background-color: #f0f0f0;
+  background-color: #e0e0e0;
+  color: black;
+  font-weight: bold;
 }
 .user-item span {
   opacity: 0;
