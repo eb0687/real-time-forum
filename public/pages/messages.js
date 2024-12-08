@@ -12,7 +12,7 @@ export async function messagesPage() {
 
   const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
 
-  socket.addEventListener("open", async (event) => {
+  socket.addEventListener("open", async () => {
     console.log("Connected to the WebSocket server");
     await handleSendMessage(socket);
   });
@@ -144,50 +144,144 @@ async function handleUserSelect(user) {
   const messagesContainer = document.getElementById("messages-container");
   messagesContainer.innerHTML = "";
 
-  await fetchMessageHistory(selectedReceiverId);
+  offset = 0;
+  await fetchMessageHistory(selectedReceiverId, 10, offset);
+
+  offset += 10;
+
+  await ensureScrollableContent();
+  setupScrollLoading();
 }
 
-async function fetchMessageHistory(receiverId, limit = 10) {
+async function fetchMessageHistory(receiverId, limit = 10, offset = 0) {
   try {
     const currentUserId = await getCurrentUserId();
+    console.log(
+      `Fetching messages for user ${receiverId} with offset ${offset}`,
+    );
+
     const response = await SpecialFetch("/api/messages", "POST", {
       senderid: currentUserId,
       receiverid: receiverId,
       senderid_2: receiverId,
       receiverid_2: currentUserId,
       limit: limit,
-      offset: 0,
+      offset: offset,
     });
+
     if (!response.ok) {
-      console.log("Failed to fetch message history:", response);
+      console.error("Failed to fetch message history:", response);
+      return false;
     }
 
     const messageHistory = await response.json();
-    console.log("Message History:", messageHistory); // Add this log
-    const messagesContainer = document.getElementById("messages-container");
-    messagesContainer.innerHTML = "";
-    if (messageHistory == null) {
-      throw new Error("you don't have any chat with this person");
+    if (!messageHistory || messageHistory.length === 0) {
+      console.log("No more messages found.");
+      return null;
     }
+
+    const messagesContainer = document.getElementById("messages-container");
 
     messageHistory.reverse().forEach(async (message) => {
       const senderUserName = await getUsernameByUserId(message.senderid);
-
       const date = new Date(message.created_at.Time);
       const prettyDate = date.toLocaleString();
 
-      messagesContainer.innerHTML += `
-        <div class="message ${message.senderid === currentUserId ? "sent" : "received"}">
-          <span class="${message.senderid === currentUserId ? "sender-name" : "receiver-name"}">
+      const messageHTML = `
+        <div class="message ${
+          message.senderid === currentUserId ? "sent" : "received"
+        }">
+          <span class="${
+            message.senderid === currentUserId ? "sender-name" : "receiver-name"
+          }">
             (${prettyDate}) ${senderUserName}:
           </span>
-          <span class="${message.senderid === currentUserId ? "sent-message" : "received-message"}">
+          <span class="${
+            message.senderid === currentUserId
+              ? "sent-message"
+              : "received-message"
+          }">
             ${message.body}
           </span>
-        </div> 
+        </div>
       `;
+
+      // Use `insertAdjacentHTML` to prepend messages
+      messagesContainer.insertAdjacentHTML("afterbegin", messageHTML);
     });
+
+    return true;
   } catch (error) {
     console.error("Error fetching message history:", error);
+    return false;
+  }
+}
+
+let offset = 0;
+async function loadPreviousMessages() {
+  try {
+    const success = await fetchMessageHistory(selectedReceiverId, 10, offset);
+    if (success) {
+      offset += 10;
+    } else {
+      // console.log("No more messages to load.");
+      return;
+    }
+    return success;
+  } catch (error) {
+    console.error("Error loading previous messages:", error);
+    return false;
+  }
+}
+
+function setupScrollLoading() {
+  const messagesContainer = document.getElementById("messages-container");
+
+  messagesContainer.addEventListener(
+    "scroll",
+    debounce(async () => {
+      if (messagesContainer.scrollTop <= 50) {
+        const success = await loadPreviousMessages();
+        if (success) {
+          const currentScrollTop = messagesContainer.scrollTop;
+          const newScrollHeight = messagesContainer.scrollHeight;
+          const scrollDownAmount = 1; // Adjust this value as needed for slight scroll
+
+          messagesContainer.scrollTop = Math.min(
+            currentScrollTop + scrollDownAmount,
+            newScrollHeight - messagesContainer.clientHeight,
+          );
+        }
+      }
+    }, 300),
+  );
+}
+
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
+async function ensureScrollableContent() {
+  const messagesContainer = document.getElementById("messages-container");
+
+  let messagesLoaded = false;
+
+  // Load messages until the content is scrollable or no more messages are available
+  while (messagesContainer.scrollHeight <= messagesContainer.clientHeight) {
+    const success = await loadPreviousMessages();
+    if (!success) {
+      console.log("No more messages to load.");
+      break;
+    }
+    messagesLoaded = true;
+  }
+
+  // Scroll to the bottom if messages were loaded
+  if (messagesLoaded) {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
 }
