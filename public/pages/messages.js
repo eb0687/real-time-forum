@@ -10,6 +10,26 @@ export async function messagesPage() {
     return;
   }
 
+  await attachBaseLayout(
+    /*html*/ `
+<link rel="stylesheet" href="public/css/messages.css">
+<div id="main">
+  <div id="private-messages-container" class="">
+    <h2>Private Messages</h2>
+    <div id="messages-container"></div>
+    <div class="message-input-container">
+      <input type="text" id="message-input" placeholder="Type your message here..." />
+      <button id="send-message-button">Send</button>
+    </div>
+  </div>
+  <div id="user-list-container">
+    <ul id="user-list"></ul>
+  </div>
+</div>
+    `,
+    capabilities,
+  );
+
   const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
 
   socket.addEventListener("open", async () => {
@@ -49,26 +69,6 @@ export async function messagesPage() {
       console.error("Error handling WebSocket message:", error);
     }
   };
-
-  await attachBaseLayout(
-    /*html*/ `
-<link rel="stylesheet" href="public/css/messages.css">
-<div id="main">
-  <div id="private-messages-container" class="">
-    <h2>Private Messages</h2>
-    <div id="messages-container"></div>
-    <div class="message-input-container">
-      <input type="text" id="message-input" placeholder="Type your message here..." />
-      <button id="send-message-button">Send</button>
-    </div>
-  </div>
-  <div id="user-list-container">
-    <ul id="user-list"></ul>
-  </div>
-</div>
-    `,
-    capabilities,
-  );
 }
 
 function capabilities() {}
