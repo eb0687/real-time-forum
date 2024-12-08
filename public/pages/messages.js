@@ -23,13 +23,26 @@ export async function messagesPage() {
 
   socket.onmessage = async (event) => {
     try {
-      const payload = JSON.parse(event.data);
+      let payload;
+      try {
+        payload = JSON.parse(event.data);
+      } catch (error) {
+        console.log("Received non-JSON message:", event.data, error);
+        return;
+      }
 
-      // Check if its a user status list
       if (Array.isArray(payload)) {
-        displayUserStatus(payload);
+        const onlineUsers = payload.filter((user) => user.online);
+        if (onlineUsers.length > 0) {
+          console.log(
+            "Online users:",
+            onlineUsers.map((user) => user.username),
+          );
+        }
+        // check if it is a user list
+        await displayUserStatus(payload);
       } else {
-        // Otherwise, handle it as a chat message
+        // otherwise, handle it as a chat message
         await handleIncomingMessage(event);
       }
     } catch (error) {
@@ -116,24 +129,6 @@ async function handleSendMessage(socket) {
   });
 }
 
-function displayUserStatus(userStatuses) {
-  const userList = document.getElementById("user-list");
-  userList.innerHTML = ""; // Clear the list before re-rendering
-
-  userStatuses.forEach((user) => {
-    const userElement = document.createElement("li");
-    userElement.className = "user-item";
-    userElement.innerHTML = `
-      <i class="fa-solid fa-circle status-icon ${user.online ? "online" : "offline"}"></i>
-      <span>${user.username}</span>
-    `;
-
-    userElement.addEventListener("click", () => handleUserSelect(user));
-
-    userList.appendChild(userElement);
-  });
-}
-
 let selectedReceiverId = null;
 async function handleUserSelect(user) {
   selectedReceiverId = user.id;
@@ -180,9 +175,18 @@ async function fetchMessageHistory(receiverId, limit = 10, offset = 0) {
       return null;
     }
 
+    // for testing only
+    // messageHistory.forEach((message) => {
+    //   const time = new Date(message.created_at.Time);
+    //   console.log(`sender: ${message.senderid}`);
+    //   console.log(`receiver: ${message.receiverid}`);
+    //   console.log(`created_at: ${time}`);
+    // });
+
     const messagesContainer = document.getElementById("messages-container");
 
-    messageHistory.reverse().forEach(async (message) => {
+    // Display messages in the correct order (oldest to newest)
+    for (const message of messageHistory) {
       const senderUserName = await getUsernameByUserId(message.senderid);
       const date = new Date(message.created_at.Time);
       const prettyDate = date.toLocaleString();
@@ -206,9 +210,9 @@ async function fetchMessageHistory(receiverId, limit = 10, offset = 0) {
         </div>
       `;
 
-      // Use `insertAdjacentHTML` to prepend messages
+      // Append messages to ensure correct order
       messagesContainer.insertAdjacentHTML("afterbegin", messageHTML);
-    });
+    }
 
     return true;
   } catch (error) {
@@ -284,4 +288,93 @@ async function ensureScrollableContent() {
   if (messagesLoaded) {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
+}
+
+async function fetchLastMessageTime(currentUserId, user) {
+  try {
+    const response = await SpecialFetch("/api/messages", "POST", {
+      senderid: currentUserId,
+      receiverid: user.id,
+      senderid_2: user.id,
+      receiverid_2: currentUserId,
+      limit: 1,
+      offset: 0,
+    });
+
+    if (!response.ok) {
+      return {
+        user,
+        lastMessageTime: null,
+      };
+    }
+
+    const messageHistory = await response.json();
+
+    if (!messageHistory) {
+      // console.log(
+      //   `No message history found for user ${user.username} (ID: ${user.id})`,
+      // );
+      return {
+        user,
+        lastMessageTime: null,
+      };
+    }
+
+    return {
+      user,
+      lastMessageTime:
+        messageHistory.length > 0
+          ? new Date(messageHistory[0].created_at.Time).getTime()
+          : null,
+    };
+  } catch (error) {
+    console.error(`Error fetching last message for user ${user.id}:`, error);
+    return {
+      user,
+      lastMessageTime: null,
+    };
+  }
+}
+
+async function displayUserStatus(userStatuses) {
+  const userList = document.getElementById("user-list");
+  userList.innerHTML = ""; // Clear the list before re-rendering
+
+  const currentUserId = await getCurrentUserId();
+
+  const userLastMessageTimes = await Promise.all(
+    userStatuses.map((user) => fetchLastMessageTime(currentUserId, user)),
+  );
+
+  // Sort users based on last message timestamp
+  const sortedUsers = userLastMessageTimes.sort((a, b) => {
+    // If both have last message times, sort by most recent
+    if (a.lastMessageTime && b.lastMessageTime) {
+      return b.lastMessageTime - a.lastMessageTime;
+    }
+
+    // If one user has no messages, put them after users with messages
+    if (a.lastMessageTime && !b.lastMessageTime) {
+      return -1;
+    }
+    if (!a.lastMessageTime && b.lastMessageTime) {
+      return 1;
+    }
+
+    // If neither have messages, sort alphabetically by username
+    return a.user.username.localeCompare(b.user.username);
+  });
+
+  sortedUsers.forEach(({ user }) => {
+    const userElement = document.createElement("li");
+    userElement.className = "user-item";
+    userElement.innerHTML = `
+      <i class="fa-solid fa-circle status-icon ${user.online ? "online" : "offline"}"></i>
+      <span>${user.username}</span>
+    `;
+
+    userElement.addEventListener("click", () => handleUserSelect(user));
+
+    userList.appendChild(userElement);
+  });
 }
