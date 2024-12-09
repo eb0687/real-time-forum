@@ -24,43 +24,36 @@ export async function postPage(id) {
         .map((cat) => `<span class="post-category">${cat.name}</span>`)
         .join(", ")
     : "";
-
   const postUserName = await getUsernameByUserId(post.userid);
 
   const createdDate = new Date(post.created_at.Time).toLocaleString();
   const updatedDate = new Date(post.updated_at.Time).toLocaleString();
 
   document.title = post.title;
+
   await attachBaseLayout(
     /*html*/ `
-
-<link rel="stylesheet" href="/public/css/post.css">
-<div id="main" class="">
-  <div id="main-container" class="">
-    <div id="post-title" class="">
-      ${post.title}
-    </div>
-    <div id="post-categories">
-      Categories: ${categoryList}
-    </div>
-    <div id="post-details" class="">
-      <div id="post-author" class="">
-        <i class="fa-regular fa-user"></i>
-        <p>${postUserName}</p>
+    <link rel="stylesheet" href="/public/css/post.css" />
+    <div id="main" class="">
+      <div id="main-container" class="">
+        <div id="post-title" class="">${post.title}</div>
+        <div id="post-categories">Categories: ${categoryList}</div>
+        <div id="post-details" class="">
+          <div id="post-author" class="">
+            <i class="fa-regular fa-user"></i>
+            <p>${postUserName}</p>
+          </div>
+          <p>postid: ${post.id}</p>
+          <p>created: ${createdDate}</p>
+          <p>updated: ${updatedDate}</p>
+          <button id="edit-post">Edit</button>
+        </div>
+        <div id="post-body-container">
+          <p>${post.body}</p>
+        </div>
+        ${commentsBox} ${commentsHtml}
       </div>
-      <p>postid: ${post.id}</p>
-      <p>created: ${createdDate}</p>
-      <p>updated: ${updatedDate}</p>
-      <button id="edit-post">Edit</button>
     </div>
-    <div id="post-body-container">
-      <p>${post.body}</p>
-    </div>
-    ${commentsBox}
-    ${commentsHtml}
-  </div>
-</div>
-
     `,
     async () => {
       handleCreateComment(post.id);
@@ -74,11 +67,17 @@ export async function postPage(id) {
 
 function CommentsBox() {
   return /*html*/ `
-        <link rel="stylesheet" href="/public/css/post.css">
-        <div id="comment-box-container" class="">
-            <textarea class="" id="comment-text" rows="10" cols="80" placeholder="Write your comment here..."></textarea>
-            <button id="submit-comment-button">Submit</button>
-        </div>
+    <link rel="stylesheet" href="/public/css/post.css" />
+    <div id="comment-box-container" class="">
+      <textarea
+        class=""
+        id="comment-text"
+        rows="10"
+        cols="80"
+        placeholder="Write your comment here..."
+      ></textarea>
+      <button id="submit-comment-button">Submit</button>
+    </div>
     `;
 }
 

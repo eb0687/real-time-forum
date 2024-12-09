@@ -54,7 +54,6 @@ export async function messagesPage() {
         console.log("Received non-JSON message:", event.data, error);
         return;
       }
-
       if (Array.isArray(payload)) {
         const onlineUsers = payload.filter((user) => user.online);
         if (onlineUsers.length > 0) {
@@ -63,6 +62,7 @@ export async function messagesPage() {
             onlineUsers.map((user) => user.username),
           );
         }
+
         // check if it is a user list
         await displayUserStatus(payload);
       } else {

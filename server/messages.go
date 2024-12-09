@@ -102,6 +102,10 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Printf("Unmarshalled message: %+v\n", dbMsg)
 
+		if dbMsg.Senderid == dbMsg.Receiverid {
+			SendErrorToWS(models.ErrInternalServerError, conn)
+			continue
+		}
 		msg, err := ws.DB.CreateMessage(dbMsg)
 		if err != nil {
 			SendErrorToWS(models.ErrInternalServerError, conn)
