@@ -5,6 +5,7 @@
   justify-content: flex-start;
   padding: 10px 120px;
 }
+
 #main-container {
   border-width: 1px;
   border-color: white;
@@ -12,11 +13,13 @@
   border-radius: 5px;
   padding: 15px;
 }
+
 #post-title {
   font-size: 3rem;
   font-weight: bold;
   padding-bottom: 10px;
 }
+
 #post-details {
   display: flex;
   flex-direction: row;
@@ -26,6 +29,7 @@
   font-size: 1rem;
   border-bottom: 1px dotted white;
 }
+
 #post-details button {
   font-size: 0.65rem;
   padding: 0 10px;
@@ -33,6 +37,7 @@
   max-height: 15px;
   cursor: pointer;
 }
+
 #post-details button:hover {
   font-size: 0.65rem;
   padding: 0 10px;
@@ -41,12 +46,14 @@
   background-color: #ddd;
   color: black;
 }
+
 #post-author {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 5px;
 }
+
 #post-body-container {
   font-size: 2rem;
   border-bottom: 1px dotted white;
@@ -61,19 +68,24 @@
   padding-top: 10px;
   border-bottom: 1px dotted white;
 }
+
+
 #comment-text {
+  background-color: #2b2f31;
+  border: 3px solid #7daea3;
+  border-radius: 5px;
   margin-bottom: 10px;
-  resize: none;
+  color: white;
+  padding: 5px;
 }
-#comment-text {
-  background-color: #f8f9fa;
-}
+
 #comment-box-container button {
   font-size: 0.65rem;
   padding: 0 10px;
   min-width: 80px;
   cursor: pointer;
 }
+
 #comment-box-container button:hover {
   font-size: 0.65rem;
   padding: 0 10px;
@@ -82,9 +94,8 @@
   background-color: #ddd;
   color: black;
 }
-#comment-text {
-  resize: none;
-}
+
+
 #comment-container {
   display: flex;
   flex-direction: row;
@@ -92,66 +103,118 @@
   justify-content: flex-start;
   border-bottom: 1px dotted white;
 }
+
 #comment-details-container {
   width: 20%;
   min-width: 20%;
   border-right: 1px dotted white;
 }
+
 #comment-body-container {
   width: 100%;
   padding: 10px;
   min-height: 30%;
   font-size: 1.2rem;
 }
+
 #comment-buttons-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
   align-items: flex-end;
+  justify-content: center;
 }
+
 #comment-buttons-container button {
   font-size: 0.65rem;
-  padding: 0 10px;
+  padding: 4px;
+  border-radius: 3px;
   min-width: 80px;
   cursor: pointer;
+  background-color: black;
+  color: white;
+  border: 1px white solid;
 }
+
 #comment-buttons-container button:hover {
+  background-color: white;
+  color: black;
+  border: 1px black solid;
+}
+
+#edit-form-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+#edit-form-buttons-container button {
   font-size: 0.65rem;
-  padding: 0 10px;
+  padding: 4px;
+  border-radius: 3px;
   min-width: 80px;
   cursor: pointer;
-  background-color: #ddd;
-  color: black;
+  background-color: black;
+  color: white;
+  border: 1px white solid;
 }
+
+#edit-form-buttons-container button:hover {
+  background-color: white;
+  color: black;
+  border: 1px black solid;
+}
+
+.edit-textarea {
+  background-color: #2b2f31;
+  border: 3px solid #7daea3;
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+}
+
+/*  font-size: 0.65rem;*/
+/*  padding: 0 10px;*/
+/*  min-width: 80px;*/
+/*  cursor: pointer;*/
+/*  background-color: #ddd;*/
+/*  color: black;*/
+/*}*/
+
 .edit-form {
   display: none;
   width: 100%;
   justify-content: space-between;
   padding: 10px 0 0 10px;
 }
+
 .edit-form textarea {
   width: 50%;
   height: 90%;
   resize: none;
-  background-color: #f8f9fa;
 }
-#edit-form-buttons-container {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: flex-end;
-}
-#edit-form-buttons-container button {
-  font-size: 0.65rem;
-  padding: 0 10px;
-  min-width: 80px;
-  cursor: pointer;
-}
-#edit-form-buttons-container button:hover {
-  font-size: 0.65rem;
-  padding: 0 10px;
-  min-width: 80px;
-  cursor: pointer;
-  background-color: #ddd;
-  color: black;
-}
+
+/*#edit-form-buttons-container {*/
+/*  display: flex;*/
+/*  flex-direction: row;*/
+/*  gap: 10px;*/
+/*  align-items: flex-end;*/
+/*}*/
+/**/
+/*#edit-form-buttons-container button {*/
+/*  font-size: 0.65rem;*/
+/*  padding: 0 10px;*/
+/*  min-width: 80px;*/
+/*  cursor: pointer;*/
+/*}*/
+/**/
+/*#edit-form-buttons-container button:hover {*/
+/*  font-size: 0.65rem;*/
+/*  padding: 0 10px;*/
+/*  min-width: 80px;*/
+/*  cursor: pointer;*/
+/*  background-color: #ddd;*/
+/*  color: black;*/
+/*}*/

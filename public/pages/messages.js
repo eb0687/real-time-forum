@@ -360,10 +360,15 @@ async function displayUserStatus(userStatuses) {
   userList.innerHTML = ""; // Clear the list before re-rendering
 
   const currentUserId = await getCurrentUserId();
+  console.log(userStatuses);
+  console.log(currentUserId);
+
+  userStatuses = userStatuses.filter((v) => v.id != currentUserId);
 
   const userLastMessageTimes = await Promise.all(
     userStatuses.map((user) => fetchLastMessageTime(currentUserId, user)),
   );
+  console.log("userLastMessageTimes", userLastMessageTimes);
 
   // Sort users based on last message timestamp
   const sortedUsers = userLastMessageTimes.sort((a, b) => {
@@ -393,7 +398,6 @@ async function displayUserStatus(userStatuses) {
     `;
 
     userElement.addEventListener("click", () => handleUserSelect(user));
-
     userList.appendChild(userElement);
   });
 }
