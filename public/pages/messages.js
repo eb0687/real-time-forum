@@ -30,6 +30,10 @@ export async function messagesPage() {
     capabilities,
   );
 
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
+
   const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
 
   socket.addEventListener("open", async () => {
@@ -77,30 +81,65 @@ async function handleIncomingMessage(event) {
   try {
     const message = JSON.parse(event.data);
     const output = document.getElementById("messages-container");
+    const currentUserId = await getCurrentUserId();
 
-    if (
-      message.senderid === selectedReceiverId ||
-      message.receiverid === selectedReceiverId
-    ) {
-      const senderUserName = await getUsernameByUserId(message.senderid);
-      const date = new Date(message.created_at.Time);
-      const prettyDate = date.toLocaleString();
+    if (message.receiverid === currentUserId) {
+      if (message.senderid !== selectedReceiverId) {
+        showNotification(message);
+      }
 
-      output.innerHTML += `
-        <div class="message ${message.senderid === selectedReceiverId ? "received" : "sent"}">
-          <span class="${message.senderid === selectedReceiverId ? "receiver-name" : "sender-name"}">
-            (${prettyDate}) ${senderUserName}:
-          </span>
-          <span class="${message.senderid === selectedReceiverId ? "received-message" : "sent-message"}">
-            ${message.body}
-          </span>
-        </div>
-      `;
+      if (
+        message.senderid === selectedReceiverId ||
+        message.receiverid === selectedReceiverId
+      ) {
+        const senderUserName = await getUsernameByUserId(message.senderid);
+        const date = new Date(message.created_at.Time);
+        const prettyDate = date.toLocaleString();
+
+        output.innerHTML += `
+          <div class="message ${message.senderid === selectedReceiverId ? "received" : "sent"}">
+            <span class="${message.senderid === selectedReceiverId ? "receiver-name" : "sender-name"}">
+              (${prettyDate}) ${senderUserName}:
+            </span>
+            <span class="${message.senderid === selectedReceiverId ? "received-message" : "sent-message"}">
+              ${message.body}
+            </span>
+          </div>
+        `;
+      }
     }
   } catch (error) {
     console.error("Error parsing message:", error, "Data:", event.data);
   }
 }
+// async function handleIncomingMessage(event) {
+//   try {
+//     const message = JSON.parse(event.data);
+//     const output = document.getElementById("messages-container");
+//
+//     if (
+//       message.senderid === selectedReceiverId ||
+//       message.receiverid === selectedReceiverId
+//     ) {
+//       const senderUserName = await getUsernameByUserId(message.senderid);
+//       const date = new Date(message.created_at.Time);
+//       const prettyDate = date.toLocaleString();
+//
+//       output.innerHTML += `
+//         <div class="message ${message.senderid === selectedReceiverId ? "received" : "sent"}">
+//           <span class="${message.senderid === selectedReceiverId ? "receiver-name" : "sender-name"}">
+//             (${prettyDate}) ${senderUserName}:
+//           </span>
+//           <span class="${message.senderid === selectedReceiverId ? "received-message" : "sent-message"}">
+//             ${message.body}
+//           </span>
+//         </div>
+//       `;
+//     }
+//   } catch (error) {
+//     console.error("Error parsing message:", error, "Data:", event.data);
+//   }
+// }
 
 async function handleSendMessage(socket) {
   const sendButton = document.getElementById("send-message-button");
@@ -376,5 +415,20 @@ async function displayUserStatus(userStatuses) {
     userElement.addEventListener("click", () => handleUserSelect(user));
 
     userList.appendChild(userElement);
+  });
+}
+
+function showNotification(message) {
+  // Request notification permission if not already granted
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+    return;
+  }
+
+  // Create a notification
+  getUsernameByUserId(message.senderid).then((senderName) => {
+    new Notification(`New Message from: ${senderName}`, {
+      body: message.body,
+    });
   });
 }
