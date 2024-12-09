@@ -72,9 +72,15 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = conn.WriteMessage(websocket.TextMessage, data)
-	if err != nil {
-		panic(err)
+	// err = conn.WriteMessage(websocket.TextMessage, data)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	for c := range Users {
+		err := c.WriteMessage(websocket.TextMessage, data)
+		if err != nil {
+			continue
+		}
 	}
 
 	// Handle websocket messages
