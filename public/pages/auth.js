@@ -58,24 +58,7 @@ export async function authPage() {
       </div>
     </div>
 
-    <style>
-        input {
-            border: 1px solid white;
-            color: #ddd;
-        }
-        input[type="submit"]:hover {
-            background-color: #ddd;
-            color: black;
-            cursor: pointer;
-        }
-        .tab-btn {
-            color: #ddd;
-        }
-        .tab-btn.active {
-            background-color: #ddd;
-            color: black;
-        }
-    </style>
+    <link rel="stylesheet" href="/public/css/auth.css">
     `,
     setupAuthHandlers,
   );
