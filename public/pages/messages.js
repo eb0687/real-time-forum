@@ -83,63 +83,43 @@ async function handleIncomingMessage(event) {
     const output = document.getElementById("messages-container");
     const currentUserId = await getCurrentUserId();
 
-    if (message.receiverid === currentUserId) {
-      if (message.senderid !== selectedReceiverId) {
-        showNotification(message);
-      }
+    // Check if the message is related to the current conversation
+    if (
+      (message.senderid === selectedReceiverId &&
+        message.receiverid === currentUserId) ||
+      (message.senderid === currentUserId &&
+        message.receiverid === selectedReceiverId)
+    ) {
+      const senderUserName = await getUsernameByUserId(message.senderid);
+      const date = new Date(message.created_at.Time);
+      const prettyDate = date.toLocaleString();
 
-      if (
-        message.senderid === selectedReceiverId ||
-        message.receiverid === selectedReceiverId
-      ) {
-        const senderUserName = await getUsernameByUserId(message.senderid);
-        const date = new Date(message.created_at.Time);
-        const prettyDate = date.toLocaleString();
+      output.innerHTML += `
+        <div class="message ${message.senderid === currentUserId ? "sent" : "received"}">
+          <span class="${message.senderid === currentUserId ? "sender-name" : "receiver-name"}">
+            (${prettyDate}) ${senderUserName}:
+          </span>
+          <span class="${message.senderid === currentUserId ? "sent-message" : "received-message"}">
+            ${message.body}
+          </span>
+        </div>
+      `;
 
-        output.innerHTML += `
-          <div class="message ${message.senderid === selectedReceiverId ? "received" : "sent"}">
-            <span class="${message.senderid === selectedReceiverId ? "receiver-name" : "sender-name"}">
-              (${prettyDate}) ${senderUserName}:
-            </span>
-            <span class="${message.senderid === selectedReceiverId ? "received-message" : "sent-message"}">
-              ${message.body}
-            </span>
-          </div>
-        `;
-      }
+      // Scroll to the bottom of the messages
+      output.scrollTop = output.scrollHeight;
+    }
+
+    // Notification logic - separate from message display
+    if (
+      message.receiverid === currentUserId &&
+      message.senderid !== selectedReceiverId
+    ) {
+      showNotification(message);
     }
   } catch (error) {
     console.error("Error parsing message:", error, "Data:", event.data);
   }
 }
-// async function handleIncomingMessage(event) {
-//   try {
-//     const message = JSON.parse(event.data);
-//     const output = document.getElementById("messages-container");
-//
-//     if (
-//       message.senderid === selectedReceiverId ||
-//       message.receiverid === selectedReceiverId
-//     ) {
-//       const senderUserName = await getUsernameByUserId(message.senderid);
-//       const date = new Date(message.created_at.Time);
-//       const prettyDate = date.toLocaleString();
-//
-//       output.innerHTML += `
-//         <div class="message ${message.senderid === selectedReceiverId ? "received" : "sent"}">
-//           <span class="${message.senderid === selectedReceiverId ? "receiver-name" : "sender-name"}">
-//             (${prettyDate}) ${senderUserName}:
-//           </span>
-//           <span class="${message.senderid === selectedReceiverId ? "received-message" : "sent-message"}">
-//             ${message.body}
-//           </span>
-//         </div>
-//       `;
-//     }
-//   } catch (error) {
-//     console.error("Error parsing message:", error, "Data:", event.data);
-//   }
-// }
 
 async function handleSendMessage(socket) {
   const sendButton = document.getElementById("send-message-button");
