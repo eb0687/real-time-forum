@@ -22,13 +22,13 @@ export async function notFoundPage() {
 
 function errPage({ title, message }) {
   return /*html*/ `
-
-        <div class="">
+        <link rel="stylesheet" href="/public/css/error.css">
+        <main>
             <div >
                 <h1>${title}</h1>
                 <p>${message}</p>
             </div>
-        </div>
+        </main>
     `;
 }
 
