@@ -1,5 +1,6 @@
 import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "../pages/layouts.js";
+import { socket } from "../pages/messages.js";
 import { managePostModal } from "./managePost.js";
 
 export const Nav = async () => {
@@ -13,7 +14,7 @@ export const Nav = async () => {
             <a href="/register" class="route">register</a>
         </nav> -->
     `;
-    return { nav, cap: () => {} };
+    return { nav, cap: () => { } };
   }
 
   nav = /*html*/ `
@@ -31,7 +32,7 @@ export const Nav = async () => {
             <i class="fas fa-user"></i>
             <span class="nav-text">Profile Page</span>
         </a>
-        <a href="/messages" class="nav-item" >
+        <a href="/messages" id="nav-msg-btn" class="nav-item" >
             <i class="fa-solid fa-message"></i>
             <span class="nav-text">Messages</span>
         </a>
@@ -49,15 +50,28 @@ export const Nav = async () => {
 };
 
 function capabilities() {
+
+  document.getElementById("nav-msg-btn")?.addEventListener("click", async () => {
+    try {
+      const userList = document.getElementById("user-list");
+      userList?.innerHTML = ""; // Clear the list before re-rendering
+
+      payload = SpecialFetch("/messages/status")
+      if (payload == null) throw new Error("didn't work");
+
+      await displayUserStatus(payload);
+    } catch (error) { }
+  })
   document
     .getElementById("logout-button")
     ?.addEventListener("click", async (e) => {
       e.preventDefault();
       try {
+        socket.close()
         const response = await SpecialFetch("/auth/logout", "POST");
         if (!response.ok) throw "Logout failed, please try again";
 
-        attachBaseLayout("", () => {});
+        attachBaseLayout("", () => { });
         console.log("logged out from server");
 
         await reRoute("/login");

@@ -186,7 +186,7 @@ type UserStatus struct {
 func (ws *WebServer) GetAllUserStatus() ([]UserStatus, error) {
 	allUsers, err := ws.DB.ReadAllUsers()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	userStatuses := []UserStatus{}
@@ -199,6 +199,17 @@ func (ws *WebServer) GetAllUserStatus() ([]UserStatus, error) {
 		})
 	}
 	return userStatuses, nil
+}
+
+func (ws *WebServer) GetAllUserStatusHandler(w http.ResponseWriter, r *http.Request) {
+	allUsers, err := ws.DB.ReadAllUsers()
+	if err != nil {
+		panic(err)
+	}
+	err = utils.SendJsonResponse(w, http.StatusOK, allUsers)
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
 }
 
 func (ws *WebServer) GetHistory(w http.ResponseWriter, r *http.Request) {

@@ -3,12 +3,20 @@ import { getUsernameByUserId } from "./home.js";
 import { attachBaseLayout } from "./layouts.js";
 import { getCurrentUserId } from "./post.js";
 
+const cookie = getCookieWithoutRequest("auth_token");
+console.log(document.cookie);
+if (cookie === null) {
+  return;
+}
+export const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
+
 export async function messagesPage() {
-  const cookie = getCookieWithoutRequest("auth_token");
-  console.log(document.cookie);
-  if (cookie === null) {
-    return;
-  }
+  //const cookie = getCookieWithoutRequest("auth_token");
+  //console.log(document.cookie);
+  //if (cookie === null) {
+  //  return;
+  //}
+  //const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
 
   await attachBaseLayout(
     /*html*/ `
@@ -34,7 +42,6 @@ export async function messagesPage() {
     Notification.requestPermission();
   }
 
-  const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
 
   socket.addEventListener("open", async () => {
     console.log("Connected to the WebSocket server");
@@ -62,7 +69,6 @@ export async function messagesPage() {
             onlineUsers.map((user) => user.username),
           );
         }
-
         // check if it is a user list
         await displayUserStatus(payload);
       } else {
@@ -75,7 +81,7 @@ export async function messagesPage() {
   };
 }
 
-function capabilities() {}
+function capabilities() { }
 
 async function handleIncomingMessage(event) {
   try {
@@ -211,19 +217,16 @@ async function fetchMessageHistory(receiverId, limit = 10, offset = 0) {
       const prettyDate = date.toLocaleString();
 
       const messageHTML = `
-        <div class="message ${
-          message.senderid === currentUserId ? "sent" : "received"
+        <div class="message ${message.senderid === currentUserId ? "sent" : "received"
         }">
-          <span class="${
-            message.senderid === currentUserId ? "sender-name" : "receiver-name"
-          }">
+          <span class="${message.senderid === currentUserId ? "sender-name" : "receiver-name"
+        }">
             (${prettyDate}) ${senderUserName}:
           </span>
-          <span class="${
-            message.senderid === currentUserId
-              ? "sent-message"
-              : "received-message"
-          }">
+          <span class="${message.senderid === currentUserId
+          ? "sent-message"
+          : "received-message"
+        }">
             ${message.body}
           </span>
         </div>
@@ -282,7 +285,7 @@ function setupScrollLoading() {
 
 function debounce(func, wait) {
   let timeout;
-  return function (...args) {
+  return function(...args) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };

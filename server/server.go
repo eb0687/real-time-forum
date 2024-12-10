@@ -55,6 +55,7 @@ func (ws *WebServer) AddHandlers() {
 		m.HandleFunc("DELETE /post-categories", ws.DeletePostCategory)
 
 		m.HandleFunc("POST /messages", ws.GetHistory)
+		m.HandleFunc("GET /messages/status", ws.GetAllUserStatusHandler)
 
 		m.HandleFunc("/cookie", ws.CheckCookie)
 
