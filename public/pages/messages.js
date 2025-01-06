@@ -1,5 +1,4 @@
 import { getCookieWithoutRequest, SpecialFetch } from "../js/utils.js";
-import { WebSocketSingleton } from "../js/WebSocketSingleton.js";
 import { getUsernameByUserId } from "./home.js";
 import { attachBaseLayout } from "./layouts.js";
 import { getCurrentUserId } from "./post.js";
@@ -29,10 +28,7 @@ export async function messagesPage() {
   );
 }
 
-async function capabilities() {
-  const socket = WebSocketSingleton.getInstance();
-  await handleSendMessage(socket);
-}
+function capabilities() {}
 
 export async function handleIncomingMessage(event) {
   try {
@@ -264,19 +260,4 @@ async function ensureScrollableContent() {
   if (messagesLoaded) {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
-}
-
-function showNotification(message) {
-  // Request notification permission if not already granted
-  if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-    return;
-  }
-
-  // Create a notification
-  getUsernameByUserId(message.senderid).then((senderName) => {
-    new Notification(`New Message from: ${senderName}`, {
-      body: message.body,
-    });
-  });
 }

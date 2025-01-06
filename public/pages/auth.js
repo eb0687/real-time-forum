@@ -1,7 +1,5 @@
-import { Nav } from "../components/nav.js";
-import { userList } from "../components/userList.js";
 import { applyTailwind } from "../js/cheatyCheaty.js";
-import { onRefresh, reRoute, SpecialFetch } from "../js/utils.js";
+import { reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
 
 export async function authPage() {
@@ -66,14 +64,6 @@ export async function authPage() {
   );
 }
 
-async function onLogin() {
-  // https://github.com/eb0687/real-time-forum/issues/10
-  if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-  }
-  onRefresh();
-}
-
 function setupAuthHandlers() {
   // Tab switching logic
   const tabs = document.querySelectorAll(".tab-btn");
@@ -111,7 +101,11 @@ function setupAuthHandlers() {
           throw "your email or password is incorrect";
         // const data = await response.json();
         await reRoute("/");
-        await onLogin();
+
+        // https://github.com/eb0687/real-time-forum/issues/10
+        if (Notification.permission !== "granted") {
+          Notification.requestPermission();
+        }
       } catch (error) {
         // alert(error);
         document.getElementById("message").innerHTML = error;
@@ -168,7 +162,10 @@ function setupAuthHandlers() {
         if (response.status != 200) throw "could not create an account";
         //   const data = await response.json();
         await reRoute("/");
-        await onLogin();
+        // https://github.com/eb0687/real-time-forum/issues/10
+        if (Notification.permission !== "granted") {
+          Notification.requestPermission();
+        }
       } catch (error) {
         document.getElementById("message").innerHTML = error;
         console.log("error", error);

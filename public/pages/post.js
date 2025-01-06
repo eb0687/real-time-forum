@@ -67,7 +67,6 @@ export async function postPage(id) {
 
 function CommentsBox() {
   return /*html*/ `
-
     <link rel="stylesheet" href="/public/css/post.css" />
     <div id="comment-box-container" class="">
       <textarea

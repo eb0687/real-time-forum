@@ -3,12 +3,12 @@ import { homePage } from "../pages/home.js";
 import { notFoundPage } from "../pages/errorPages.js";
 // import { registerPage } from "../pages/register.js";
 import { postPage } from "../pages/post.js"; // Import the post page
-import { getCookie, onRefresh, PreventDefaultATag } from "./utils.js";
+import { getCookie, PreventDefaultATag } from "./utils.js";
 import { profilePage, ownProfilePage } from "../pages/profile.js";
 import { applyTailwind } from "./cheatyCheaty.js";
 import { authPage } from "../pages/auth.js";
 import { messagesPage } from "../pages/messages.js";
-import { WebSocketSingleton } from "./WebSocketSingleton.js";
+import { WebSocketSingleton } from "./websocket.js";
 
 const routes = {
   "/": {
@@ -47,7 +47,6 @@ const routes = {
 };
 
 export async function router() {
-  window.removeEventListener("popstate", router);
   const path = window.location.pathname;
   let route = routes[path] || routes["/404"];
 
@@ -60,6 +59,7 @@ export async function router() {
     };
   }
 
+  console.log("path", path);
   // Handle dynamic route for /profile/:id
   if (path.startsWith("/profile/")) {
     const id = path.split("/")[2];
@@ -86,4 +86,3 @@ PreventDefaultATag();
 
 await router(); // Initial call to load the default page
 WebSocketSingleton.getInstance();
-await onRefresh();

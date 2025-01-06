@@ -1,5 +1,3 @@
-import { Nav } from "../components/nav.js";
-import { userList } from "../components/userList.js";
 import { router } from "./app.js";
 
 /**
@@ -8,17 +6,6 @@ import { router } from "./app.js";
  */
 export function attach(page) {
   document.getElementById("app").innerHTML = page;
-}
-
-export async function onRefresh() {
-  const { nav, cap } = await Nav();
-  document.querySelector("nav#nav-content").innerHTML = nav;
-  cap();
-
-  const { ul, ulCap } = await userList();
-  document.querySelector("nav#user-list-content").innerHTML = ul;
-  ulCap();
-  PreventDefaultATag();
 }
 
 /**
@@ -38,23 +25,6 @@ export function PreventDefaultATag() {
       await router();
     });
   });
-}
-
-function removeAllEventListeners(element, eventType) {
-  if (eventType) {
-    // If an event type is provided, remove only that type of listener
-    const listener = eventListeners.get(eventType);
-    if (listener) {
-      element.removeEventListener(eventType, listener);
-      eventListeners.delete(eventType);
-    }
-  } else {
-    // If no event type is provided, remove all event listeners
-    for (const [event, listener] of eventListeners.entries()) {
-      element.removeEventListener(event, listener);
-    }
-    eventListeners.clear(); // Clear all stored event listeners
-  }
 }
 
 export async function getCookie(name) {

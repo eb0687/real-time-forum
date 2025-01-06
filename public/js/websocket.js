@@ -4,7 +4,7 @@ import { getCookieWithoutRequest, reRoute, SpecialFetch } from "./utils.js";
 
 export const WebSocketSingleton = (function () {
   let instance; // Holds the single WebSocket instance
-  const cookie = getCookieWithoutRequest("auth_token");
+  let cookie = getCookieWithoutRequest("auth_token");
   if (cookie == null) {
     reRoute("/");
   }
@@ -17,11 +17,7 @@ export const WebSocketSingleton = (function () {
 
         // Set up WebSocket event handlers
         instance.onopen = async () => {
-          try {
-            await handleSendMessage(instance);
-          } catch (error) {
-            console.log(error);
-          }
+          await handleSendMessage(socket);
           console.log("WebSocket connection established.");
         };
         instance.onmessage = async (event) => {
