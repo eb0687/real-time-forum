@@ -1,0 +1,469 @@
+
+r.Cookies(): [token=123 auth_token=f87160c1-9bb7-491b-8a22-19a8bd762f99]
+err: write tcp [::1]:8080->[::1]:60418: write: broken pipe
+err: write tcp [::1]:8080->[::1]:60418: write: broken pipe
+fatal error: concurrent map writes
+
+goroutine 2276 [running]:
+real-time-forum/server.(*WebServer).HandleWebSocket(0xc00013e090, {0x8eb138?, 0xc0002ac380?}, 0xc00032ef00)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:114 +0xb49
+net/http.HandlerFunc.ServeHTTP(0xc0001580e0?, {0x8eb138?, 0xc0002ac380?}, 0x66c616?)
+        /usr/lib/go/src/net/http/server.go:2220 +0x29
+net/http.(*ServeMux).ServeHTTP(0x469139?, {0x8eb138, 0xc0002ac380}, 0xc00032ef00)
+        /usr/lib/go/src/net/http/server.go:2747 +0x1ca
+net/http.serverHandler.ServeHTTP({0xc000458120?}, {0x8eb138?, 0xc0002ac380?}, 0x6?)
+        /usr/lib/go/src/net/http/server.go:3210 +0x8e
+net/http.(*conn).serve(0xc0000d8510, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2092 +0x5d0
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 1 [IO wait]:
+internal/poll.runtime_pollWait(0x7fa2de750e20, 0x72)
+        /usr/lib/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc00016e180?, 0x900000036?, 0x0)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*pollDesc).waitRead(...)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:89
+internal/poll.(*FD).Accept(0xc00016e180)
+        /usr/lib/go/src/internal/poll/fd_unix.go:620 +0x295
+net.(*netFD).accept(0xc00016e180)
+        /usr/lib/go/src/net/fd_unix.go:172 +0x29
+net.(*TCPListener).accept(0xc00012e500)
+        /usr/lib/go/src/net/tcpsock_posix.go:159 +0x1e
+net.(*TCPListener).Accept(0xc00012e500)
+        /usr/lib/go/src/net/tcpsock.go:372 +0x30
+net/http.(*Server).Serve(0xc00017da40, {0x8eb258, 0xc00012e500})
+        /usr/lib/go/src/net/http/server.go:3330 +0x30c
+net/http.(*Server).ListenAndServe(0xc00017da40)
+        /usr/lib/go/src/net/http/server.go:3259 +0x71
+net/http.ListenAndServe(...)
+        /usr/lib/go/src/net/http/server.go:3514
+main.main()
+        /home/nasoooor/repos/real-time-forum/main.go:48 +0x1eb
+
+goroutine 20 [select, 7 minutes]:
+database/sql.(*DB).connectionOpener(0xc000132b60, {0x8eb7a0, 0xc00014a050})
+        /usr/lib/go/src/database/sql/sql.go:1253 +0x87
+created by database/sql.OpenDB in goroutine 1
+        /usr/lib/go/src/database/sql/sql.go:833 +0x130
+
+goroutine 818 [IO wait]:
+internal/poll.runtime_pollWait(0x7fa2de750100, 0x72)
+        /usr/lib/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc000302280?, 0xc000326000?, 0x0)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*pollDesc).waitRead(...)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:89
+internal/poll.(*FD).Read(0xc000302280, {0xc000326000, 0x1000, 0x1000})
+        /usr/lib/go/src/internal/poll/fd_unix.go:165 +0x27a
+net.(*netFD).Read(0xc000302280, {0xc000326000?, 0xc0003c9aa0?, 0x4d3a25?})
+        /usr/lib/go/src/net/fd_posix.go:55 +0x25
+net.(*conn).Read(0xc000306110, {0xc000326000?, 0x0?, 0xc0002a3b38?})
+        /usr/lib/go/src/net/net.go:189 +0x45
+net/http.(*connReader).Read(0xc0002a3b30, {0xc000326000, 0x1000, 0x1000})
+        /usr/lib/go/src/net/http/server.go:798 +0x14b
+bufio.(*Reader).fill(0xc000324000)
+        /usr/lib/go/src/bufio/bufio.go:110 +0x103
+bufio.(*Reader).Peek(0xc000324000, 0x4)
+        /usr/lib/go/src/bufio/bufio.go:148 +0x53
+net/http.(*conn).serve(0xc00038f0e0, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2127 +0x738
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 692 [IO wait]:
+internal/poll.runtime_pollWait(0x7fa2de750bf0, 0x72)
+        /usr/lib/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc000338400?, 0xc0000b4000?, 0x0)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*pollDesc).waitRead(...)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:89
+internal/poll.(*FD).Read(0xc000338400, {0xc0000b4000, 0x1000, 0x1000})
+        /usr/lib/go/src/internal/poll/fd_unix.go:165 +0x27a
+net.(*netFD).Read(0xc000338400, {0xc0000b4000?, 0xc0004c3aa0?, 0x4d3a25?})
+        /usr/lib/go/src/net/fd_posix.go:55 +0x25
+net.(*conn).Read(0xc0002ea0f8, {0xc0000b4000?, 0x0?, 0xc0002ed418?})
+        /usr/lib/go/src/net/net.go:189 +0x45
+net/http.(*connReader).Read(0xc0002ed410, {0xc0000b4000, 0x1000, 0x1000})
+        /usr/lib/go/src/net/http/server.go:798 +0x14b
+bufio.(*Reader).fill(0xc000032420)
+        /usr/lib/go/src/bufio/bufio.go:110 +0x103
+bufio.(*Reader).Peek(0xc000032420, 0x4)
+        /usr/lib/go/src/bufio/bufio.go:148 +0x53
+net/http.(*conn).serve(0xc00038e630, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2127 +0x738
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 1343 [runnable]:
+github.com/mattn/go-sqlite3._cgo_cmalloc(0x1c)
+        _cgo_gotypes.go:1454 +0x48
+github.com/mattn/go-sqlite3._Cfunc_CString({0xc000484220, 0x1b})
+        _cgo_gotypes.go:207 +0x45
+github.com/mattn/go-sqlite3.(*SQLiteDriver).Open.func5({0xc000484220?, 0x19?})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:1480 +0x25
+github.com/mattn/go-sqlite3.(*SQLiteDriver).Open(0xc000140060, {0x85b294, 0x9})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:1490 +0x27e4
+database/sql.dsnConnector.Connect(...)
+        /usr/lib/go/src/database/sql/sql.go:801
+database/sql.(*DB).conn(0xc000132b60, {0x8eb5d0, 0xb41320}, 0x1)
+        /usr/lib/go/src/database/sql/sql.go:1423 +0x87e
+database/sql.(*DB).query(0xc000132b60, {0x8eb5d0, 0xb41320}, {0x8723cf, 0x6d}, {0x0, 0x0, 0x0}, 0x0?)
+        /usr/lib/go/src/database/sql/sql.go:1751 +0x57
+database/sql.(*DB).QueryContext.func1(0xd5?)
+        /usr/lib/go/src/database/sql/sql.go:1734 +0x4f
+database/sql.(*DB).retry(0x200?, 0xc0004c5158)
+        /usr/lib/go/src/database/sql/sql.go:1568 +0x42
+database/sql.(*DB).QueryContext(0x5?, {0x8eb5d0?, 0xb41320?}, {0x8723cf?, 0x10?}, {0x0?, 0xc0004c5228?, 0x415285?})
+        /usr/lib/go/src/database/sql/sql.go:1733 +0xc5
+database/sql.(*DB).Query(...)
+        /usr/lib/go/src/database/sql/sql.go:1747
+real-time-forum/database.(*Queries).ReadAllUsers(0x2?)
+        /home/nasoooor/repos/real-time-forum/database/users.sql.go:98 +0x72
+real-time-forum/server.(*WebServer).GetAllUserStatus(0x800ee0?)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:187 +0x26
+real-time-forum/server.(*WebServer).HandleWebSocket.func1()
+        /home/nasoooor/repos/real-time-forum/server/messages.go:45 +0x49
+real-time-forum/server.(*WebServer).HandleWebSocket(0xc00013e090, {0x8eb138?, 0xc0002d5260?}, 0xc0002d8c80)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:172 +0xb5e
+net/http.HandlerFunc.ServeHTTP(0xc0001580e0?, {0x8eb138?, 0xc0002d5260?}, 0x66c616?)
+        /usr/lib/go/src/net/http/server.go:2220 +0x29
+net/http.(*ServeMux).ServeHTTP(0x469139?, {0x8eb138, 0xc0002d5260}, 0xc0002d8c80)
+        /usr/lib/go/src/net/http/server.go:2747 +0x1ca
+net/http.serverHandler.ServeHTTP({0xc0002a2f60?}, {0x8eb138?, 0xc0002d5260?}, 0x6?)
+        /usr/lib/go/src/net/http/server.go:3210 +0x8e
+net/http.(*conn).serve(0xc00033da70, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2092 +0x5d0
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 1913 [runnable]:
+github.com/mattn/go-sqlite3._cgo_cmalloc(0x1c)
+        _cgo_gotypes.go:1454 +0x48
+github.com/mattn/go-sqlite3._Cfunc_CString({0xc000518080, 0x1b})
+        _cgo_gotypes.go:207 +0x45
+github.com/mattn/go-sqlite3.(*SQLiteDriver).Open.func5({0xc000518080?, 0x19?})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:1480 +0x25
+github.com/mattn/go-sqlite3.(*SQLiteDriver).Open(0xc000140060, {0x85b294, 0x9})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:1490 +0x27e4
+database/sql.dsnConnector.Connect(...)
+        /usr/lib/go/src/database/sql/sql.go:801
+database/sql.(*DB).conn(0xc000132b60, {0x8eb5d0, 0xb41320}, 0x1)
+        /usr/lib/go/src/database/sql/sql.go:1423 +0x87e
+database/sql.(*DB).query(0xc000132b60, {0x8eb5d0, 0xb41320}, {0x8723cf, 0x6d}, {0x0, 0x0, 0x0}, 0x0?)
+        /usr/lib/go/src/database/sql/sql.go:1751 +0x57
+database/sql.(*DB).QueryContext.func1(0x30?)
+        /usr/lib/go/src/database/sql/sql.go:1734 +0x4f
+database/sql.(*DB).retry(0xc0005311a0?, 0xc000531158)
+        /usr/lib/go/src/database/sql/sql.go:1568 +0x42
+database/sql.(*DB).QueryContext(0xc00024e1c0?, {0x8eb5d0?, 0xb41320?}, {0x8723cf?, 0x7fa2dc4e0860?}, {0x0?, 0x4?, 0x4?})
+        /usr/lib/go/src/database/sql/sql.go:1733 +0xc5
+database/sql.(*DB).Query(...)
+        /usr/lib/go/src/database/sql/sql.go:1747
+real-time-forum/database.(*Queries).ReadAllUsers(0x7fca40?)
+        /home/nasoooor/repos/real-time-forum/database/users.sql.go:98 +0x72
+real-time-forum/server.(*WebServer).GetAllUserStatus(0x800ee0?)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:187 +0x26
+real-time-forum/server.(*WebServer).HandleWebSocket.func1()
+        /home/nasoooor/repos/real-time-forum/server/messages.go:45 +0x49
+real-time-forum/server.(*WebServer).HandleWebSocket(0xc00013e090, {0x8eb138?, 0xc0004a3260?}, 0xc0000d0a00)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:172 +0xb5e
+net/http.HandlerFunc.ServeHTTP(0xc0001580e0?, {0x8eb138?, 0xc0004a3260?}, 0x66c616?)
+        /usr/lib/go/src/net/http/server.go:2220 +0x29
+net/http.(*ServeMux).ServeHTTP(0x469139?, {0x8eb138, 0xc0004a3260}, 0xc0000d0a00)
+        /usr/lib/go/src/net/http/server.go:2747 +0x1ca
+net/http.serverHandler.ServeHTTP({0xc000388480?}, {0x8eb138?, 0xc0004a3260?}, 0x6?)
+        /usr/lib/go/src/net/http/server.go:3210 +0x8e
+net/http.(*conn).serve(0xc0004937a0, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2092 +0x5d0
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 819 [IO wait]:
+internal/poll.runtime_pollWait(0x7fa2de7508a8, 0x72)
+        /usr/lib/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc000302300?, 0xc0006ba000?, 0x0)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*pollDesc).waitRead(...)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:89
+internal/poll.(*FD).Read(0xc000302300, {0xc0006ba000, 0x1000, 0x1000})
+        /usr/lib/go/src/internal/poll/fd_unix.go:165 +0x27a
+net.(*netFD).Read(0xc000302300, {0xc0006ba000?, 0xc000167aa0?, 0x4d3a25?})
+        /usr/lib/go/src/net/fd_posix.go:55 +0x25
+net.(*conn).Read(0xc000306118, {0xc0006ba000?, 0x0?, 0xc0002a3bf8?})
+        /usr/lib/go/src/net/net.go:189 +0x45
+net/http.(*connReader).Read(0xc0002a3bf0, {0xc0006ba000, 0x1000, 0x1000})
+        /usr/lib/go/src/net/http/server.go:798 +0x14b
+bufio.(*Reader).fill(0xc000181500)
+        /usr/lib/go/src/bufio/bufio.go:110 +0x103
+bufio.(*Reader).Peek(0xc000181500, 0x4)
+        /usr/lib/go/src/bufio/bufio.go:148 +0x53
+net/http.(*conn).serve(0xc00038f170, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2127 +0x738
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 728 [IO wait]:
+internal/poll.runtime_pollWait(0x7fa2de750330, 0x72)
+        /usr/lib/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc000338100?, 0xc0001d6000?, 0x0)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*pollDesc).waitRead(...)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:89
+internal/poll.(*FD).Read(0xc000338100, {0xc0001d6000, 0x1000, 0x1000})
+        /usr/lib/go/src/internal/poll/fd_unix.go:165 +0x27a
+net.(*netFD).Read(0xc000338100, {0xc0001d6000?, 0xc0003c7aa0?, 0x4d3a25?})
+        /usr/lib/go/src/net/fd_posix.go:55 +0x25
+net.(*conn).Read(0xc0002ea020, {0xc0001d6000?, 0x0?, 0xc0002ec308?})
+        /usr/lib/go/src/net/net.go:189 +0x45
+net/http.(*connReader).Read(0xc0002ec300, {0xc0001d6000, 0x1000, 0x1000})
+        /usr/lib/go/src/net/http/server.go:798 +0x14b
+bufio.(*Reader).fill(0xc0001800c0)
+        /usr/lib/go/src/bufio/bufio.go:110 +0x103
+bufio.(*Reader).Peek(0xc0001800c0, 0x4)
+        /usr/lib/go/src/bufio/bufio.go:148 +0x53
+net/http.(*conn).serve(0xc00033c480, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2127 +0x738
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 605 [IO wait]:
+internal/poll.runtime_pollWait(0x7fa2de750ad8, 0x72)
+        /usr/lib/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0000b0000?, 0xc000240000?, 0x0)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*pollDesc).waitRead(...)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:89
+internal/poll.(*FD).Read(0xc0000b0000, {0xc000240000, 0x1000, 0x1000})
+        /usr/lib/go/src/internal/poll/fd_unix.go:165 +0x27a
+net.(*netFD).Read(0xc0000b0000, {0xc000240000?, 0xc0004dbaa0?, 0x4d3a25?})
+        /usr/lib/go/src/net/fd_posix.go:55 +0x25
+net.(*conn).Read(0xc000124058, {0xc000240000?, 0x0?, 0xc00012d1d8?})
+        /usr/lib/go/src/net/net.go:189 +0x45
+net/http.(*connReader).Read(0xc00012d1d0, {0xc000240000, 0x1000, 0x1000})
+        /usr/lib/go/src/net/http/server.go:798 +0x14b
+bufio.(*Reader).fill(0xc0005802a0)
+        /usr/lib/go/src/bufio/bufio.go:110 +0x103
+bufio.(*Reader).Peek(0xc0005802a0, 0x4)
+        /usr/lib/go/src/bufio/bufio.go:148 +0x53
+net/http.(*conn).serve(0xc00020a120, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2127 +0x738
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 607 [IO wait]:
+internal/poll.runtime_pollWait(0x7fa2de7509c0, 0x72)
+        /usr/lib/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0000b0080?, 0xc000244000?, 0x0)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+internal/poll.(*pollDesc).waitRead(...)
+        /usr/lib/go/src/internal/poll/fd_poll_runtime.go:89
+internal/poll.(*FD).Read(0xc0000b0080, {0xc000244000, 0x1000, 0x1000})
+        /usr/lib/go/src/internal/poll/fd_unix.go:165 +0x27a
+net.(*netFD).Read(0xc0000b0080, {0xc000244000?, 0xc0004ddaa0?, 0x4d3a25?})
+        /usr/lib/go/src/net/fd_posix.go:55 +0x25
+net.(*conn).Read(0xc000124070, {0xc000244000?, 0x0?, 0xc00012d8c8?})
+        /usr/lib/go/src/net/net.go:189 +0x45
+net/http.(*connReader).Read(0xc00012d8c0, {0xc000244000, 0x1000, 0x1000})
+        /usr/lib/go/src/net/http/server.go:798 +0x14b
+bufio.(*Reader).fill(0xc000580600)
+        /usr/lib/go/src/bufio/bufio.go:110 +0x103
+bufio.(*Reader).Peek(0xc000580600, 0x4)
+        /usr/lib/go/src/bufio/bufio.go:148 +0x53
+net/http.(*conn).serve(0xc00020a360, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2127 +0x738
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 1698 [runnable]:
+github.com/mattn/go-sqlite3._cgo_cmalloc(0x1c)
+        _cgo_gotypes.go:1454 +0x48
+github.com/mattn/go-sqlite3._Cfunc_CString({0xc00042e300, 0x1b})
+        _cgo_gotypes.go:207 +0x45
+github.com/mattn/go-sqlite3.(*SQLiteDriver).Open.func5({0xc00042e300?, 0x19?})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:1480 +0x25
+github.com/mattn/go-sqlite3.(*SQLiteDriver).Open(0xc000140060, {0x85b294, 0x9})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:1490 +0x27e4
+database/sql.dsnConnector.Connect(...)
+        /usr/lib/go/src/database/sql/sql.go:801
+database/sql.(*DB).conn(0xc000132b60, {0x8eb5d0, 0xb41320}, 0x1)
+        /usr/lib/go/src/database/sql/sql.go:1423 +0x87e
+database/sql.(*DB).query(0xc000132b60, {0x8eb5d0, 0xb41320}, {0x8723cf, 0x6d}, {0x0, 0x0, 0x0}, 0x50?)
+        /usr/lib/go/src/database/sql/sql.go:1751 +0x57
+database/sql.(*DB).QueryContext.func1(0x30?)
+        /usr/lib/go/src/database/sql/sql.go:1734 +0x4f
+database/sql.(*DB).retry(0xc0002f71a0?, 0xc0002f7158)
+        /usr/lib/go/src/database/sql/sql.go:1568 +0x42
+database/sql.(*DB).QueryContext(0x442936?, {0x8eb5d0?, 0xb41320?}, {0x8723cf?, 0x7fa2dc4e0a90?}, {0x0?, 0x4?, 0x4?})
+        /usr/lib/go/src/database/sql/sql.go:1733 +0xc5
+database/sql.(*DB).Query(...)
+        /usr/lib/go/src/database/sql/sql.go:1747
+real-time-forum/database.(*Queries).ReadAllUsers(0x7fca40?)
+        /home/nasoooor/repos/real-time-forum/database/users.sql.go:98 +0x72
+real-time-forum/server.(*WebServer).GetAllUserStatus(0x800ee0?)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:187 +0x26
+real-time-forum/server.(*WebServer).HandleWebSocket.func1()
+        /home/nasoooor/repos/real-time-forum/server/messages.go:45 +0x49
+real-time-forum/server.(*WebServer).HandleWebSocket(0xc00013e090, {0x8eb138?, 0xc000233420?}, 0xc0005b6b40)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:172 +0xb5e
+net/http.HandlerFunc.ServeHTTP(0xc0001580e0?, {0x8eb138?, 0xc000233420?}, 0x66c616?)
+        /usr/lib/go/src/net/http/server.go:2220 +0x29
+net/http.(*ServeMux).ServeHTTP(0x469139?, {0x8eb138, 0xc000233420}, 0xc0005b6b40)
+        /usr/lib/go/src/net/http/server.go:2747 +0x1ca
+net/http.serverHandler.ServeHTTP({0xc000388c30?}, {0x8eb138?, 0xc000233420?}, 0x6?)
+        /usr/lib/go/src/net/http/server.go:3210 +0x8e
+net/http.(*conn).serve(0xc0001638c0, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2092 +0x5d0
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 1406 [runnable]:
+github.com/mattn/go-sqlite3._cgo_cmalloc(0x1c)
+        _cgo_gotypes.go:1454 +0x48
+github.com/mattn/go-sqlite3._Cfunc_CString({0xc0001b6360, 0x1b})
+        _cgo_gotypes.go:207 +0x45
+github.com/mattn/go-sqlite3.(*SQLiteDriver).Open.func5({0xc0001b6360?, 0x19?})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:1480 +0x25
+github.com/mattn/go-sqlite3.(*SQLiteDriver).Open(0xc000140060, {0x85b294, 0x9})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:1490 +0x27e4
+database/sql.dsnConnector.Connect(...)
+        /usr/lib/go/src/database/sql/sql.go:801
+database/sql.(*DB).conn(0xc000132b60, {0x8eb5d0, 0xb41320}, 0x1)
+        /usr/lib/go/src/database/sql/sql.go:1423 +0x87e
+database/sql.(*DB).query(0xc000132b60, {0x8eb5d0, 0xb41320}, {0x8723cf, 0x6d}, {0x0, 0x0, 0x0}, 0x0?)
+        /usr/lib/go/src/database/sql/sql.go:1751 +0x57
+database/sql.(*DB).QueryContext.func1(0x30?)
+        /usr/lib/go/src/database/sql/sql.go:1734 +0x4f
+database/sql.(*DB).retry(0xc0004c11a0?, 0xc0004c1158)
+        /usr/lib/go/src/database/sql/sql.go:1568 +0x42
+database/sql.(*DB).QueryContext(0x442936?, {0x8eb5d0?, 0xb41320?}, {0x8723cf?, 0x7fa2dc4e0ba8?}, {0x0?, 0x4?, 0x4?})
+        /usr/lib/go/src/database/sql/sql.go:1733 +0xc5
+database/sql.(*DB).Query(...)
+        /usr/lib/go/src/database/sql/sql.go:1747
+real-time-forum/database.(*Queries).ReadAllUsers(0x7fca40?)
+        /home/nasoooor/repos/real-time-forum/database/users.sql.go:98 +0x72
+real-time-forum/server.(*WebServer).GetAllUserStatus(0x800ee0?)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:187 +0x26
+real-time-forum/server.(*WebServer).HandleWebSocket.func1()
+        /home/nasoooor/repos/real-time-forum/server/messages.go:45 +0x49
+real-time-forum/server.(*WebServer).HandleWebSocket(0xc00013e090, {0x8eb138?, 0xc0004a28c0?}, 0xc0004e4280)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:172 +0xb5e
+net/http.HandlerFunc.ServeHTTP(0xc0001580e0?, {0x8eb138?, 0xc0004a28c0?}, 0x66c616?)
+        /usr/lib/go/src/net/http/server.go:2220 +0x29
+net/http.(*ServeMux).ServeHTTP(0x469139?, {0x8eb138, 0xc0004a28c0}, 0xc0004e4280)
+        /usr/lib/go/src/net/http/server.go:2747 +0x1ca
+net/http.serverHandler.ServeHTTP({0xc0003e7530?}, {0x8eb138?, 0xc0004a28c0?}, 0x6?)
+        /usr/lib/go/src/net/http/server.go:3210 +0x8e
+net/http.(*conn).serve(0xc0001e3050, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2092 +0x5d0
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 2099 [runnable]:
+github.com/mattn/go-sqlite3._Cfunc_sqlite3_column_decltype(0x7fa2d000bec8, 0x1)
+        _cgo_gotypes.go:689 +0x4c
+github.com/mattn/go-sqlite3.(*SQLiteRows).declTypes.func1(0xc0006860a0?, 0x1)
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:2152 +0x50
+github.com/mattn/go-sqlite3.(*SQLiteRows).declTypes(0xc00068d2c0)
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:2152 +0xbb
+github.com/mattn/go-sqlite3.(*SQLiteRows).nextSyncLocked(0xc00068d2c0, {0xc000501a40, 0xa, 0xc00052f030?})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:2211 +0x52
+github.com/mattn/go-sqlite3.(*SQLiteRows).Next(0xc00068d2c0, {0xc000501a40, 0xa, 0xa})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:2175 +0x312
+database/sql.(*Rows).nextLocked(0xc000501900)
+        /usr/lib/go/src/database/sql/sql.go:3058 +0x102
+database/sql.(*Rows).Next.func1()
+        /usr/lib/go/src/database/sql/sql.go:3033 +0x29
+database/sql.withLock({0x8e9d80, 0xc000501938}, 0xc00052f190)
+        /usr/lib/go/src/database/sql/sql.go:3566 +0x71
+database/sql.(*Rows).Next(0xc000501900)
+        /usr/lib/go/src/database/sql/sql.go:3032 +0x71
+real-time-forum/database.(*Queries).ReadAllUsers(0x7fca40?)
+        /home/nasoooor/repos/real-time-forum/database/users.sql.go:104 +0x136
+real-time-forum/server.(*WebServer).GetAllUserStatus(0x800ee0?)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:187 +0x26
+real-time-forum/server.(*WebServer).HandleWebSocket.func1()
+        /home/nasoooor/repos/real-time-forum/server/messages.go:45 +0x49
+real-time-forum/server.(*WebServer).HandleWebSocket(0xc00013e090, {0x8eb138?, 0xc0002d5a40?}, 0xc0003468c0)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:172 +0xb5e
+net/http.HandlerFunc.ServeHTTP(0xc0001580e0?, {0x8eb138?, 0xc0002d5a40?}, 0x66c616?)
+        /usr/lib/go/src/net/http/server.go:2220 +0x29
+net/http.(*ServeMux).ServeHTTP(0x469139?, {0x8eb138, 0xc0002d5a40}, 0xc0003468c0)
+        /usr/lib/go/src/net/http/server.go:2747 +0x1ca
+net/http.serverHandler.ServeHTTP({0xc000305680?}, {0x8eb138?, 0xc0002d5a40?}, 0x6?)
+        /usr/lib/go/src/net/http/server.go:3210 +0x8e
+net/http.(*conn).serve(0xc00038e870, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2092 +0x5d0
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+
+goroutine 1812 [runnable]:
+github.com/mattn/go-sqlite3._Cfunc_sqlite3_column_decltype(0x7fa2b400ab18, 0x2)
+        _cgo_gotypes.go:689 +0x4c
+github.com/mattn/go-sqlite3.(*SQLiteRows).declTypes.func1(0xc000612000?, 0x2)
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:2152 +0x50
+github.com/mattn/go-sqlite3.(*SQLiteRows).declTypes(0xc000450660)
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:2152 +0xbb
+github.com/mattn/go-sqlite3.(*SQLiteRows).nextSyncLocked(0xc000450660, {0xc0003c0d20, 0xa, 0xc000533030?})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:2211 +0x52
+github.com/mattn/go-sqlite3.(*SQLiteRows).Next(0xc000450660, {0xc0003c0d20, 0xa, 0xa})
+        /home/nasoooor/go/pkg/mod/github.com/mattn/go-sqlite3@v1.14.24/sqlite3.go:2175 +0x312
+database/sql.(*Rows).nextLocked(0xc0003c0be0)
+        /usr/lib/go/src/database/sql/sql.go:3058 +0x102
+database/sql.(*Rows).Next.func1()
+        /usr/lib/go/src/database/sql/sql.go:3033 +0x29
+database/sql.withLock({0x8e9d80, 0xc0003c0c18}, 0xc000533190)
+        /usr/lib/go/src/database/sql/sql.go:3566 +0x71
+database/sql.(*Rows).Next(0xc0003c0be0)
+        /usr/lib/go/src/database/sql/sql.go:3032 +0x71
+real-time-forum/database.(*Queries).ReadAllUsers(0x7fca40?)
+        /home/nasoooor/repos/real-time-forum/database/users.sql.go:104 +0x136
+real-time-forum/server.(*WebServer).GetAllUserStatus(0x800ee0?)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:187 +0x26
+real-time-forum/server.(*WebServer).HandleWebSocket.func1()
+        /home/nasoooor/repos/real-time-forum/server/messages.go:45 +0x49
+real-time-forum/server.(*WebServer).HandleWebSocket(0xc00013e090, {0x8eb138?, 0xc0002acfc0?}, 0xc000332500)
+        /home/nasoooor/repos/real-time-forum/server/messages.go:172 +0xb5e
+net/http.HandlerFunc.ServeHTTP(0xc0001580e0?, {0x8eb138?, 0xc0002acfc0?}, 0x66c616?)
+        /usr/lib/go/src/net/http/server.go:2220 +0x29
+net/http.(*ServeMux).ServeHTTP(0x469139?, {0x8eb138, 0xc0002acfc0}, 0xc000332500)
+        /usr/lib/go/src/net/http/server.go:2747 +0x1ca
+net/http.serverHandler.ServeHTTP({0xc00012cde0?}, {0x8eb138?, 0xc0002acfc0?}, 0x6?)
+        /usr/lib/go/src/net/http/server.go:3210 +0x8e
+net/http.(*conn).serve(0xc00038fa70, {0x8eb768, 0xc00012d590})
+        /usr/lib/go/src/net/http/server.go:2092 +0x5d0
+created by net/http.(*Server).Serve in goroutine 1
+        /usr/lib/go/src/net/http/server.go:3360 +0x485
+Process Exit with Code: 2
+^Ccleaning...
+see you again~
+~/repos/real-time-forum notifications *7 !4 ························································································· 48m 8s  base 08:24:00 AM
+❯
+~/repos/real-time-forum notifications *7 !4 ························································································· 48m 8s  base 08:24:00 AM
+❯
+~/repos/real-time-forum notifications *7 !4 ························································································· 48m 8s  base 08:24:00 AM
+❯ air
+❯ air
+
+  __    _   ___
+ / /\  | | | |_)
+/_/--\ |_| |_| \_ v1.61.1, built with Go go1.23.3
+
+watching .
+watching database
+watching database/sql
+watching middlewares
+watching models
+watching public
+watching public/components
+watching public/css
+watching public/js
+watching public/pages
+watching server
+!exclude tmp
+watching utils
+building...
+running...
+Listening on :8080
+

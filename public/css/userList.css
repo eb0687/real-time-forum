@@ -1,0 +1,60 @@
+#user-list-container {
+  position: fixed;
+  top: 7.9%;
+  right: 2rem;
+  width: 40px;
+  height: 100%;
+  max-height: 810px;
+  overflow-y: auto;
+  background-color: #000000;
+  border: 2px solid white;
+  border-radius: 8px;
+  padding: 10px 5px;
+  box-sizing: border-box;
+  transition:
+    width 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+}
+
+#user-list-container:hover {
+  width: 200px;
+}
+
+#user-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-item:hover {
+  background-color: #e0e0e0;
+  color: black;
+  font-weight: bold;
+}
+
+.user-item span {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#user-list-container:hover .user-item span {
+  opacity: 1;
+}

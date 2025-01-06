@@ -8,6 +8,7 @@ import { profilePage, ownProfilePage } from "../pages/profile.js";
 import { applyTailwind } from "./cheatyCheaty.js";
 import { authPage } from "../pages/auth.js";
 import { messagesPage } from "../pages/messages.js";
+import { WebSocketSingleton } from "./websocket.js";
 
 const routes = {
   "/": {
@@ -84,3 +85,4 @@ window.addEventListener("popstate", router);
 PreventDefaultATag();
 
 await router(); // Initial call to load the default page
+WebSocketSingleton.getInstance();

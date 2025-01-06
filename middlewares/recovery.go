@@ -14,7 +14,7 @@ func Recovery(next http.Handler) http.Handler {
 			if r == nil {
 				return
 			}
-			fmt.Println("err",r)
+			fmt.Println("err", r)
 			data, ok := r.(models.CustomError)
 			if !ok {
 				utils.SendCustomError(w, models.ErrInternalServerError)

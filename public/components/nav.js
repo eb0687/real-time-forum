@@ -73,6 +73,9 @@ function capabilities() {
       }
 
       managePostModal(false);
+      if (document.getElementById("create-post-modal") == null) {
+        return;
+      }
 
       document.getElementById("create-post-modal").style.display = "block";
     });

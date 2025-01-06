@@ -22,58 +22,15 @@ export async function messagesPage() {
       <button id="send-message-button">Send</button>
     </div>
   </div>
-  <div id="user-list-container">
-    <ul id="user-list"></ul>
-  </div>
 </div>
     `,
     capabilities,
   );
-
-  const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
-
-  socket.addEventListener("open", async () => {
-    console.log("Connected to the WebSocket server");
-    await handleSendMessage(socket);
-  });
-
-  socket.addEventListener("error", (event) => {
-    console.error("WebSocket error observed:", event);
-  });
-
-  socket.onmessage = async (event) => {
-    try {
-      let payload;
-      try {
-        payload = JSON.parse(event.data);
-      } catch (error) {
-        console.log("Received non-JSON message:", event.data, error);
-        return;
-      }
-      if (Array.isArray(payload)) {
-        const onlineUsers = payload.filter((user) => user.online);
-        if (onlineUsers.length > 0) {
-          console.log(
-            "Online users:",
-            onlineUsers.map((user) => user.username),
-          );
-        }
-
-        // check if it is a user list
-        await displayUserStatus(payload);
-      } else {
-        // otherwise, handle it as a chat message
-        await handleIncomingMessage(event);
-      }
-    } catch (error) {
-      console.error("Error handling WebSocket message:", error);
-    }
-  };
 }
 
 function capabilities() {}
 
-async function handleIncomingMessage(event) {
+export async function handleIncomingMessage(event) {
   try {
     const message = JSON.parse(event.data);
     const output = document.getElementById("messages-container");
@@ -117,7 +74,7 @@ async function handleIncomingMessage(event) {
   }
 }
 
-async function handleSendMessage(socket) {
+export async function handleSendMessage(socket) {
   const sendButton = document.getElementById("send-message-button");
   const messageInput = document.getElementById("message-input");
 
@@ -145,7 +102,7 @@ async function handleSendMessage(socket) {
 }
 
 let selectedReceiverId = null;
-async function handleUserSelect(user) {
+export async function handleUserSelect(user) {
   selectedReceiverId = user.id;
 
   const messageInput = document.getElementById("message-input");
@@ -303,112 +260,4 @@ async function ensureScrollableContent() {
   if (messagesLoaded) {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
-}
-
-async function fetchLastMessageTime(currentUserId, user) {
-  try {
-    const response = await SpecialFetch("/api/messages", "POST", {
-      senderid: currentUserId,
-      receiverid: user.id,
-      senderid_2: user.id,
-      receiverid_2: currentUserId,
-      limit: 1,
-      offset: 0,
-    });
-
-    if (!response.ok) {
-      return {
-        user,
-        lastMessageTime: null,
-      };
-    }
-
-    const messageHistory = await response.json();
-
-    if (!messageHistory) {
-      // console.log(
-      //   `No message history found for user ${user.username} (ID: ${user.id})`,
-      // );
-      return {
-        user,
-        lastMessageTime: null,
-      };
-    }
-
-    return {
-      user,
-      lastMessageTime:
-        messageHistory.length > 0
-          ? new Date(messageHistory[0].created_at.Time).getTime()
-          : null,
-    };
-  } catch (error) {
-    console.error(`Error fetching last message for user ${user.id}:`, error);
-    return {
-      user,
-      lastMessageTime: null,
-    };
-  }
-}
-
-async function displayUserStatus(userStatuses) {
-  const userList = document.getElementById("user-list");
-  userList.innerHTML = ""; // Clear the list before re-rendering
-
-  const currentUserId = await getCurrentUserId();
-  console.log(userStatuses);
-  console.log(currentUserId);
-
-  userStatuses = userStatuses.filter((v) => v.id != currentUserId);
-
-  const userLastMessageTimes = await Promise.all(
-    userStatuses.map((user) => fetchLastMessageTime(currentUserId, user)),
-  );
-  console.log("userLastMessageTimes", userLastMessageTimes);
-
-  // Sort users based on last message timestamp
-  const sortedUsers = userLastMessageTimes.sort((a, b) => {
-    // If both have last message times, sort by most recent
-    if (a.lastMessageTime && b.lastMessageTime) {
-      return b.lastMessageTime - a.lastMessageTime;
-    }
-
-    // If one user has no messages, put them after users with messages
-    if (a.lastMessageTime && !b.lastMessageTime) {
-      return -1;
-    }
-    if (!a.lastMessageTime && b.lastMessageTime) {
-      return 1;
-    }
-
-    // If neither have messages, sort alphabetically by username
-    return a.user.username.localeCompare(b.user.username);
-  });
-
-  sortedUsers.forEach(({ user }) => {
-    const userElement = document.createElement("li");
-    userElement.className = "user-item";
-    userElement.innerHTML = `
-      <i class="fa-solid fa-circle status-icon ${user.online ? "online" : "offline"}"></i>
-      <span>${user.username}</span>
-    `;
-
-    userElement.addEventListener("click", () => handleUserSelect(user));
-    userList.appendChild(userElement);
-  });
-}
-
-function showNotification(message) {
-  // Request notification permission if not already granted
-  if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-    return;
-  }
-
-  // Create a notification
-  getUsernameByUserId(message.senderid).then((senderName) => {
-    new Notification(`New Message from: ${senderName}`, {
-      body: message.body,
-    });
-  });
 }
