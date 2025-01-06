@@ -1,0 +1,19 @@
+input {
+  border: 1px solid white;
+  color: #ddd;
+}
+
+input[type="submit"]:hover {
+  background-color: #ddd;
+  color: black;
+  cursor: pointer;
+}
+
+.tab-btn {
+  color: #ddd;
+}
+
+.tab-btn.active {
+  background-color: #ddd;
+  color: black;
+}

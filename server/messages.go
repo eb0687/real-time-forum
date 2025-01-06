@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"real-time-forum/database"
 	"real-time-forum/models"
+	"real-time-forum/utils"
 
 	"github.com/gorilla/websocket"
 )
@@ -39,6 +40,27 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	// defer conn.Close()
 	defer func() {
 		delete(Users, conn)
+
+		// notify the other users that this one have left
+		userStatuses, err := ws.GetAllUserStatus()
+		if err != nil {
+			fmt.Printf("err: %v\n", err)
+			SendErrorToWS(models.ErrInternalServerError, conn)
+			return
+		}
+		data, err := json.Marshal(userStatuses)
+		if err != nil {
+			fmt.Printf("err: %v\n", err)
+			SendErrorToWS(models.ErrInternalServerError, conn)
+			return
+		}
+		for c := range Users {
+			err := c.WriteMessage(websocket.TextMessage, data)
+			if err != nil {
+				fmt.Printf("err: %v\n", err)
+				continue
+			}
+		}
 		conn.Close()
 	}()
 
@@ -71,9 +93,15 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = conn.WriteMessage(websocket.TextMessage, data)
-	if err != nil {
-		panic(err)
+	// err = conn.WriteMessage(websocket.TextMessage, data)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	for c := range Users {
+		err := c.WriteMessage(websocket.TextMessage, data)
+		if err != nil {
+			continue
+		}
 	}
 
 	// Handle websocket messages
@@ -101,6 +129,10 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Printf("Unmarshalled message: %+v\n", dbMsg)
 
+		if dbMsg.Senderid == dbMsg.Receiverid {
+			SendErrorToWS(models.ErrInternalServerError, conn)
+			continue
+		}
 		msg, err := ws.DB.CreateMessage(dbMsg)
 		if err != nil {
 			SendErrorToWS(models.ErrInternalServerError, conn)
@@ -154,7 +186,7 @@ type UserStatus struct {
 func (ws *WebServer) GetAllUserStatus() ([]UserStatus, error) {
 	allUsers, err := ws.DB.ReadAllUsers()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	userStatuses := []UserStatus{}
@@ -167,4 +199,21 @@ func (ws *WebServer) GetAllUserStatus() ([]UserStatus, error) {
 		})
 	}
 	return userStatuses, nil
+}
+
+func (ws *WebServer) GetHistory(w http.ResponseWriter, r *http.Request) {
+	data, err := utils.DecodeRequestBody[database.GetHistoryParams](r)
+	if err != nil {
+		panic(models.ErrInvalidRequest)
+	}
+
+	msgs, err := ws.DB.GetHistory(*data)
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
+
+	err = utils.SendJsonResponse(w, http.StatusOK, msgs)
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
 }

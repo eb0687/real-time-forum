@@ -31,43 +31,17 @@ export async function homePage() {
 
   await attachBaseLayout(
     /*html*/ `
-<div id="home-header" class="flex flex-col justify-center items-center p-10px">
+<link rel="stylesheet" href="/public/css/home.css">
+<div id="home-header" class="">
   <h1>Real time forum (placeholder)</h1>
   <p id="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit ratione quisquam accusantium magni distinctio hic, cum doloremque, qui quae veritatis harum sequi at vero ducimus magnam tenetur laboriosam fuga. Officia molestiae similique esse dicta laborum, natus error aliquid atque nobis repellat vero velit doloremque, provident illum laudantium facilis expedita, voluptates alias eius nesciunt! Porro, asperiores! Soluta sapiente nemo magnam necessitatibus perferendis commodi esse quaerat modi dicta? Reiciendis veritatis laborum, inventore architecto similique quae voluptates nam, dignissimos distinctio, fuga impedit incidunt ut laudantium? Animi non exercitationem rem eaque cumque inventore mollitia, quos modi saepe molestias omnis facere minus, officia doloribus accusantium.</p>
 </div>
-<div id="categories-container" class="flex flex-row gap-10px justify-center pt-20px">
+<div id="categories-container" class="">
   ${categoriesHtml}
 </div>
-<div id="main-posts-container" class="flex flex-row gap-40px justify-between pl-120px pr-120px pt-50px pb-50px">
+<div id="main-posts-container" class="">
   ${PostList(enrichedPosts)}
 </div>
-
-<style>
-  #description {
-    font-size: 1.0rem;
-    padding: 30px 120px;
-  }
-  #main-posts-container {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  #categories-container {
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 10px
-  }
-  .category-button {
-    font-size: 0.7rem;
-    padding: 10px 20px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  .category-button:hover {
-    background-color: #ddd;
-  }
-</style>
     `,
     capabilities,
   );
@@ -120,7 +94,6 @@ async function filterPostsByCategory(posts, categoryId) {
   if (!res.ok) return posts;
 
   let filteredCategoryPosts = await res.json();
-  // this is a fix for categories with no posts assosiated to it
   if (!Array.isArray(filteredCategoryPosts)) {
     filteredCategoryPosts = [];
   }

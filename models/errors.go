@@ -7,7 +7,6 @@ type CustomError struct {
 	Status int    `json:"status"`
 }
 
-
 func (c CustomError) Error() string {
 	return c.Msg
 }
@@ -34,9 +33,13 @@ var (
 		Msg:    "Invalid request",
 		Status: http.StatusBadRequest,
 	}
+
+	ErrMsgToSelf = CustomError{
+		Msg:    "you can't send message to your self",
+		Status: http.StatusConflict,
+	}
 	ErrUnauthorized = CustomError{
 		Msg:    "Unauthorized",
 		Status: http.StatusUnauthorized,
 	}
-
 )

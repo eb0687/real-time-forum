@@ -114,12 +114,14 @@ button.nav-item {
 
 #create-post-form input {
   background-color: #2b2f31;
+  color: white;
 }
 
 #create-post-form textarea {
   background-color: #2b2f31;
   resize: none;
   height: 100%;
+  color: white;
 }
 
 .close-button {

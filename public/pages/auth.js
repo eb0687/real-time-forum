@@ -58,24 +58,7 @@ export async function authPage() {
       </div>
     </div>
 
-    <style>
-        input {
-            border: 1px solid white;
-            color: #ddd;
-        }
-        input[type="submit"]:hover {
-            background-color: #ddd;
-            color: black;
-            cursor: pointer;
-        }
-        .tab-btn {
-            color: #ddd;
-        }
-        .tab-btn.active {
-            background-color: #ddd;
-            color: black;
-        }
-    </style>
+    <link rel="stylesheet" href="/public/css/auth.css">
     `,
     setupAuthHandlers,
   );
@@ -118,6 +101,11 @@ function setupAuthHandlers() {
           throw "your email or password is incorrect";
         // const data = await response.json();
         await reRoute("/");
+
+        // https://github.com/eb0687/real-time-forum/issues/10
+        if (Notification.permission !== "granted") {
+          Notification.requestPermission();
+        }
       } catch (error) {
         // alert(error);
         document.getElementById("message").innerHTML = error;
@@ -174,6 +162,10 @@ function setupAuthHandlers() {
         if (response.status != 200) throw "could not create an account";
         //   const data = await response.json();
         await reRoute("/");
+        // https://github.com/eb0687/real-time-forum/issues/10
+        if (Notification.permission !== "granted") {
+          Notification.requestPermission();
+        }
       } catch (error) {
         document.getElementById("message").innerHTML = error;
         console.log("error", error);

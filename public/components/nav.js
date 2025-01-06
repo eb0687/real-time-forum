@@ -23,10 +23,6 @@ export const Nav = async () => {
             <i class="fas fa-home"></i>
             <span class="nav-text">Home</span>
         </a>
-        <a href="/about" class="nav-item">
-            <i class="fas fa-info-circle"></i>
-            <span class="nav-text">About</span>
-        </a>
         <a href="/profile" class="nav-item" >
             <i class="fas fa-user"></i>
             <span class="nav-text">Profile Page</span>
@@ -42,7 +38,7 @@ export const Nav = async () => {
         <button class="nav-item" id="logout-button" >
             <i class="fas fa-sign-out-alt"></i>
             <span class="nav-text">Logout</span>
-        </button>
+          </button>
     </nav>
   `;
   return { nav, cap: capabilities };
@@ -73,6 +69,7 @@ function capabilities() {
       const modal = document.getElementById("create-post-modal");
       if (modal) {
         modal.parentNode.removeChild(modal);
+        return;
       }
 
       managePostModal(false);

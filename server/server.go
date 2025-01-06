@@ -54,6 +54,8 @@ func (ws *WebServer) AddHandlers() {
 		m.HandleFunc("GET /post-categories/{id}", ws.GetAllPostsForCategory)
 		m.HandleFunc("DELETE /post-categories", ws.DeletePostCategory)
 
+		m.HandleFunc("POST /messages", ws.GetHistory)
+
 		m.HandleFunc("/cookie", ws.CheckCookie)
 
 		return s(middlewares.Auth(m, ws.DB))
@@ -82,6 +84,7 @@ func AddFileServer(mux *http.ServeMux) {
 		fmt.Printf("r.Cookies(): %v\n", r.Cookies())
 		_, err := os.Stat(r.URL.Path)
 		if err != nil && os.IsNotExist(err) {
+			// w.WriteHeader(404)
 			// w.WriteHeader(http.StatusNotFound)
 			http.ServeFile(w, r, "public/index.html")
 			return

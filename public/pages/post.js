@@ -24,68 +24,36 @@ export async function postPage(id) {
         .map((cat) => `<span class="post-category">${cat.name}</span>`)
         .join(", ")
     : "";
-
   const postUserName = await getUsernameByUserId(post.userid);
 
+  const createdDate = new Date(post.created_at.Time).toLocaleString();
+  const updatedDate = new Date(post.updated_at.Time).toLocaleString();
+
   document.title = post.title;
+
   await attachBaseLayout(
     /*html*/ `
-
-<div class="flex flex-col justify-start pl-120px pr-120px pt-10px pb-10px">
-  <div id="main-container" class="b-1px-border rounded p-15px">
-    <div id="post-title" class="pb-10px">
-      ${post.title}
-    </div>
-    <div id="post-categories">
-      Categories: ${categoryList}
-    </div>
-    <div id="post-details" class="flex flex-row gap-20px pb-10px items-center">
-      <div id="post-author" class="flex flex-row items-center gap-5px">
-        <i class="fa-regular fa-user"></i>
-        <p>${postUserName}</p>
+    <link rel="stylesheet" href="/public/css/post.css" />
+    <div id="main" class="">
+      <div id="main-container" class="">
+        <div id="post-title" class="">${post.title}</div>
+        <div id="post-categories">Categories: ${categoryList}</div>
+        <div id="post-details" class="">
+          <div id="post-author" class="">
+            <i class="fa-regular fa-user"></i>
+            <p>${postUserName}</p>
+          </div>
+          <p>postid: ${post.id}</p>
+          <p>created: ${createdDate}</p>
+          <p>updated: ${updatedDate}</p>
+          <button id="edit-post">Edit</button>
+        </div>
+        <div id="post-body-container">
+          <p>${post.body}</p>
+        </div>
+        ${commentsBox} ${commentsHtml}
       </div>
-      <p>postid: ${post.id}</p>
-      <p>created: ${post.created_at.Time}</p>
-      <p>updated: ${post.updated_at.Time}</p>
-      <button id="edit-post">Edit</button>
     </div>
-    <div id="post-body-container">
-      <p>${post.body}</p>
-    </div>
-    ${commentsBox}
-    ${commentsHtml}
-  </div>
-</div>
-<style>
-  #post-title {
-    font-size: 3rem;
-    font-weight: bold;
-  }
-  #post-details {
-    font-size: 1rem;
-    border-bottom: 1px dotted white
-  }
-  #post-details button{
-    font-size: 0.65rem;
-    padding: 0 10px;
-    min-width: 80px;
-    max-height: 15px;
-    cursor: pointer;
-  }
-  #post-details button:hover {
-    font-size: 0.65rem;
-    padding: 0 10px;
-    min-width: 80px;
-    cursor: pointer;
-    background-color: #ddd;
-    color: black;
-  }
-  #post-body-container {
-    font-size: 2rem;
-    border-bottom: 1px dotted white
-  }
-</style>
-
     `,
     async () => {
       handleCreateComment(post.id);
@@ -99,32 +67,17 @@ export async function postPage(id) {
 
 function CommentsBox() {
   return /*html*/ `
-        <div id="comment-box-container" class="flex flex-col items-start pb-10px pt-10px">
-            <textarea class="mb-10px" id="comment-text" rows="10" cols="80" placeholder="Write your comment here..."></textarea>
-            <button id="submit-comment-button">Submit</button>
-        </div>
-        <style>
-          #comment-box-container{
-            border-bottom: 1px dotted white
-          }
-          #comment-box-container button{
-            font-size: 0.65rem;
-            padding: 0 10px;
-            min-width: 80px;
-            cursor: pointer;
-          }
-          #comment-box-container button:hover {
-            font-size: 0.65rem;
-            padding: 0 10px;
-            min-width: 80px;
-            cursor: pointer;
-            background-color: #ddd;
-            color: black;
-          }
-          #comment-text{
-            resize: none
-          }
-        </style>
+    <link rel="stylesheet" href="/public/css/post.css" />
+    <div id="comment-box-container" class="">
+      <textarea
+        class=""
+        id="comment-text"
+        rows="10"
+        cols="80"
+        placeholder="Write your comment here..."
+      ></textarea>
+      <button id="submit-comment-button">Submit</button>
+    </div>
     `;
 }
 

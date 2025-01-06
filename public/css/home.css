@@ -1,0 +1,110 @@
+#home-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+#description {
+  font-size: 1rem;
+  padding: 30px 120px;
+}
+
+/* categories section  */
+#categories-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  padding-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 10px;
+}
+.category-button {
+  font-size: 0.7rem;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.category-button:hover {
+  background-color: #ddd;
+}
+
+/* post section */
+#main-posts-container {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  /* justify-content: space-between; */
+  padding: 50px 120px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+#post-container {
+  flex: 1 1 100px;
+  min-width: 300px;
+  min-height: 300px;
+  border: solid white;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 10px;
+  padding: 10px;
+}
+#post-container:hover {
+  background-color: #2b2f31;
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.7);
+}
+#post-title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1px solid white;
+}
+#post-container:hover #post-title-container {
+  border-bottom-color: black;
+}
+#post-details {
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+  align-items: center;
+}
+#post-details p {
+  font-size: 0.8rem;
+  color: #bbb;
+  margin-top: 5px;
+}
+.post-title {
+  padding: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  min-height: 50px;
+  text-decoration: none;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: border-color 0.3s ease;
+}
+.post-title:hover {
+  color: #ddd;
+}
+
+.post-body {
+  padding: 10px;
+  font-size: 1.2rem;
+  max-height: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
