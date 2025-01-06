@@ -1,4 +1,5 @@
 import { getCookieWithoutRequest, SpecialFetch } from "../js/utils.js";
+import { WebSocketSingleton } from "../js/websocket.js";
 import { getUsernameByUserId } from "./home.js";
 import { attachBaseLayout } from "./layouts.js";
 import { getCurrentUserId } from "./post.js";
@@ -28,7 +29,10 @@ export async function messagesPage() {
   );
 }
 
-function capabilities() {}
+async function capabilities() {
+  const instance = WebSocketSingleton.getInstance();
+  await handleSendMessage(instance);
+}
 
 export async function handleIncomingMessage(event) {
   try {

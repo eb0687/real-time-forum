@@ -17,7 +17,6 @@ export const WebSocketSingleton = (function () {
 
         // Set up WebSocket event handlers
         instance.onopen = async () => {
-          await handleSendMessage(socket);
           console.log("WebSocket connection established.");
         };
         instance.onmessage = async (event) => {

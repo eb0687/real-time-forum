@@ -1,5 +1,6 @@
 import { getCurrentUserId } from "../pages/post.js";
 import { handleUserSelect } from "../pages/messages.js";
+import { SpecialFetch } from "../js/utils.js";
 
 export const userList = async () => {
   return {
@@ -49,6 +50,8 @@ export async function displayUserStatus(userStatuses) {
   });
 
   sortedUsers.forEach(({ user }) => {
+    console.log(user);
+
     const userElement = document.createElement("li");
     userElement.className = "user-item";
     userElement.innerHTML = `
