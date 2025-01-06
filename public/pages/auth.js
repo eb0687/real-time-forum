@@ -162,4 +162,9 @@ function setupAuthHandlers() {
         console.log("error", error);
       }
     });
+
+  // https://github.com/eb0687/real-time-forum/issues/10
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
 }

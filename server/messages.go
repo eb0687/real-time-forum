@@ -186,7 +186,7 @@ type UserStatus struct {
 func (ws *WebServer) GetAllUserStatus() ([]UserStatus, error) {
 	allUsers, err := ws.DB.ReadAllUsers()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	userStatuses := []UserStatus{}

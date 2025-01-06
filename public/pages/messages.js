@@ -30,10 +30,6 @@ export async function messagesPage() {
     capabilities,
   );
 
-  if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-  }
-
   const socket = new WebSocket(`ws://localhost:8080/ws?token=${cookie}`);
 
   socket.addEventListener("open", async () => {
