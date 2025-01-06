@@ -1,5 +1,6 @@
 import { getCurrentUserId } from "../pages/post.js";
 import { handleUserSelect } from "../pages/messages.js";
+import { SpecialFetch } from "../js/utils.js";
 
 export const userList = async () => {
   return {
@@ -19,6 +20,9 @@ export async function displayUserStatus(userStatuses) {
   userList.innerHTML = ""; // Clear the list before re-rendering
 
   const currentUserId = await getCurrentUserId();
+  if (currentUserId == null) {
+    return;
+  }
   console.log(userStatuses);
   console.log(currentUserId);
 
@@ -56,7 +60,11 @@ export async function displayUserStatus(userStatuses) {
       <span>${user.username}</span>
     `;
 
-    userElement.addEventListener("click", () => handleUserSelect(user));
+    try {
+      userElement.addEventListener("click", () => handleUserSelect(user));
+    } catch (_error) {
+      console.log(_error);
+    }
     userList.appendChild(userElement);
   });
 }
@@ -107,19 +115,4 @@ async function fetchLastMessageTime(currentUserId, user) {
       lastMessageTime: null,
     };
   }
-}
-
-function showNotification(message) {
-  // Request notification permission if not already granted
-  if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-    return;
-  }
-
-  // Create a notification
-  getUsernameByUserId(message.senderid).then((senderName) => {
-    new Notification(`New Message from: ${senderName}`, {
-      body: message.body,
-    });
-  });
 }

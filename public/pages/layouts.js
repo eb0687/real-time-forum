@@ -1,11 +1,8 @@
 import { Nav } from "../components/nav.js";
 import { userList } from "../components/userList.js";
-import { attach, getCookie, PreventDefaultATag, reRoute } from "../js/utils.js";
+import { getCookie, PreventDefaultATag, reRoute } from "../js/utils.js";
 
 export async function attachBaseLayout(content, capabilities) {
-  const { nav, cap } = await Nav();
-  const { ul, ulCap } = await userList();
-
   // DON'T AWAIT IT
   // DON'T AWAIT IT
   // DON'T AWAIT IT
@@ -15,14 +12,14 @@ export async function attachBaseLayout(content, capabilities) {
     return;
   }
 
-  attach(/*html*/ `
-        ${ul}
-        ${nav}
-        ${content}
-    `);
+  document.getElementById("main-content").innerHTML = content;
+
+  //attach(/*html*/ `
+  //      ${ul}
+  //      ${nav}
+  //      ${content}
+  //  `);
   PreventDefaultATag();
 
   capabilities();
-  cap();
-  ulCap();
 }

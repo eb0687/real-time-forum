@@ -41,3 +41,11 @@
 - How to make the background color extend to the rest of the screen
 - Inconsistency with showing edit button for post
 - When updating a post, the title disappears
+
+
+
+# GOD HELP
+- user list color
+- user list clicked
+- gazillion request (propabley eveny listener)
+
