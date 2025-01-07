@@ -1,15 +1,14 @@
 import { getCurrentUserId } from "../pages/post.js";
-import { handleUserSelect } from "../pages/messages.js";
+import { handleUserSelect, toggleSending } from "../pages/messages.js";
 import { reRoute, SpecialFetch } from "../js/utils.js";
 
 export const userList = async () => {
   return {
     ul: `
-
-<link rel="stylesheet" href="public/css/userList.css">
-  <div id="user-list-container">
-    <ul id="user-list"></ul>
-  </div>
+<link rel="stylesheet" href="public/css/userList.css" />
+<div id="user-list-container">
+  <ul id="user-list"></ul>
+</div>
 `,
     ulCap: () => {},
   };
@@ -76,6 +75,7 @@ export async function displayUserStatus() {
           await new Promise((resolve) => setTimeout(resolve, 500));
           await handleUserSelect(user);
         }
+        await toggleSending(false, user.id);
       });
     } catch (_error) {
       console.log(_error);

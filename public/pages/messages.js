@@ -13,13 +13,17 @@ export async function messagesPage() {
 
   await attachBaseLayout(
     /*html*/ `
-<link rel="stylesheet" href="public/css/messages.css">
+<link rel="stylesheet" href="public/css/messages.css" />
 <div id="main">
   <div id="private-messages-container" class="">
     <h2>Private Messages</h2>
     <div id="messages-container"></div>
     <div class="message-input-container">
-      <input type="text" id="message-input" placeholder="Type your message here..." />
+      <input
+        type="text"
+        id="message-input"
+        placeholder="Type your message here..."
+      />
       <button id="send-message-button">Send</button>
     </div>
   </div>
@@ -30,8 +34,43 @@ export async function messagesPage() {
 }
 
 async function capabilities() {
+  await toggleSending();
   const socket = WebSocketSingleton.getInstance();
   await handleSendMessage(socket);
+}
+
+export async function toggleSending(bool = true, user = null) {
+  const sendButton = document.getElementById("send-message-button");
+  const messageInput = document.getElementById("message-input");
+  sendButton.disabled = bool;
+  messageInput.disabled = bool;
+
+  if (user == null) {
+    return;
+  }
+
+  const data = await SpecialFetch("/api/get-sorted-user-list");
+  // console.log(await data.json());
+  const realData = await data.json();
+
+  console.log(realData);
+  console.log(user);
+  console.log(realData.filter((v) => v.user.id == user));
+
+  const realUserData = realData.filter((v) => v.user.id == user);
+
+  if (realUserData.length == 0) {
+    return;
+  }
+  const status = realUserData[0].user.online;
+
+  if (status === true) {
+    sendButton.disabled = false;
+    messageInput.disabled = false;
+  } else {
+    sendButton.disabled = true;
+    messageInput.disabled = true;
+  }
 }
 
 export async function handleIncomingMessage(event) {

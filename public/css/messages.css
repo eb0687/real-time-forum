@@ -64,7 +64,6 @@
   transform: translateY(1px);
 }
 
-
 .sent .sender-name {
   color: blue;
   font-weight: bold;
@@ -91,4 +90,12 @@
   padding: 5px;
   margin-top: 5px;
   display: inline-block;
+}
+
+button#send-message-button:disabled {
+  background-color: gray;
+}
+
+input#message-input:disabled {
+  background-color: gray;
 }
