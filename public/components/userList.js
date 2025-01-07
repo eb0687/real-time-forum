@@ -1,6 +1,6 @@
 import { getCurrentUserId } from "../pages/post.js";
 import { handleUserSelect } from "../pages/messages.js";
-import { SpecialFetch } from "../js/utils.js";
+import { reRoute, SpecialFetch } from "../js/utils.js";
 
 export const userList = async () => {
   return {
@@ -61,7 +61,15 @@ export async function displayUserStatus(userStatuses) {
     `;
 
     try {
-      userElement.addEventListener("click", () => handleUserSelect(user));
+      userElement.addEventListener("click", async () => {
+        if (window.location.href == "/messages") {
+          handleUserSelect(user);
+        } else {
+          await reRoute("/messages");
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          await handleUserSelect(user);
+        }
+      });
     } catch (_error) {
       console.log(_error);
     }

@@ -4,15 +4,15 @@ import { getCookieWithoutRequest, reRoute } from "./utils.js";
 
 export const WebSocketSingleton = (function () {
   let instance; // Holds the single WebSocket instance
-  let cookie = getCookieWithoutRequest("auth_token");
-  if (cookie == null) {
-    reRoute("/");
-  }
-  const url = `ws://localhost:8080/ws?token=${cookie}`; // Your fixed WebSocket URL
 
   return {
     getInstance: function () {
       if (!instance) {
+        let cookie = getCookieWithoutRequest("auth_token");
+        if (cookie == null) {
+          reRoute("/");
+        }
+        const url = `ws://localhost:8080/ws?token=${cookie}`; // Your fixed WebSocket URL
         instance = new WebSocket(url);
 
         // Set up WebSocket event handlers

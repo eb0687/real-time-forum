@@ -1,6 +1,7 @@
 import { Nav } from "../components/nav.js";
 import { userList } from "../components/userList.js";
 import { router } from "./app.js";
+import { WebSocketSingleton } from "./WebSocketSingleton.js";
 
 /**
  *
@@ -11,6 +12,9 @@ export function attach(page) {
 }
 
 export async function onRefresh() {
+  console.log("mama");
+
+  WebSocketSingleton.getInstance();
   const { nav, cap } = await Nav();
   document.querySelector("nav#nav-content").innerHTML = nav;
   cap();

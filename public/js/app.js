@@ -3,7 +3,12 @@ import { homePage } from "../pages/home.js";
 import { notFoundPage } from "../pages/errorPages.js";
 // import { registerPage } from "../pages/register.js";
 import { postPage } from "../pages/post.js"; // Import the post page
-import { getCookie, onRefresh, PreventDefaultATag } from "./utils.js";
+import {
+  getCookie,
+  getCookieWithoutRequest,
+  onRefresh,
+  PreventDefaultATag,
+} from "./utils.js";
 import { profilePage, ownProfilePage } from "../pages/profile.js";
 import { applyTailwind } from "./cheatyCheaty.js";
 import { authPage } from "../pages/auth.js";
@@ -83,7 +88,8 @@ export async function router() {
 
 window.addEventListener("popstate", router);
 PreventDefaultATag();
-
 await router(); // Initial call to load the default page
-WebSocketSingleton.getInstance();
-await onRefresh();
+
+if (getCookie("auth-token") != null) {
+  await onRefresh();
+}

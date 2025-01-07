@@ -2,3 +2,15 @@ body {
     color: #ddd;
     background-color: black;
 }
+
+.status-icon.online {
+    color: green;
+}
+
+.status-icon.offline {
+    color: red;
+}
+
+.status-icon {
+    font-size: 14px;
+}

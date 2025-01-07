@@ -1,22 +1,11 @@
 import { getCookie, reRoute, SpecialFetch } from "../js/utils.js";
+import { WebSocketSingleton } from "../js/WebSocketSingleton.js";
 import { attachBaseLayout } from "../pages/layouts.js";
 import { managePostModal } from "./managePost.js";
 
 export const Nav = async () => {
-  const cookie = await getCookie("auth_token");
-
-  let nav;
-  if (!cookie) {
-    nav = /*html*/ `
-        <!-- <nav>
-            <a href="/login" class="route">login</a>
-            <a href="/register" class="route">register</a>
-        </nav> -->
-    `;
-    return { nav, cap: () => {} };
-  }
-
-  nav = /*html*/ `
+  return {
+    nav: `
     <link rel="stylesheet" href="/public/css/nav.css">
     <nav class="sidebar">
         <a href="/" class="nav-item">
@@ -40,8 +29,9 @@ export const Nav = async () => {
             <span class="nav-text">Logout</span>
           </button>
     </nav>
-  `;
-  return { nav, cap: capabilities };
+  `,
+    cap: capabilities,
+  };
 };
 
 function capabilities() {
@@ -57,6 +47,7 @@ function capabilities() {
         console.log("logged out from server");
 
         await reRoute("/login");
+        WebSocketSingleton.getInstance().close();
       } catch (error) {
         console.log("error", error);
       }

@@ -1,5 +1,3 @@
-import { Nav } from "../components/nav.js";
-import { userList } from "../components/userList.js";
 import { applyTailwind } from "../js/cheatyCheaty.js";
 import { onRefresh, reRoute, SpecialFetch } from "../js/utils.js";
 import { attachBaseLayout } from "./layouts.js";
@@ -71,6 +69,8 @@ async function onLogin() {
   if (Notification.permission !== "granted") {
     Notification.requestPermission();
   }
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
   onRefresh();
 }
 

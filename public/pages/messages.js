@@ -78,6 +78,7 @@ export async function handleIncomingMessage(event) {
   }
 }
 
+
 export async function handleSendMessage(socket) {
   const sendButton = document.getElementById("send-message-button");
   const messageInput = document.getElementById("message-input");

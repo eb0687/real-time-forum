@@ -45,7 +45,7 @@
 
 
 # GOD HELP
-- user list color
-- user list clicked
 - gazillion request (propabley eveny listener)
+
+
 

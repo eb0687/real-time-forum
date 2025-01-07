@@ -1,17 +1,22 @@
 import { handleSendMessage, handleIncomingMessage } from "../pages/messages.js";
 import { displayUserStatus } from "../components/userList.js";
-import { getCookieWithoutRequest, reRoute, SpecialFetch } from "./utils.js";
+import {
+  getCookie,
+  getCookieWithoutRequest,
+  reRoute,
+  SpecialFetch,
+} from "./utils.js";
 
 export const WebSocketSingleton = (function () {
   let instance; // Holds the single WebSocket instance
-  const cookie = getCookieWithoutRequest("auth_token");
-  if (cookie == null) {
-    reRoute("/");
-  }
-  const url = `ws://localhost:8080/ws?token=${cookie}`; // Your fixed WebSocket URL
 
   return {
     getInstance: function () {
+      const cookie = getCookie("auth_token");
+      if (cookie == null) {
+        reRoute("/");
+      }
+      const url = `ws://localhost:8080/ws?token=${cookie}`; // Your fixed WebSocket URL
       if (!instance) {
         instance = new WebSocket(url);
 

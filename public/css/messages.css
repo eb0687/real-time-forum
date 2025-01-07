@@ -64,17 +64,6 @@
   transform: translateY(1px);
 }
 
-.status-icon.online {
-  color: green;
-}
-
-.status-icon.offline {
-  color: red;
-}
-
-.status-icon {
-  font-size: 14px;
-}
 
 .sent .sender-name {
   color: blue;

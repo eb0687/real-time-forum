@@ -1,5 +1,3 @@
-import { Nav } from "../components/nav.js";
-import { userList } from "../components/userList.js";
 import { getCookie, PreventDefaultATag, reRoute } from "../js/utils.js";
 
 export async function attachBaseLayout(content, capabilities) {
