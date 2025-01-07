@@ -7,6 +7,7 @@ import (
 	"real-time-forum/database"
 	"real-time-forum/models"
 	"real-time-forum/utils"
+	"slices"
 
 	"github.com/gorilla/websocket"
 )
@@ -199,6 +200,79 @@ func (ws *WebServer) GetAllUserStatus() ([]UserStatus, error) {
 		})
 	}
 	return userStatuses, nil
+}
+
+type SortedUserList struct {
+	User            UserStatus `json:"user"`
+	LastMessageTime int        `json:"lastMessageTime"`
+}
+
+func (ws *WebServer) GetSortedUserList(w http.ResponseWriter, r *http.Request) {
+	allUsers, err := ws.DB.ReadAllUsers()
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
+
+	idk := []SortedUserList{}
+	c, err := utils.GetCookieByUUID(r, ws.DB)
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
+	for _, user := range allUsers {
+		if c.Userid == user.ID {
+			continue
+		}
+
+		lastmsgs, err := ws.DB.GetHistory(database.GetHistoryParams{
+			Senderid:     c.Userid,
+			Receiverid:   user.ID,
+			Senderid_2:   user.ID,
+			Receiverid_2: c.Userid,
+			Limit:        1,
+			Offset:       0,
+		})
+		if err != nil {
+			panic(models.ErrInternalServerError)
+		}
+
+		isOnline := getConnByUserID(user.ID) != nil
+		idk = append(idk, SortedUserList{
+			User: UserStatus{
+				ID:       user.ID,
+				Username: user.Nickname,
+				Online:   isOnline,
+			},
+			LastMessageTime: int(lastmsgs[0].CreatedAt.Time.Unix()),
+		})
+	}
+
+	slices.SortFunc(idk, func(a, b SortedUserList) int {
+		if a.LastMessageTime != 0 && b.LastMessageTime != 0 {
+			return b.LastMessageTime - a.LastMessageTime // Most recent first
+		}
+
+		// If one user has no messages, put them after users with messages
+		if a.LastMessageTime != 0 && b.LastMessageTime == 0 {
+			return -1
+		}
+		if a.LastMessageTime == 0 && b.LastMessageTime != 0 {
+			return 1
+		}
+
+		// If neither have messages, sort alphabetically by username
+		if a.User.Username < b.User.Username {
+			return -1
+		} else if a.User.Username > b.User.Username {
+			return 1
+		}
+
+		return 0
+	})
+
+	err = utils.SendJsonResponse(w, http.StatusOK, idk)
+	if err != nil {
+		panic(models.ErrInternalServerError)
+	}
 }
 
 type CustomMessages struct {
