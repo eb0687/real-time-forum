@@ -19,7 +19,6 @@
     - The user name, that identifies the user that sent the message
 
 - [ ] css for:
-
   - [ ] private chat
   - [ ] homepage
   - [ ] post
@@ -47,9 +46,6 @@
 # GOD HELP
 - realistic data? (FUCK DATA)
 - show error message on register
-- diable fields on message when no user selected or offline user
 - update userlist on user register
-
-
-
+- diable fields on message when no user selected or offline user
 

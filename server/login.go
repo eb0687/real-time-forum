@@ -15,7 +15,6 @@ type LoginClientParams struct {
 }
 
 func (ws *WebServer) LoginHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("mama")
 	data, err := utils.DecodeRequestBody[LoginClientParams](r)
 	if err != nil {
 		utils.SendCustomError(w, models.ErrInvalidRequest)

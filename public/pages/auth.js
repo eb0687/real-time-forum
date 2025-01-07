@@ -51,8 +51,8 @@ export async function authPage() {
             <label for="password">Password:</label>
             <input type="password" name="password" id="password" class="rounded p-5px">
 
-            <input type="submit" value="Register" class="mt-15px rounded p-5px"></input>
-            <p id="message"></p>
+            <button type="submit" class="mt-15px rounded p-5px white">Register</button>
+            <p id="reg-msg"></p>
           </form>
         </div>
       </div>
@@ -69,7 +69,6 @@ async function onLogin() {
   if (Notification.permission !== "granted") {
     Notification.requestPermission();
   }
-
   //await new Promise((resolve) => setTimeout(resolve, 500));
   onRefresh();
 }
@@ -143,7 +142,8 @@ function setupAuthHandlers() {
         !email ||
         !password
       ) {
-        console.log("Please fill in all fields.");
+        const msgBox = document.getElementById("reg-msg");
+        msgBox.innerText = "Please fill in all fields.";
         return;
       }
 
@@ -159,18 +159,19 @@ function setupAuthHandlers() {
         });
 
         if (!response) throw "could not get the response";
-        //if (response.status == 401)
-        //  throw `<a href="/login">Account already exists. Click <strong>here</strong> to login</a>`;
-
-        if (response.status === 401) throw "Account already exists.";
-
+        if (response.status === 409) throw "Account already exists.";
         if (response.status == 400) throw "Please fill in all fields";
         if (response.status != 200) throw "could not create an account";
-        //   const data = await response.json();
+        //const data = await response.json();
+        //console.log(data);
+
         await reRoute("/");
       } catch (error) {
-        document.getElementById("message").innerHTML = error;
         console.log("error", error);
+
+        const msgBox = document.getElementById("reg-msg");
+        console.log(msgBox);
+        msgBox.innerText = error;
       }
     });
 }

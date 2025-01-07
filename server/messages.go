@@ -32,6 +32,30 @@ func getConnByUserID(uid int64) *websocket.Conn {
 	return nil
 }
 
+func (ws *WebServer) NotifyAllClients() (e error) {
+	// Send the list of all users with their status to the connected client
+	userStatuses, err := ws.GetAllUserStatus()
+	if err != nil {
+		e = err
+		return
+	}
+
+	data, err := json.Marshal(userStatuses)
+	if err != nil {
+		e = err
+		return
+	}
+
+	for c := range Users {
+		err := c.WriteMessage(websocket.TextMessage, data)
+		if err != nil {
+			e = err
+			continue
+		}
+	}
+	return e
+}
+
 func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -81,29 +105,7 @@ func (ws *WebServer) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	Users[conn] = user
 
-	// Send the list of all users with their status to the connected client
-	userStatuses, err := ws.GetAllUserStatus()
-	if err != nil {
-		SendErrorToWS(models.ErrInternalServerError, conn)
-		return
-	}
-
-	data, err := json.Marshal(userStatuses)
-	if err != nil {
-		SendErrorToWS(models.ErrInternalServerError, conn)
-		return
-	}
-
-	// err = conn.WriteMessage(websocket.TextMessage, data)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	for c := range Users {
-		err := c.WriteMessage(websocket.TextMessage, data)
-		if err != nil {
-			continue
-		}
-	}
+	ws.NotifyAllClients()
 
 	// Handle websocket messages
 	for {
