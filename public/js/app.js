@@ -51,7 +51,10 @@ const routes = {
   },
 };
 
+let pageLoaded = false;
 export async function router() {
+  if (pageLoaded) return;
+  pageLoaded = true;
   const path = window.location.pathname;
   let route = routes[path] || routes["/404"];
 
@@ -83,9 +86,10 @@ export async function router() {
   document.title = route.title;
   await route.page();
   applyTailwind();
+  pageLoaded = false;
 }
 
-window.addEventListener("popstate", router);
+//window.addEventListener("popstate", router);
 PreventDefaultATag();
 await router(); // Initial call to load the default page
 

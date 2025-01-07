@@ -45,7 +45,9 @@
 
 
 # GOD HELP
-- gazillion request (propabley eveny listener)
-
+- gazillion request (propabley eveny listener), DONE?
+- backend validation on create and update routes
+- OPTIONAL: minimize requests amount to the minimum
+- realistic data?
 
 

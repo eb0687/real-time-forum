@@ -32,7 +32,7 @@ export async function reRoute(path) {
   history.pushState({}, "", path);
   router();
 }
-
+// ALERT: GAS
 export function PreventDefaultATag() {
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", async (e) => {

@@ -93,30 +93,30 @@ func AddFileServer(mux *http.ServeMux) {
 	})
 }
 
-func (ws *WebServer) WithAuthMiddleware() http.Handler {
-	router := http.NewServeMux()
-
-	router.HandleFunc("/homepage", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Homepage")
-	})
-
-	router.HandleFunc("POST /comments", ws.CreateComment)
-	router.HandleFunc("GET /comments", ws.ReadAllComments)
-	router.HandleFunc("GET /comments/{id}", ws.ReadCommentsByPostId)
-	router.HandleFunc("PUT /comments/{id}", ws.UpdateComment)
-	router.HandleFunc("DELETE /comments/{id}", ws.DeleteComment)
-
-	router.HandleFunc("POST /posts", ws.CreatePost)
-	router.HandleFunc("GET /posts", ws.ReadAllPosts)
-	router.HandleFunc("GET /posts/{id}", ws.ReadPost)
-	router.HandleFunc("PUT /posts/{id}", ws.UpdatePost)
-	router.HandleFunc("DELETE /posts/{id}", ws.DeletePost)
-
-	router.HandleFunc("GET /profile/{id}", ws.GetUserProfile)
-	router.HandleFunc("GET /profile", ws.GetOwnUserProfile)
-
-	router.HandleFunc("GET /users/{id}", ws.GetUserDetailsById)
-
-	router.HandleFunc("/cookie", ws.CheckCookie)
-	return middlewares.Auth(router, ws.DB)
-}
+// func (ws *WebServer) WithAuthMiddleware() http.Handler {
+// 	router := http.NewServeMux()
+//
+// 	router.HandleFunc("/homepage", func(w http.ResponseWriter, r *http.Request) {
+// 		fmt.Fprintf(w, "Homepage")
+// 	})
+//
+// 	router.HandleFunc("POST /comments", ws.CreateComment)
+// 	router.HandleFunc("GET /comments", ws.ReadAllComments)
+// 	router.HandleFunc("GET /comments/{id}", ws.ReadCommentsByPostId)
+// 	router.HandleFunc("PUT /comments/{id}", ws.UpdateComment)
+// 	router.HandleFunc("DELETE /comments/{id}", ws.DeleteComment)
+//
+// 	router.HandleFunc("POST /posts", ws.CreatePost)
+// 	router.HandleFunc("GET /posts", ws.ReadAllPosts)
+// 	router.HandleFunc("GET /posts/{id}", ws.ReadPost)
+// 	router.HandleFunc("PUT /posts/{id}", ws.UpdatePost)
+// 	router.HandleFunc("DELETE /posts/{id}", ws.DeletePost)
+//
+// 	router.HandleFunc("GET /profile/{id}", ws.GetUserProfile)
+// 	router.HandleFunc("GET /profile", ws.GetOwnUserProfile)
+//
+// 	router.HandleFunc("GET /users/{id}", ws.GetUserDetailsById)
+//
+// 	router.HandleFunc("/cookie", ws.CheckCookie)
+// 	return middlewares.Auth(router, ws.DB)
+// }
