@@ -207,10 +207,6 @@ func (ws *WebServer) GetHistory(w http.ResponseWriter, r *http.Request) {
 		panic(models.ErrInvalidRequest)
 	}
 
-	if data.Senderid == 0 || data.Receiverid == 0 {
-		panic("data is empty")
-	}
-
 	msgs, err := ws.DB.GetHistory(*data)
 	if err != nil {
 		panic(models.ErrInternalServerError)
