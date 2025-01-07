@@ -90,6 +90,8 @@ window.addEventListener("popstate", router);
 PreventDefaultATag();
 await router(); // Initial call to load the default page
 
-if (getCookie("auth-token") != null) {
-  await onRefresh();
+const a = await getCookie("auth_token");
+console.warn(a);
+if (a !== null) {
+  onRefresh();
 }

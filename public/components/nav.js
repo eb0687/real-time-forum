@@ -47,7 +47,13 @@ function capabilities() {
         console.log("logged out from server");
 
         await reRoute("/login");
+
+        document.cookie =
+          "auth-token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
         WebSocketSingleton.getInstance().close();
+        document.querySelector("nav#nav-content").innerHTML = "";
+        document.querySelector("nav#user-list-content").innerHTML = "";
       } catch (error) {
         console.log("error", error);
       }
