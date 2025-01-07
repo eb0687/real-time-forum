@@ -45,9 +45,11 @@
 
 
 # GOD HELP
-- gazillion request (propabley eveny listener), DONE?
-- backend validation on create and update routes
-- OPTIONAL: minimize requests amount to the minimum
-- realistic data?
+- realistic data? (FUCK DATA)
+- show error message on register
+- diable fields on message when no user selected or offline user
+- update userlist on user register
+
+
 
 

@@ -33,8 +33,12 @@ export async function homePage() {
     /*html*/ `
 <link rel="stylesheet" href="/public/css/home.css">
 <div id="home-header" class="">
-  <h1>Real time forum (placeholder)</h1>
-  <p id="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit ratione quisquam accusantium magni distinctio hic, cum doloremque, qui quae veritatis harum sequi at vero ducimus magnam tenetur laboriosam fuga. Officia molestiae similique esse dicta laborum, natus error aliquid atque nobis repellat vero velit doloremque, provident illum laudantium facilis expedita, voluptates alias eius nesciunt! Porro, asperiores! Soluta sapiente nemo magnam necessitatibus perferendis commodi esse quaerat modi dicta? Reiciendis veritatis laborum, inventore architecto similique quae voluptates nam, dignissimos distinctio, fuga impedit incidunt ut laudantium? Animi non exercitationem rem eaque cumque inventore mollitia, quos modi saepe molestias omnis facere minus, officia doloribus accusantium.</p>
+  <h1>Connectify Forum</h1>
+  <p id="description">
+Connectify Forum is your gateway to dynamic, engaging, and interactive online discussions. Designed for seamless user experiences, this forum empowers you to share your thoughts through captivating posts, exchange ideas through insightful comments, and build meaningful connections via real-time private messaging.
+
+Whether you're sparking new conversations or diving into existing ones, Connectify Forum keeps everything at your fingertips with its intuitive, single-page design. Effortlessly navigate through categories, stay updated on the latest posts, and engage with a vibrant community of like-minded individuals.
+    </p>
 </div>
 <div id="categories-container" class="">
   ${categoriesHtml}

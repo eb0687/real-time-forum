@@ -54,3 +54,6 @@ try {
 - return the result to js
 - do whatever you want
 
+- errors
+- when register error happen no message shown
+

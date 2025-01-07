@@ -168,7 +168,6 @@ function setupAuthHandlers() {
         if (response.status != 200) throw "could not create an account";
         //   const data = await response.json();
         await reRoute("/");
-        await onLogin();
       } catch (error) {
         document.getElementById("message").innerHTML = error;
         console.log("error", error);
