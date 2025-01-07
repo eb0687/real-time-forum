@@ -46,9 +46,14 @@ func (ws *WebServer) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(models.ErrInternalServerError)
 	}
-
-	err = utils.GenerateCookie(w, user.ID, ws.DB)
+	err = ws.NotifyAllClients()
 	if err != nil {
-		panic(models.ErrInternalServerError)
+		fmt.Printf("err: %v\n", err)
+		return
 	}
+
+	// err = utils.GenerateCookie(w, user.ID, ws.DB)
+	// if err != nil {
+	// 	panic(models.ErrInternalServerError)
+	// }
 }
