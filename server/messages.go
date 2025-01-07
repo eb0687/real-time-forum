@@ -201,6 +201,11 @@ func (ws *WebServer) GetAllUserStatus() ([]UserStatus, error) {
 	return userStatuses, nil
 }
 
+type CustomMessages struct {
+	database.Message
+	User database.User
+}
+
 func (ws *WebServer) GetHistory(w http.ResponseWriter, r *http.Request) {
 	data, err := utils.DecodeRequestBody[database.GetHistoryParams](r)
 	if err != nil {
@@ -209,10 +214,32 @@ func (ws *WebServer) GetHistory(w http.ResponseWriter, r *http.Request) {
 
 	msgs, err := ws.DB.GetHistory(*data)
 	if err != nil {
+		fmt.Printf("err: %v\n", err)
 		panic(models.ErrInternalServerError)
 	}
 
-	err = utils.SendJsonResponse(w, http.StatusOK, msgs)
+	users := map[int64]database.User{}
+	for _, msg := range msgs {
+		if _, found := users[msg.Senderid]; found {
+			continue
+		}
+		u, err := ws.DB.ReadUser(msg.Senderid)
+		if err != nil {
+			panic(models.ErrInternalServerError)
+		}
+		users[msg.Senderid] = u
+		fmt.Printf("users[msg.Senderid]: %v\n", users[msg.Senderid])
+	}
+
+	newMsgs := []CustomMessages{}
+	for _, msg := range msgs {
+		newMsgs = append(newMsgs, CustomMessages{
+			Message: msg,
+			User:    users[msg.Senderid],
+		})
+	}
+
+	err = utils.SendJsonResponse(w, http.StatusOK, newMsgs)
 	if err != nil {
 		panic(models.ErrInternalServerError)
 	}

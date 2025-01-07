@@ -151,19 +151,11 @@ async function fetchMessageHistory(receiverId, limit = 10, offset = 0) {
       return null;
     }
 
-    // for testing only
-    // messageHistory.forEach((message) => {
-    //   const time = new Date(message.created_at.Time);
-    //   console.log(`sender: ${message.senderid}`);
-    //   console.log(`receiver: ${message.receiverid}`);
-    //   console.log(`created_at: ${time}`);
-    // });
-
     const messagesContainer = document.getElementById("messages-container");
 
     // Display messages in the correct order (oldest to newest)
     for (const message of messageHistory) {
-      const senderUserName = await getUsernameByUserId(message.senderid);
+      //const senderUserName = await getUsernameByUserId(message.senderid);
       const date = new Date(message.created_at.Time);
       const prettyDate = date.toLocaleString();
 
@@ -174,7 +166,7 @@ async function fetchMessageHistory(receiverId, limit = 10, offset = 0) {
           <span class="${
             message.senderid === currentUserId ? "sender-name" : "receiver-name"
           }">
-            (${prettyDate}) ${senderUserName}:
+            (${prettyDate}) ${message.User.nickname}:
           </span>
           <span class="${
             message.senderid === currentUserId
