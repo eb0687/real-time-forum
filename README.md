@@ -45,7 +45,5 @@
 
 # GOD HELP
 - realistic data? (FUCK DATA)
-- show error message on register
-- update userlist on user register
 - diable fields on message when no user selected or offline user
 
