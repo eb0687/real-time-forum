@@ -26,6 +26,10 @@ func (ws *WebServer) CreatePostCategory(w http.ResponseWriter, r *http.Request) 
 		panic(models.ErrInvalidRequest)
 	}
 
+	if data.CategoryID == 0 || data.PostID == 0 {
+		panic("data cannot be empty")
+	}
+
 	pc, err := ws.DB.CreatePostCategory(*data)
 	if err != nil {
 		panic(err)

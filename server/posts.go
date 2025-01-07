@@ -20,6 +20,9 @@ func (ws *WebServer) CreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data.Userid = c.Userid
+	if data.Body == "" {
+		panic("Post body cannot be empty")
+	}
 	p, err := ws.DB.CreatePost(*data)
 	if err != nil {
 		panic(err)
@@ -73,6 +76,10 @@ func (ws *WebServer) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data.ID = id
+	if data.Body == "" {
+		panic("Post body cannot be empty")
+	}
+
 	newPost, err := ws.DB.UpdatePost(*data)
 	if err != nil {
 		panic(err)

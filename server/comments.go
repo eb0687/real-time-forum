@@ -20,6 +20,10 @@ func (ws *WebServer) CreateComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data.Userid = c.Userid
+	if data.Body == "" {
+		panic("Comment body cannot be empty")
+	}
+
 	com, err := ws.DB.CreateComment(*data)
 	if err != nil {
 		panic(err)
@@ -72,6 +76,9 @@ func (ws *WebServer) UpdateComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data.ID = id
+	if data.Body == "" {
+		panic("Comment body cannot be empty")
+	}
 	newComment, err := ws.DB.UpdateComment(*data)
 	if err != nil {
 		panic(err)
