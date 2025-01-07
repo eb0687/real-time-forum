@@ -10,7 +10,7 @@ export const Post = (post) => {
     <div id="post-title-container" class="">
       <div id="post-details" class="">
         <i class="fa-regular fa-user"></i>
-        <p>${post.username}</p>
+        <p>${post.nickname}</p>
       </div>
       <a class="post-title" href="/posts/${post.id}">${post.title}</a>
     </div>

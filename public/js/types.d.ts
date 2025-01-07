@@ -1,6 +1,7 @@
 export interface Post {
   id: number;
   userid: number;
+  nickname: string;
   title: string;
   body: string;
   created_at: CreatedAt;

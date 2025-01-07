@@ -1,7 +1,7 @@
-
 package database
 
 import (
+	"database/sql"
 )
 
 const createPost = `
@@ -56,18 +56,31 @@ func (q *Queries) GetPostByID(id int64) (Post, error) {
 }
 
 const readAllPosts = `
-SELECT id, userid, title, body, created_at, updated_at FROM posts ORDER BY created_at DESC
+SELECT posts.id, posts.userid, posts.title, posts.body, posts.created_at, posts.updated_at, users.nickname 
+FROM posts 
+JOIN users ON posts.userid = users.id
+ORDER BY posts.created_at DESC
 `
 
-func (q *Queries) ReadAllPosts() ([]Post, error) {
+type ReadAllPostsRow struct {
+	ID        int64        `json:"id"`
+	Userid    int64        `json:"userid"`
+	Title     string       `json:"title"`
+	Body      string       `json:"body"`
+	CreatedAt sql.NullTime `json:"created_at"`
+	UpdatedAt sql.NullTime `json:"updated_at"`
+	Nickname  string       `json:"nickname"`
+}
+
+func (q *Queries) ReadAllPosts() ([]ReadAllPostsRow, error) {
 	rows, err := q.db.Query(readAllPosts)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Post
+	var items []ReadAllPostsRow
 	for rows.Next() {
-		var i Post
+		var i ReadAllPostsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Userid,
@@ -75,6 +88,7 @@ func (q *Queries) ReadAllPosts() ([]Post, error) {
 			&i.Body,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Nickname,
 		); err != nil {
 			return nil, err
 		}

@@ -9,15 +9,15 @@ export async function homePage() {
    * @type {import("../js/types").Post[]}
    */
   const posts = await res.json();
+  const enrichedPosts = posts;
+  //const enrichedPosts = await Promise.all(
+  //  posts.map(async (post) => {
+  //    const username = await getUsernameByUserId(post.userid);
+  //    return { ...post, username };
+  //  }),
+  //);
 
-  const enrichedPosts = await Promise.all(
-    posts.map(async (post) => {
-      const username = await getUsernameByUserId(post.userid);
-      return { ...post, username };
-    }),
-  );
-
-  // console.log("enrichedPosts", enrichedPosts);
+  console.log("enrichedPosts", enrichedPosts);
 
   const categories = await fetchCategories();
   const categoriesHtml = categories

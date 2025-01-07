@@ -13,7 +13,10 @@ UPDATE posts SET title = ?, body = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 
 
 
 -- name: ReadAllPosts :many
-SELECT * FROM posts ORDER BY created_at DESC;
+SELECT posts.*, users.nickname 
+FROM posts 
+JOIN users ON posts.userid = users.id
+ORDER BY posts.created_at DESC;
 
 
 -- name: ReadPostsByUserID :many

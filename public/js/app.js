@@ -52,7 +52,6 @@ const routes = {
 };
 
 export async function router() {
-  window.removeEventListener("popstate", router);
   const path = window.location.pathname;
   let route = routes[path] || routes["/404"];
 
