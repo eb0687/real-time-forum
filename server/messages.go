@@ -234,7 +234,11 @@ func (ws *WebServer) GetSortedUserList(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(models.ErrInternalServerError)
 		}
+		var lmt int
 
+		if len(lastmsgs) != 0 {
+			lmt = int(lastmsgs[0].CreatedAt.Time.Unix())
+		}
 		isOnline := getConnByUserID(user.ID) != nil
 		idk = append(idk, SortedUserList{
 			User: UserStatus{
@@ -242,7 +246,7 @@ func (ws *WebServer) GetSortedUserList(w http.ResponseWriter, r *http.Request) {
 				Username: user.Nickname,
 				Online:   isOnline,
 			},
-			LastMessageTime: int(lastmsgs[0].CreatedAt.Time.Unix()),
+			LastMessageTime: lmt,
 		})
 	}
 

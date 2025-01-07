@@ -15,42 +15,49 @@ export const userList = async () => {
   };
 };
 
-export async function displayUserStatus(userStatuses) {
+export async function displayUserStatus() {
   const userList = document.getElementById("user-list");
   userList.innerHTML = ""; // Clear the list before re-rendering
 
-  const currentUserId = await getCurrentUserId();
-  if (currentUserId == null) {
-    return;
-  }
-  console.log(userStatuses);
-  console.log(currentUserId);
+  //const currentUserId = await getCurrentUserId();
+  //if (currentUserId == null) {
+  //  return;
+  //}
+  //console.log(userStatuses);
+  //console.log(currentUserId);
 
-  userStatuses = userStatuses.filter((v) => v.id != currentUserId);
-
-  const userLastMessageTimes = await Promise.all(
-    userStatuses.map((user) => fetchLastMessageTime(currentUserId, user)),
-  );
-  console.log("userLastMessageTimes", userLastMessageTimes);
+  //userStatuses = userStatuses.filter((v) => v.id != currentUserId);
+  //
+  //const userLastMessageTimes = await Promise.all(
+  //  userStatuses.map((user) => fetchLastMessageTime(currentUserId, user)),
+  //);
+  //console.log("userLastMessageTimes", userLastMessageTimes);
 
   // Sort users based on last message timestamp
-  const sortedUsers = userLastMessageTimes.sort((a, b) => {
-    // If both have last message times, sort by most recent
-    if (a.lastMessageTime && b.lastMessageTime) {
-      return b.lastMessageTime - a.lastMessageTime;
-    }
+  //const sortedUsers = userLastMessageTimes.sort((a, b) => {
+  //  // If both have last message times, sort by most recent
+  //  if (a.lastMessageTime && b.lastMessageTime) {
+  //    return b.lastMessageTime - a.lastMessageTime;
+  //  }
+  //
+  //  // If one user has no messages, put them after users with messages
+  //  if (a.lastMessageTime && !b.lastMessageTime) {
+  //    return -1;
+  //  }
+  //  if (!a.lastMessageTime && b.lastMessageTime) {
+  //    return 1;
+  //  }
+  //
+  //  // If neither have messages, sort alphabetically by username
+  //  return a.user.username.localeCompare(b.user.username);
+  //});
 
-    // If one user has no messages, put them after users with messages
-    if (a.lastMessageTime && !b.lastMessageTime) {
-      return -1;
-    }
-    if (!a.lastMessageTime && b.lastMessageTime) {
-      return 1;
-    }
-
-    // If neither have messages, sort alphabetically by username
-    return a.user.username.localeCompare(b.user.username);
-  });
+  const res = await SpecialFetch("/api/get-sorted-user-list");
+  if (res == null) {
+    console.warn("fuck");
+    return;
+  }
+  const sortedUsers = await res.json();
 
   sortedUsers.forEach(({ user }) => {
     const userElement = document.createElement("li");
