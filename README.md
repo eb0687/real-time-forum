@@ -1,49 +1,61 @@
-## TODOs
+# Connectify Forum
 
-- [x] learn about [sqlc](https://www.youtube.com/watch?v=VX6KzpjaPp8)
-- [x] make a CRUD handler for user's table
-- [x] make the file server in go (serve static files in go)
-- [x] components with vanilla js
-- [x] create html css for the login page and the register page
-- [x] categories ([source](https://learn.reboot01.com/git/root/public/src/branch/master/subjects/real-time-forum#posts-and-comments) )
-- [ ] private chat ([source](https://learn.reboot01.com/git/root/public/src/branch/master/subjects/real-time-forum#private-messages))
+Welcome to **Connectify Forum**, your gateway to dynamic, engaging, and interactive online discussions. Designed for seamless user experiences, this forum empowers you to share your thoughts through captivating posts, exchange ideas through insightful comments, and build meaningful connections via real-time private messaging.
 
-  - A section to show who is online/offline and able to talk to:
-  - This section must be organized by the last message sent (just like discord). If the user is new and does not present messages you must organize it in alphabetic order.
-  - The user must be able to send private messages to the users who are online.
-  - This section must be visible at all times.
-  - Be visible, for this you will have to be able to see the previous messages that you had with the user
-  - Reload the last 10 messages and when scrolled up to see more messages you must provide the user with 10 more, without spamming the scroll event. Do not forget what you learned!! (Throttle, Debounce)
-  - Messages must follow a specific format:
-    - A date that shows when the message was sent
-    - The user name, that identifies the user that sent the message
+## Features
 
-- [ ] css for:
-  - [ ] private chat
-  - [ ] homepage
-  - [ ] post
-  - [ ] registration
-  - [ ] login
-  - [ ] profile
+### 1. **User Authentication**
 
-- a proper read me file
+- **Registration**: Users can register with various details
+- **Login**: Login using either nickname or email combined with the password.
+- **Logout**: Users can log out from any page.
 
-### extras:
+### 2. **Posts and Comments**
 
-- [ ] allow user to update their own profile?
-- [ ] no mention of docker anywhere so not sure if we need to make one
+- **Create Posts**: Users can create posts, categorized for better organization.
+- **Commenting**: Users can comment on posts.
+- **Feed View**: Posts are displayed in a feed format.
+- **Detailed View**: Comments are visible when clicking on a specific post.
 
-## Issues
+### 3. **Private Messaging**
 
-- The styling is not being applied consistently, sometimes when I manually
-  refresh the page it either breaks or fixes the css.
-- How to make the background color extend to the rest of the screen
-- Inconsistency with showing edit button for post
-- When updating a post, the title disappears
+- **Real-time Chat**: Exchange private messages in real-time using WebSockets.
+- **User Status**: See who is online or offline.
 
+## Project Structure
 
+### Backend
 
-# GOD HELP
-- realistic data? (FUCK DATA)
-- diable fields on message when no user selected or offline user
+- **Language**: Go
+- **Database**: SQLite
+- **WebSockets**: Gorilla WebSocket for real-time communication
+- **Security**:
+  - `bcrypt` for password hashing
+  - `UUID` for unique identifiers
 
+### Frontend
+
+- **Language**: JavaScript
+- **WebSockets**: JavaScript WebSocket API for client communication
+- **Single Page Application**:
+  - One HTML file handles all views and routes dynamically.
+
+## Learning Outcomes
+
+- Master web basics like HTML, CSS, and HTTP.
+- Understand sessions and cookies for authentication.
+- Develop expertise in Go routines and channels.
+- Work with WebSocket protocols in both Go and JavaScript.
+- Enhance database management skills with SQLite.
+
+## How to Run the Project
+
+### Prerequisites
+
+- **Go** installed on your system.
+- **SQLite** installed for database management.
+
+## Authors
+
+- [nhussain](https://learn.reboot01.com/git/nhussain)
+- [etarada](https://learn.reboot01.com/git/etarada)
